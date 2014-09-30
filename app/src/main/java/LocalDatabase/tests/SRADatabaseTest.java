@@ -14,6 +14,10 @@ import junit.framework.Assert;
 
 import LocalDatabase.AreaTable;
 import LocalDatabase.SRADatabase;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Chad Carey on 9/29/2014.
@@ -47,5 +51,11 @@ public class SRADatabaseTest extends AndroidTestCase {
     public void testGetArea() {
         AreaTable table = database.getAreaTable();
         Assert.assertNotNull(table);
+    }
+
+    public String generateTimestamp() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        return dateFormat.format(cal.getTime());
     }
 }
