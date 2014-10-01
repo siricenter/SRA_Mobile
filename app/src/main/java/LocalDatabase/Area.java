@@ -8,20 +8,8 @@ import com.activeandroid.query.Select;
 /**
  * Created by jakobhartman on 10/1/14.
  */
-@Table(name = "Areas")
+@Table(name = "areas")
 public class Area extends SRAModel {
-
-    public Area() {
-        super();
-    }
-
-    public static Area getAreaById(long id) {
-        return new Select().from(Area.class).where("id=" + Long.toString(id)).executeSingle();
-    }
-
-    public static Area getAreaByName(String name) {
-        return new Select().from(Area.class).where("name='" + name+ "'").executeSingle();
-    }
 
     @Column(name = "name")
     public String name;
@@ -29,4 +17,18 @@ public class Area extends SRAModel {
     public String created_at;
     @Column(name = "updated_at")
     public String updated_at;
+
+
+    public Area() {
+        super();
+    }
+
+    public static Area getById(long id) {
+        return new Select().from(Area.class).where("id=" + Long.toString(id)).executeSingle();
+    }
+
+    public static Area getByName(String name) {
+        return new Select().from(Area.class).where("name='" + name+ "'").executeSingle();
+    }
+
 }
