@@ -11,5 +11,7 @@
     <string name="Logo">Logo Home Button</string>
     <string name="feedtext">Feed The World</string>
     <string name="login">Login</string>
+    <string name="landingtText">SELF RELIANCE + SUSTAINABLE FARMING + LASTING IMPACT</string>
+    <string name="title_activity_login">login</string>
 
 </resources>

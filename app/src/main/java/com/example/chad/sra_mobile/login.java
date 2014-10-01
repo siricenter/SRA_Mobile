@@ -1,25 +1,24 @@
 package com.example.chad.sra_mobile;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class MyActivity extends Activity {
+
+public class login extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.activity_login);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
+        getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 
@@ -34,12 +33,4 @@ public class MyActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    public void goToLogin(View v){
-        final Intent intent0 = new Intent(this, login.class);
-        startActivity(intent0);
-    }
-
 }
-
