@@ -54,4 +54,37 @@ public class AreaTest extends AndroidTestCase {
         Assert.assertTrue(area.created_at.equals("now"));
         Assert.assertTrue(area.updated_at.equals("then"));
     }
+
+
+   public void testUpdate() {
+        // create an item and get it's id
+       long id = generateArea().getId();
+        // the user would load an item by id
+       Area area = Area.load(Area.class, id);
+       assertNotNull(area);
+        // then the user makes a change and saves
+       area.name = "Alli";
+       area.updated_at = "2001";
+       area.save();
+       area = null;
+        // now reload the object  by id and check to see if it was changed
+       area = Area.load(Area.class, id);
+       assertTrue(area.name.equals("Alli"));
+       assertTrue(area.updated_at.equals("2001"));
+       assertTrue(area.created_at.equals("now"));
+    }
+
+   public void testDelete() {
+            // create an item and get it's id
+        long id = generateArea().getId();
+        // the user would load an item by id usually in a use situation so we will here
+        Area area = Area.load(Area.class, id);
+        assertNotNull(area);
+        // delete the object
+        area.delete();
+        area = null;
+        // we should then try and reload the object and get null
+       area = Area.load(Area.class, id);
+       assertNull(area);
+    }
 }

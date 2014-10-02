@@ -66,4 +66,36 @@ public class HouseholdTest extends InstrumentationTestCase {
         assertTrue(household.updated_at.equals("1981"));
         assertTrue(household.area.getId() == areaId);
     }
+
+    public void testUpdate() {
+        // create an item and get it's id
+        long id = generateHousehold().getId();
+        // the user would load an item by id
+        Household household = Household.load(Household.class, id);
+        // then the user makes a change and saves
+        household.name = "another name";
+        household.updated_at = "2000";
+        household.save();
+        household = null;
+        // now reload the object  by id and check to see if it was changed
+        household = Household.load(Household.class, id);
+        assertTrue(household.name.equals("another name"));
+        assertTrue(household.updated_at.equals("2000"));
+        assertTrue(household.created_at.equals("1980"));
+    }
+
+    public void testDelete() {
+        // create an item and get it's id
+        long id = generateHousehold().getId();
+        // the user would load an item by id usually in a use situation so we will here
+        Household household = Household.load(Household.class, id);
+        assertNotNull(household);
+        // delete the object
+        household.delete();
+        household = null;
+        // we should then try and reload the object and get null
+        household = Household.load(Household.class, id);
+        assertNull(household);
+    }
+
 }
