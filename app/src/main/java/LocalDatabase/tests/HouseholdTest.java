@@ -14,27 +14,6 @@ import LocalDatabase.Household;
  */
 public class HouseholdTest extends InstrumentationTestCase {
 
-    public Area generateArea() {
-        Area area = new Area();
-        area.name = "Jimmy";
-        area.created_at = "now";
-        area.updated_at = "then";
-        area.save();
-        long areaId = area.getId();
-        Log.d("HouseholdTest: generateArea", "area id = " + Long.toString(areaId));
-        return  area;
-    }
-
-    public Household generateHousehold() {
-        Household household = new Household();
-        household.area = generateArea();
-        household.name = "Johns";
-        household.created_at = "1980";
-        household.updated_at = "1981";
-
-        household.save();
-        return household;
-    }
 
     public void testHouseholdTestObjectCreation() {
         Household household = new Household();
@@ -97,5 +76,29 @@ public class HouseholdTest extends InstrumentationTestCase {
         household = Household.load(Household.class, id);
         assertNull(household);
     }
+
+    /****FUNCTIONS****/
+    public Area generateArea() {
+        Area area = new Area();
+        area.name = "Jimmy";
+        area.created_at = "now";
+        area.updated_at = "then";
+        area.save();
+        long areaId = area.getId();
+        Log.d("HouseholdTest: generateArea", "area id = " + Long.toString(areaId));
+        return  area;
+    }
+
+    public Household generateHousehold() {
+        Household household = new Household();
+        household.area = generateArea();
+        household.name = "Johns";
+        household.created_at = "1980";
+        household.updated_at = "1981";
+
+        household.save();
+        return household;
+    }
+
 
 }

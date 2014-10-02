@@ -1,6 +1,7 @@
 package LocalDatabase.tests;
 
 import android.test.AndroidTestCase;
+import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.activeandroid.query.Select;
@@ -14,29 +15,19 @@ import LocalDatabase.Area;
 /**
  * Created by Chad Carey on 9/29/2014.
  */
-public class AreaTest extends AndroidTestCase {
+public class AreaTest extends InstrumentationTestCase {
 
     public void testObjectCreation() {
         Area area = new Area();
         Assert.assertNotNull(area);
     }
 
-    private Area generateArea() {
-        Area area = new Area();
-        area.name = "Jimmy";
-        area.created_at = "now";
-        area.updated_at = "then";
-        area.save();
-
-        return area;
-    }
-
-    public void testAreaSave() {
+    public void testSave() {
         long id = generateArea().getId();
         Assert.assertTrue(id >= 0);
     }
 
-    public void testLoadById() {
+    public void testLoad() {
         long id = generateArea().getId();
 
         Area a = Area.load(Area.class, id);
@@ -87,4 +78,16 @@ public class AreaTest extends AndroidTestCase {
        area = Area.load(Area.class, id);
        assertNull(area);
     }
+
+    /****FUNCTIONS****/
+    private Area generateArea() {
+        Area area = new Area();
+        area.name = "Jimmy";
+        area.created_at = "now";
+        area.updated_at = "then";
+        area.save();
+
+        return area;
+    }
+
 }
