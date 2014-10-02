@@ -28,10 +28,6 @@ public class ConsumedFood extends SRAModel {
         super();
     }
 
-    public static ConsumedFood getFoodById(long id) {
-        return new Select().from(ConsumedFood.class).where("id=" + Long.toString(id)).executeSingle();
-    }
-
     /*public static ConsumedFood getFoodsByInterview(Interview in) {
         return new Select().from(ConsumedFood.class).where("id=" + Long.toString(id)).execute();
     }*/
