@@ -1,15 +1,7 @@
 package LocalDatabase.tests;
 
-import android.test.AndroidTestCase;
 import android.test.InstrumentationTestCase;
-import android.util.Log;
-
-import com.activeandroid.query.Select;
-
 import junit.framework.Assert;
-
-import java.util.HashMap;
-
 import LocalDatabase.Area;
 
 /**

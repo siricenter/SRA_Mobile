@@ -79,8 +79,4 @@ public class Interview extends SRAModel {
         super();
     }
 
-    public static Interview getById(long searchId) {
-         return new Select().from(Interview.class).where("id=" + Long.toString(searchId)).executeSingle();
-    }
-
 }

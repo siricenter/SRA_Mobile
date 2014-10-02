@@ -1,6 +1,5 @@
 package LocalDatabase;
 
-import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
@@ -10,14 +9,12 @@ import com.activeandroid.query.Select;
  */
 @Table(name = "areas")
 public class Area extends SRAModel {
-
     @Column(name = "name")
     public String name;
     @Column(name = "created_at")
     public String created_at;
     @Column(name = "updated_at")
     public String updated_at;
-
 
     public Area() {
         super();
