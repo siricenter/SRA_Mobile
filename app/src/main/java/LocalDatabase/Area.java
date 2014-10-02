@@ -23,9 +23,6 @@ public class Area extends SRAModel {
         super();
     }
 
-    public static Area getById(long id) {
-        return new Select().from(Area.class).where("id=" + Long.toString(id)).executeSingle();
-    }
 
     public static Area getByName(String name) {
         return new Select().from(Area.class).where("name='" + name+ "'").executeSingle();

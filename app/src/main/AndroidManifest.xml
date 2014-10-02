@@ -27,6 +27,9 @@
             android:name=".login"
             android:label="@string/title_activity_login" >
         </activity>
+
+        <meta-data android:name="AA_DB_NAME" android:value="SRA.db" />
+
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

@@ -9,6 +9,10 @@ import com.activeandroid.Model;
  */
 public class SRAModel extends Model {
 
+    public SRAModel() {
+        super();
+    }
+
     /**
      * Generate Timestamp will generate a current timestamp for tables
      * @return
