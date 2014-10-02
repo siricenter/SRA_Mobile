@@ -2,7 +2,6 @@ package LocalDatabase;
 
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
 /**
  * Created by Chad Carey on 10/1/2014.

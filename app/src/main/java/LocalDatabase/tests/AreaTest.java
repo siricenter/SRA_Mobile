@@ -62,7 +62,7 @@ public class AreaTest extends InstrumentationTestCase {
         long id = generateArea().getId();
         // the user would load an item by id usually in a use situation so we will here
         Area area = Area.load(Area.class, id);
-        assertNotNull(area);
+        assertNotNull("Area was null after load", area);
         // delete the object
         area.delete();
         area = null;
