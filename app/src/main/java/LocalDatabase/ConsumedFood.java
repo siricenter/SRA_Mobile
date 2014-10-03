@@ -9,6 +9,7 @@ import com.activeandroid.annotation.Table;
  */
 @Table(name = "consumed_foods")
 public class ConsumedFood extends Model {
+
     @Column(name = "servings")
     public int servings;
     @Column(name = "frequency")
