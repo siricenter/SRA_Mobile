@@ -1,5 +1,6 @@
 package LocalDatabase;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -7,7 +8,7 @@ import com.activeandroid.annotation.Table;
  * Created by Chad Carey on 10/1/2014.
  */
 @Table(name = "interviews")
-public class Interview extends SRAModel {
+public class Interview extends Model {
     @Column(name = "household")
     public Household household;
     @Column(name = "roof")

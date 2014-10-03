@@ -12,7 +12,7 @@ import LocalDatabase.Household;
 /**
  * Created by Chad Carey on 10/1/2014.
  */
-public class HouseholdTest extends InstrumentationTestCase {
+public class HouseholdTest extends AndroidTestCase {
 
 
     public void testHouseholdTestObjectCreation() {

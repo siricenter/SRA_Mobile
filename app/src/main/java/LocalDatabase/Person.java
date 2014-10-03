@@ -1,5 +1,6 @@
 package LocalDatabase;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
@@ -8,7 +9,7 @@ import com.activeandroid.query.Select;
  * Created by jordanreed on 10/2/14.
  */
 @Table(name = "people")
-public class Person extends SRAModel {
+public class Person extends Model {
 
     @Column(name = "given_name")
     public String given_name;

@@ -1,6 +1,6 @@
 package DataSync;
- import org.quickconnectfamily.json.JSONInputStream;
- import org.quickconnectfamily.json.JSONInputStream;
+ //import org.quickconnectfamily.json.JSONInputStream;
+ //import org.quickconnectfamily.json.JSONInputStream;
  import java.net.Socket;
  import quickconnectfamily.json.JSONInputStream;
  import quickconnectfamily.json.JSONOutputStream;
@@ -35,7 +35,7 @@ public class DataSync implements Runnable {
             theHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    MainActivity theActivity = (MainActivity) theReference.get();
+                   // MainActivity theActivity = (MainActivity) theReference.get();
                     //theActivity.getFromThread(inFromServer.readObject()); //System.out.println(inFromServer.readObject());
                 }
             });

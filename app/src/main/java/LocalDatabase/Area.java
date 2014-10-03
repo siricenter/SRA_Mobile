@@ -1,14 +1,15 @@
 package LocalDatabase;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
 /**
- * Created by jakobhartman on 10/1/14.
+ * Created by Chad Carey on 10/1/2014.
  */
-@Table(name = "areas")
-public class Area extends SRAModel {
+@Table(name = "sra_areas")
+public class Area extends Model {
+
     @Column(name = "name")
     public String name;
     @Column(name = "created_at")
@@ -18,11 +19,6 @@ public class Area extends SRAModel {
 
     public Area() {
         super();
-    }
-
-
-    public static Area getByName(String name) {
-        return new Select().from(Area.class).where("name='" + name+ "'").executeSingle();
     }
 
 }

@@ -12,7 +12,7 @@ import LocalDatabase.Interview;
 /**
  * Created by Chad Carey on 10/1/2014.
  */
-public class InterviewTest extends InstrumentationTestCase {
+public class InterviewTest extends AndroidTestCase {
 
 
     public void testInterviewObjectCreation() {
