@@ -1,0 +1,326 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'appium' ]
+2 info using npm@1.4.23
+3 info using node@v0.10.31
+4 verbose cache add [ 'appium', null ]
+5 verbose cache add name=undefined spec="appium" args=["appium",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'appium',
+6 verbose parsed url   path: 'appium',
+6 verbose parsed url   href: 'appium' }
+7 silly lockFile d94e78b1-appium appium
+8 verbose lock appium /Users/jakobhartman/.npm/d94e78b1-appium.lock
+9 silly lockFile d94e78b1-appium appium
+10 silly lockFile d94e78b1-appium appium
+11 verbose addNamed [ 'appium', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 0e563340-appium appium@
+14 verbose lock appium@ /Users/jakobhartman/.npm/0e563340-appium.lock
+15 silly addNameRange { name: 'appium', range: '*', hasData: false }
+16 verbose request where is /appium
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id c38c04118ad9a047
+19 verbose url raw /appium
+20 verbose url resolving [ 'https://registry.npmjs.org/', './appium' ]
+21 verbose url resolved https://registry.npmjs.org/appium
+22 verbose request where is https://registry.npmjs.org/appium
+23 info trying registry request attempt 1 at 10:49:28
+24 http GET https://registry.npmjs.org/appium
+25 http 200 https://registry.npmjs.org/appium
+26 silly registry.get cb [ 200,
+26 silly registry.get   { date: 'Wed, 01 Oct 2014 16:49:31 GMT',
+26 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly registry.get     etag: '"78UFHRMV34M52LQ8H8N2ZWO9Q"',
+26 silly registry.get     'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=60',
+26 silly registry.get     'content-length': '253646',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '401',
+26 silly registry.get     'x-served-by': 'cache-lax1425-LAX',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1412182171.402791,VS0,VE177',
+26 silly registry.get     vary: 'Accept',
+26 silly registry.get     'keep-alive': 'timeout=10, max=50',
+26 silly registry.get     connection: 'Keep-Alive' } ]
+27 silly addNameRange number 2 { name: 'appium', range: '*', hasData: true }
+28 silly addNameRange versions [ 'appium',
+28 silly addNameRange   [ '0.0.1',
+28 silly addNameRange     '0.0.2',
+28 silly addNameRange     '0.0.3',
+28 silly addNameRange     '0.0.4',
+28 silly addNameRange     '0.0.5',
+28 silly addNameRange     '0.0.6',
+28 silly addNameRange     '0.0.7',
+28 silly addNameRange     '0.0.8',
+28 silly addNameRange     '0.0.9',
+28 silly addNameRange     '0.0.10',
+28 silly addNameRange     '0.0.11',
+28 silly addNameRange     '0.0.12',
+28 silly addNameRange     '0.0.13',
+28 silly addNameRange     '0.0.14',
+28 silly addNameRange     '0.0.15',
+28 silly addNameRange     '0.1.0',
+28 silly addNameRange     '0.1.1',
+28 silly addNameRange     '0.1.2',
+28 silly addNameRange     '0.2.0',
+28 silly addNameRange     '0.2.1',
+28 silly addNameRange     '0.2.2',
+28 silly addNameRange     '0.2.3',
+28 silly addNameRange     '0.3.0',
+28 silly addNameRange     '0.3.1',
+28 silly addNameRange     '0.4.0',
+28 silly addNameRange     '0.4.1',
+28 silly addNameRange     '0.5.0',
+28 silly addNameRange     '0.5.1',
+28 silly addNameRange     '0.5.2',
+28 silly addNameRange     '0.6.0',
+28 silly addNameRange     '0.6.1',
+28 silly addNameRange     '0.7.0',
+28 silly addNameRange     '0.7.1',
+28 silly addNameRange     '0.7.2',
+28 silly addNameRange     '0.7.3',
+28 silly addNameRange     '0.8.0',
+28 silly addNameRange     '0.8.1',
+28 silly addNameRange     '0.8.2',
+28 silly addNameRange     '0.8.3',
+28 silly addNameRange     '0.8.4',
+28 silly addNameRange     '0.8.5',
+28 silly addNameRange     '0.9.0',
+28 silly addNameRange     '0.9.1',
+28 silly addNameRange     '0.10.0',
+28 silly addNameRange     '0.10.1',
+28 silly addNameRange     '0.10.2',
+28 silly addNameRange     '0.10.3',
+28 silly addNameRange     '0.10.4',
+28 silly addNameRange     '0.11.0',
+28 silly addNameRange     '0.11.1',
+28 silly addNameRange     '0.11.2',
+28 silly addNameRange     '0.11.3',
+28 silly addNameRange     '0.11.4',
+28 silly addNameRange     '0.12.0',
+28 silly addNameRange     '0.12.1-b',
+28 silly addNameRange     '0.12.2',
+28 silly addNameRange     '0.12.3',
+28 silly addNameRange     '0.13.0',
+28 silly addNameRange     '0.14.0',
+28 silly addNameRange     '0.14.1',
+28 silly addNameRange     '0.14.2',
+28 silly addNameRange     '0.15.0',
+28 silly addNameRange     '0.16.0',
+28 silly addNameRange     '0.17.0',
+28 silly addNameRange     '0.17.2',
+28 silly addNameRange     '0.17.3',
+28 silly addNameRange     '0.17.4',
+28 silly addNameRange     '0.17.5',
+28 silly addNameRange     '0.17.6',
+28 silly addNameRange     '0.18.0',
+28 silly addNameRange     '0.18.1',
+28 silly addNameRange     '1.0.0-beta.1',
+28 silly addNameRange     '0.18.2',
+28 silly addNameRange     '1.0.0-beta.2',
+28 silly addNameRange     '1.0.0',
+28 silly addNameRange     '1.1.0',
+28 silly addNameRange     '1.2.0',
+28 silly addNameRange     '1.2.1',
+28 silly addNameRange     '1.2.2',
+28 silly addNameRange     '1.2.3' ] ]
+29 verbose addNamed [ 'appium', '1.2.3' ]
+30 verbose addNamed [ '1.2.3', '1.2.3' ]
+31 silly lockFile 2a6359d4-appium-1-2-3 appium@1.2.3
+32 verbose lock appium@1.2.3 /Users/jakobhartman/.npm/2a6359d4-appium-1-2-3.lock
+33 silly lockFile 885e447b-pmjs-org-appium-appium-1-2-3-tgz https://registry.npmjs.org/appium/-/appium-1.2.3.tgz
+34 verbose lock https://registry.npmjs.org/appium/-/appium-1.2.3.tgz /Users/jakobhartman/.npm/885e447b-pmjs-org-appium-appium-1-2-3-tgz.lock
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/appium/-/appium-1.2.3.tgz',
+35 verbose addRemoteTarball   '25c7285887ef0195218488a53bcc90b14a022ca8' ]
+36 info retry fetch attempt 1 at 10:49:31
+37 verbose fetch to= /var/folders/jx/36j54wq16gd0z20j2snxh1780000gn/T/npm-95836-PUsqFQVI/registry.npmjs.org/appium/-/appium-1.2.3.tgz
+38 http GET https://registry.npmjs.org/appium/-/appium-1.2.3.tgz
+39 http 200 https://registry.npmjs.org/appium/-/appium-1.2.3.tgz
+40 silly lockFile 885e447b-pmjs-org-appium-appium-1-2-3-tgz https://registry.npmjs.org/appium/-/appium-1.2.3.tgz
+41 silly lockFile 885e447b-pmjs-org-appium-appium-1-2-3-tgz https://registry.npmjs.org/appium/-/appium-1.2.3.tgz
+42 silly lockFile 2a6359d4-appium-1-2-3 appium@1.2.3
+43 silly lockFile 2a6359d4-appium-1-2-3 appium@1.2.3
+44 silly lockFile 0e563340-appium appium@
+45 silly lockFile 0e563340-appium appium@
+46 silly resolved [ { name: 'appium',
+46 silly resolved     description: 'Automation for Apps.',
+46 silly resolved     tags:
+46 silly resolved      [ 'automation',
+46 silly resolved        'javascript',
+46 silly resolved        'selenium',
+46 silly resolved        'webdriver',
+46 silly resolved        'ios',
+46 silly resolved        'android',
+46 silly resolved        'firefoxos',
+46 silly resolved        'testing' ],
+46 silly resolved     version: '1.2.3',
+46 silly resolved     author: { name: 'appium-discuss@googlegroups.com' },
+46 silly resolved     licenses: [ [Object] ],
+46 silly resolved     repository: { type: 'git', url: 'https://github.com/appium/appium.git' },
+46 silly resolved     bugs: { url: 'https://github.com/appium/appium/issues' },
+46 silly resolved     engines: [ 'node' ],
+46 silly resolved     main: './lib/server/main.js',
+46 silly resolved     bin:
+46 silly resolved      { appium: './bin/appium.js',
+46 silly resolved        'appium-doctor': './bin/appium-doctor.js',
+46 silly resolved        authorize_ios: './bin/authorize-ios.js' },
+46 silly resolved     directories: { lib: './lib', doc: './docs' },
+46 silly resolved     dependencies:
+46 silly resolved      { 'adm-zip': '~0.4.4',
+46 silly resolved        'appium-adb': '~1.3.16',
+46 silly resolved        'appium-atoms': '~0.0.5',
+46 silly resolved        'appium-instruments': '~1.4.6',
+46 silly resolved        'appium-uiauto': '~1.7.13',
+46 silly resolved        argparse: '~0.1.15',
+46 silly resolved        async: '~0.9.0',
+46 silly resolved        'binary-cookies': '~0.1.1',
+46 silly resolved        'body-parser': '~1.4.3',
+46 silly resolved        'bplist-creator': '~0.0.4',
+46 silly resolved        'bplist-parser': '~0.0.5',
+46 silly resolved        bufferpack: '0.0.6',
+46 silly resolved        bytes: '~1.0.0',
+46 silly resolved        'camel-back-promise': '^1.0.0',
+46 silly resolved        colors: '~0.6.2',
+46 silly resolved        'date-utils': '~1.2.15',
+46 silly resolved        difflib: '~0.2.4',
+46 silly resolved        express: '~4.5.1',
+46 silly resolved        glob: '~4.0.0',
+46 silly resolved        grunt: '~0.4.5',
+46 silly resolved        'grunt-cli': '~0.1.13',
+46 silly resolved        js2xmlparser2: '~0.2.0',
+46 silly resolved        md5calculator: '~0.0.3',
+46 silly resolved        'method-override': '~2.0.1',
+46 silly resolved        mkdirp: '~0.5.0',
+46 silly resolved        morgan: '~1.1.1',
+46 silly resolved        mv: '~2.0.0',
+46 silly resolved        namp: '0.2.25',
+46 silly resolved        ncp: '~0.5.1',
+46 silly resolved        'node-idevice': '~0.1.2',
+46 silly resolved        'node-uuid': '~1.4.1',
+46 silly resolved        path: '~0.4.9',
+46 silly resolved        plist: '~1.0.0',
+46 silly resolved        prompt: '~0.2.13',
+46 silly resolved        q: '~1.0.1',
+46 silly resolved        request: '~2.36.0',
+46 silly resolved        rimraf: '~2.2.8',
+46 silly resolved        'sandboxed-module': '~1.0.0',
+46 silly resolved        'serve-favicon': '~2.0.0',
+46 silly resolved        'socket.io': '~1.0.2',
+46 silly resolved        swig: '~1.4.1',
+46 silly resolved        temp: '~0.8.0',
+46 silly resolved        through: '~2.3.4',
+46 silly resolved        underscore: '~1.6.0',
+46 silly resolved        'underscore.string': '~2.3.3',
+46 silly resolved        unzip: '~0.1.9',
+46 silly resolved        utf7: '~1.0.0',
+46 silly resolved        'uuid-js': '~0.7.4',
+46 silly resolved        vargs: '~0.1.0',
+46 silly resolved        'win-spawn': '~2.0.0',
+46 silly resolved        winston: '~0.7.3',
+46 silly resolved        ws: '~0.4.31',
+46 silly resolved        xml2js: '~0.4.4',
+46 silly resolved        xmldom: '~0.1.19',
+46 silly resolved        xpath: '0.0.7' },
+46 silly resolved     scripts: { test: 'grunt travis' },
+46 silly resolved     devDependencies:
+46 silly resolved      { assert: '~1.1.1',
+46 silly resolved        chai: '~1.9.1',
+46 silly resolved        'chai-as-promised': '~4.1.1',
+46 silly resolved        glob: '~4.0.0',
+46 silly resolved        'grunt-contrib-jshint': '~0.10.0',
+46 silly resolved        'grunt-jscs-checker': '~0.6.1',
+46 silly resolved        'grunt-mocha-test': '~0.11.0',
+46 silly resolved        'grunt-newer': '^0.7.0',
+46 silly resolved        'js-yaml': '~3.0.2',
+46 silly resolved        mocha: '~1.20.0',
+46 silly resolved        'monocle-js': '~0.6.5',
+46 silly resolved        'node-static': '~0.7.3',
+46 silly resolved        saucelabs: '~0.1.1',
+46 silly resolved        sinon: '~1.10.0',
+46 silly resolved        'sinon-chai': '~2.5.0',
+46 silly resolved        'socket.io-client': '~1.0.2',
+46 silly resolved        socks: '~0.0.1',
+46 silly resolved        'underscore-cli': '~0.2.17',
+46 silly resolved        unorm: '~1.3.3',
+46 silly resolved        wd: '~0.3.8',
+46 silly resolved        'wd-bridge': '~0.0.1',
+46 silly resolved        yiewd: '~0.5.0' },
+46 silly resolved     contributors:
+46 silly resolved      [ [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object] ],
+46 silly resolved     homepage: 'https://github.com/appium/appium',
+46 silly resolved     _id: 'appium@1.2.3',
+46 silly resolved     dist:
+46 silly resolved      { shasum: '25c7285887ef0195218488a53bcc90b14a022ca8',
+46 silly resolved        tarball: 'http://registry.npmjs.org/appium/-/appium-1.2.3.tgz' },
+46 silly resolved     _from: 'appium@',
+46 silly resolved     _npmVersion: '1.4.3',
+46 silly resolved     _npmUser: { name: 'jlipps', email: 'jlipps@gmail.com' },
+46 silly resolved     maintainers: [ [Object], [Object], [Object], [Object], [Object] ],
+46 silly resolved     _shasum: '25c7285887ef0195218488a53bcc90b14a022ca8',
+46 silly resolved     _resolved: 'https://registry.npmjs.org/appium/-/appium-1.2.3.tgz' } ]
+47 info install appium@1.2.3 into /usr/local/lib
+48 info installOne appium@1.2.3
+49 verbose lib/node_modules/appium unbuild
+50 verbose tar unpack /Users/jakobhartman/.npm/appium/1.2.3/package.tgz
+51 silly lockFile 9f677e07-sr-local-lib-node-modules-appium tar:///usr/local/lib/node_modules/appium
+52 verbose lock tar:///usr/local/lib/node_modules/appium /Users/jakobhartman/.npm/9f677e07-sr-local-lib-node-modules-appium.lock
+53 silly lockFile 5fa25694-man-npm-appium-1-2-3-package-tgz tar:///Users/jakobhartman/.npm/appium/1.2.3/package.tgz
+54 verbose lock tar:///Users/jakobhartman/.npm/appium/1.2.3/package.tgz /Users/jakobhartman/.npm/5fa25694-man-npm-appium-1-2-3-package-tgz.lock
+55 silly gunzTarPerm modes [ '755', '644' ]
+56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/appium'
+56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/appium']
+56 error   errno: 3,
+56 error   code: 'EACCES',
+56 error   path: '/usr/local/lib/node_modules/appium',
+56 error   fstream_type: 'Directory',
+56 error   fstream_path: '/usr/local/lib/node_modules/appium',
+56 error   fstream_class: 'DirWriter',
+56 error   fstream_stack:
+56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+56 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+56 error      'Object.oncomplete (fs.js:107:15)' ] }
+57 error Please try running this command again as root/Administrator.
+58 error System Darwin 14.0.0
+59 error command "node" "/usr/local/bin/npm" "install" "-g" "appium"
+60 error cwd /Users/jakobhartman/AndroidStudioProjects/SRA_Mobile
+61 error node -v v0.10.31
+62 error npm -v 1.4.23
+63 error path /usr/local/lib/node_modules/appium
+64 error fstream_path /usr/local/lib/node_modules/appium
+65 error fstream_type Directory
+66 error fstream_class DirWriter
+67 error code EACCES
+68 error errno 3
+69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/appium'
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+70 error fstream_stack Object.oncomplete (fs.js:107:15)
+71 verbose exit [ 3, true ]

@@ -1,12 +1,14 @@
 package DataSync;
- import org.quickconnectfamily.json.JSONInputStream;
- import org.quickconnectfamily.json.JSONInputStream;
+ import quickconnectfamily.json.JSONInputStream;
+ import quickconnectfamily.json.JSONInputStream;
  import java.net.Socket;
  import quickconnectfamily.json.JSONInputStream;
  import quickconnectfamily.json.JSONOutputStream;
  import java.lang.ref.WeakReference;
  import java.io.*;
  import android.os.Handler;
+
+ import com.example.chad.sra_mobile.MyActivity;
 
 
 public class DataSync implements Runnable {
@@ -35,7 +37,7 @@ public class DataSync implements Runnable {
             theHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    MainActivity theActivity = (MainActivity) theReference.get();
+                    MyActivity theActivity = (MyActivity) theReference.get();
                     //theActivity.getFromThread(inFromServer.readObject()); //System.out.println(inFromServer.readObject());
                 }
             });

@@ -13,5 +13,7 @@
     <string name="login">Login</string>
     <string name="landingtText">SELF RELIANCE + SUSTAINABLE FARMING + LASTING IMPACT</string>
     <string name="title_activity_login">login</string>
+    <string name="passwordText">Password</string>
+    <string name="usernameText">Username</string>
 
 </resources>
