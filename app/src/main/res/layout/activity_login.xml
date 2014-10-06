@@ -10,30 +10,6 @@
     tools:context="com.example.chad.sra_mobile.login">
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:id="@+id/loginButton"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/passwordET"
-        android:layout_alignStart="@+id/passwordET"
-        android:layout_alignRight="@+id/passwordET"
-        android:layout_alignEnd="@+id/passwordET" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/passwordET"
-        android:background="#fff"
-        android:shadowColor="#000"
-        android:selectAllOnFocus="true"
-        android:enabled="true"
-        android:layout_above="@+id/loginButton"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +19,15 @@
         android:layout_above="@+id/passwordET"
         android:layout_alignLeft="@+id/textView2"
         android:layout_alignStart="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/usernameText"
+        android:id="@+id/textView2"
+        android:layout_above="@+id/usernameET"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -65,14 +50,29 @@
         android:clickable="true"
         android:textIsSelectable="true" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/usernameText"
-        android:id="@+id/textView2"
-        android:layout_above="@+id/usernameET"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordET"
+        android:background="#fff"
+        android:shadowColor="#000"
+        android:selectAllOnFocus="true"
+        android:enabled="true"
+        android:layout_above="@+id/loginButton"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:id="@+id/loginButton"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/passwordET"
+        android:layout_alignStart="@+id/passwordET"
+        android:layout_alignRight="@+id/passwordET"
+        android:layout_alignEnd="@+id/passwordET" />
 
     <ImageView
         android:layout_width="wrap_content"

@@ -47,6 +47,7 @@ public class MyActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void goToLogin(View v) { goToLogin(); }
 
     public void goToLogin(){
         Intent intent0 = new Intent(this, login.class);
