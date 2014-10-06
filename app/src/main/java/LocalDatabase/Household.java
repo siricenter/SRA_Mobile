@@ -21,6 +21,8 @@ public class Household extends Model {
     public String updated_at;
     @Column(name = "area")
     public Area area;
+    @Column(name = "percent")
+    public int percent;
 
     public Household() {
         super();
