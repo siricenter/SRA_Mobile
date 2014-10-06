@@ -6,6 +6,8 @@ import android.util.Log;
 
 import junit.framework.Assert;
 
+import java.util.List;
+
 import LocalDatabase.Area;
 import LocalDatabase.Household;
 
@@ -75,6 +77,26 @@ public class HouseholdTest extends AndroidTestCase {
         // we should then try and reload the object and get null
         household = Household.load(Household.class, id);
         assertNull(household);
+    }
+
+    public void testGetHouseholdByArea() {
+        Household household1 = generateHousehold();
+        Area area = household1.area;
+        long id = area.getId();
+        Household household2 = generateHousehold();
+        household2.area = area;
+        household2.name = "Jimmy";
+        household2.save();
+        household1 = null;
+        household2 = null;
+
+        List<Household> list = Household.getHousehold(id);
+
+        assertNotNull(list);
+        assertFalse(list.isEmpty());
+        assertTrue(list.size() == 2);
+        assertTrue((list.get(0).name).equals("Johns"));
+        assertTrue(list.get(1).name.equals("Jimmy"));
     }
 
     /****FUNCTIONS****/
