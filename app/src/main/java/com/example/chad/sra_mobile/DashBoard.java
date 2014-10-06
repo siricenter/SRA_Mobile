@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 
 public class DashBoard extends Activity {
-    ListView listView;
+/*    ListView listView;
 
 
     @Override
@@ -75,5 +75,5 @@ public class DashBoard extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
