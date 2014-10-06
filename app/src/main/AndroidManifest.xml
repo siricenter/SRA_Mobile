@@ -29,8 +29,8 @@
             android:value="sra.db" />
 
         <activity
-            android:name=".Dashboard"
-            android:label="@string/title_activity_dashboard" >
+            android:name=".DashBoard"
+            android:label="@string/title_activity_dash_board" >
         </activity>
     </application>
 
