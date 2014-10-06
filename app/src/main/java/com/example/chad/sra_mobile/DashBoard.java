@@ -9,17 +9,29 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import LocalDatabase.Area;
 
 
 public class DashBoard extends Activity {
     ListView listView;
+    Spinner spinner;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        listView = (ListView) findViewById(R.id.Interviews);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+        listView = (ListView) findViewById(R.id.Interviews);
+        spinner = (Spinner) findViewById(R.id.areaSpinner);
+        Area area = new Area();
+
+        List<Area> areas = area.getAllAreas();
 
         String[] values = new String[] {
                 "Bob",
@@ -28,10 +40,26 @@ public class DashBoard extends Activity {
                 "Papa Smurf",
         };
 
+        ArrayList<String> areaValues = new ArrayList<String>();
+        areaValues.add("Zimbabwa");
+        areaValues.add("France");
+        System.out.println(areas.size());
+        /*for(int i = 0;i < areas.size();i++){
+            String item = areas.get(i).name;
+            areaValues.add(item);
+        }*/
+
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         listView.setAdapter(adapter);
+        spinner.setAdapter(spinnerAdapter);
+
+        final Intent intent = new Intent(this,Interview.class);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -42,11 +70,11 @@ public class DashBoard extends Activity {
                 // ListView Clicked item index
                 int itemP = position;
 
+                intent.putExtra("household",itemP);
 
 
 
-                Intent intent = new Intent(,Interview.class);
-                // ListView Clicked item value
+                /* ListView Clicked item value */
                 String  itemValue    = (String) listView.getItemAtPosition(position);
 
                 // Show Alert

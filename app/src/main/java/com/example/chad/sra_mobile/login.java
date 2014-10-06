@@ -1,9 +1,11 @@
 package com.example.chad.sra_mobile;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class login extends Activity {
@@ -33,4 +35,10 @@ public class login extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void login(View v){
+        final Intent intent0 = new Intent(this, DashBoard.class);
+        startActivity(intent0);
+    }
+
 }
