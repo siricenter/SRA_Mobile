@@ -4,6 +4,8 @@ import android.test.AndroidTestCase;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
+import java.util.List;
+
 import LocalDatabase.Area;
 
 /**
@@ -21,7 +23,7 @@ public class AreaTest extends AndroidTestCase {
         Area area = generateArea();
         assertNotNull(area);
         long id = area.getId();
-        assertTrue((int)id >= 0);
+        assertTrue((int) id >= 0);
     }
 
     public void testLoad() {
@@ -79,6 +81,14 @@ public class AreaTest extends AndroidTestCase {
             Log.d("AreaTest : test Delete", "Area was not found after delete");
         }
         assertNull(area);
+    }
+
+    public void testGetAllAreas() {
+        List<Area> list = Area.getAllAreas();
+        assertNotNull(list);
+        assertFalse(list.isEmpty());
+        assertTrue(list.get(0).name.equals("Jimmy"));
+        assertTrue(list.size() > 0);
     }
 
     /****FUNCTIONS****/

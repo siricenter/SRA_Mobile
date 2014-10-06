@@ -5,6 +5,8 @@ import android.test.InstrumentationTestCase;
 
 import junit.framework.Assert;
 
+import java.util.List;
+
 import LocalDatabase.Area;
 import LocalDatabase.Household;
 import LocalDatabase.Interview;
@@ -145,6 +147,19 @@ public class InterviewTest extends AndroidTestCase {
         assertTrue(interview.refrigerator.equals("90"));
 
         assertTrue(interview.updated_at.equals("2001"));
+    }
+
+    public void testGetInterviewByHousehold() {
+        Interview interview1 = generateInterview();
+        Interview interview2 = generateInterview();
+        interview2.household = interview1.household;
+        long id = interview1.household.getId();
+        interview2.save();
+
+        List<Interview> list = Interview.getHouseholdInterviews(id);
+        assertNotNull(list);
+        assertFalse(list.isEmpty());
+        assertTrue(list.size() == 2);
     }
 
     /****FUNCTIONS****/

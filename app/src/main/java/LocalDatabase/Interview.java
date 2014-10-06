@@ -3,6 +3,9 @@ package LocalDatabase;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 /**
  * Created by Chad Carey on 10/1/2014.
@@ -79,4 +82,7 @@ public class Interview extends Model {
         super();
     }
 
+    public static List<Interview> getHouseholdInterviews(long householdID){
+        return new Select().from(Interview.class).where("household=" + householdID).execute();
+    }
 }

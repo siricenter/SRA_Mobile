@@ -3,6 +3,9 @@ package LocalDatabase;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 /**
  * Created by Chad Carey on 10/1/2014.
@@ -19,6 +22,10 @@ public class Area extends Model {
 
     public Area() {
         super();
+    }
+
+    public static List<Area> getAllAreas() {
+        return new Select().from(Area.class).execute();
     }
 
 }

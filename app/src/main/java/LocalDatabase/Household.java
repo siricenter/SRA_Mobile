@@ -21,6 +21,16 @@ public class Household extends Model {
     public String updated_at;
     @Column(name = "area")
     public Area area;
+
+    /**
+     * IMPORTANT INFO READ THIS!!!
+     * This percentage is the percentage of the household's interview.
+     * For the prototype the household only has one interview and we need the percentage
+     * of the household's single interview available in the view along with the interview name.
+     * In the future we will tie these percentages to each interview  itself and pull up
+     * all interviews associated with the household with these percentages.
+     * For the prototype it needs to be here.
+     */
     @Column(name = "percent")
     public int percent;
 
@@ -29,7 +39,7 @@ public class Household extends Model {
     }
 
     public static List<Household> getHousehold(long areaId) {
-        List<Household> list = new Select("name").from(Model.class).where("area="+areaId).execute();
+        List<Household> list = new Select().from(Household.class).where("area="+areaId).execute();
         return list;
     }
 
