@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +30,7 @@ public class login extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        login();
-                    }
-                });
-
+                login();
             }
         });
     }
@@ -64,8 +59,9 @@ public class login extends Activity {
         String username = usernameET.getText().toString();
         String password = passwordET.getText().toString();
         if(validate(username, password)) {
-            editor.putString("username", username);
-            editor.putString("password", password);
+            editor.putString("username", username.trim());
+            editor.putString("password", password.trim());
+            editor.commit();
             // forward to MyActivity
             Intent intent = new Intent(this, MyActivity.class);
             startActivity(intent);
@@ -73,6 +69,7 @@ public class login extends Activity {
     }
 
     public boolean validate(String username, String password) {
+        Log.d("Login : validate", "username==" + username + " password==" + password);
         if(username != null && password != null)
             if(!username.isEmpty() && !password.isEmpty())
                 return true;

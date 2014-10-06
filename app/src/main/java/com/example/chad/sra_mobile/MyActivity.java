@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,7 @@ public class MyActivity extends Activity {
     }
 
     public boolean validate(String username, String password) {
+        Log.d("MyActivity : validate", "username==" + username + " password==" + password);
         if(username != null && password != null)
             if(!username.isEmpty() && !password.isEmpty())
                 return true;
