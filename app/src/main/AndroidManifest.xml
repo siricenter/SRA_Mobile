@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="com.activeandroid.app.Application" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MyActivity"
             android:label="@string/app_name" >
@@ -20,16 +20,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dashboard"
-            android:label="@string/title_activity_dashboard" >
-        </activity>
-        <activity
             android:name=".login"
             android:label="@string/title_activity_login" >
         </activity>
 
-        <meta-data android:name="AA_DB_NAME" android:value="sra.db" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="sra.db" />
 
+        <activity
+            android:name=".Dashboard"
+            android:label="@string/title_activity_dashboard" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
