@@ -41,7 +41,11 @@ public class DashBoard extends Activity {
 
                 // ListView Clicked item index
                 int itemP = position;
-                Intent intent = new Intent();
+
+
+
+
+                Intent intent = new Intent(,Interview.class);
                 // ListView Clicked item value
                 String  itemValue    = (String) listView.getItemAtPosition(position);
 

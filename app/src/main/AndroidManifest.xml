@@ -32,6 +32,10 @@
             android:name=".DashBoard"
             android:label="@string/title_activity_dash_board" >
         </activity>
+        <activity
+            android:name=".Interview"
+            android:label="@string/title_activity_interview" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
