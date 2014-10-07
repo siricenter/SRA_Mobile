@@ -1,50 +1,65 @@
 package DataSync;
- import quickconnectfamily.json.JSONInputStream;
- import quickconnectfamily.json.JSONInputStream;
- import java.net.Socket;
- import quickconnectfamily.json.JSONInputStream;
- import quickconnectfamily.json.JSONOutputStream;
- import java.lang.ref.WeakReference;
- import java.io.*;
- import android.os.Handler;
+ import DataSync.httprequests.DataGetter;
+ import DataSync.httprequests.SyncTypes.Syncable;
 
- import com.example.chad.sra_mobile.MyActivity;
+ import java.util.LinkedList;
 
 
-public class DataSync implements Runnable {
-    private String host = "https://www.sra-api.com";
-    private String data = "default";
-    private int socket = 80;
-    private WeakReference theReference = null;
-    private android.os.Handler theHandler = null;
+public class DataSync {
+    // IDEA: this class is singleton. We have a static queque of updateables, after each update the
+    // a function is called to start the next item. Strategy pattern to allow different update types to be ran
+    // example different function for update all areas. factory can create the kind of sync the user wants
+
+    private static LinkedList<Syncable> syncList;
+    private DataGetter dataGetter;
+    private static DataSync instance;
+    private boolean syncInProgress;
 
 
-    public DataSync (String host, int socket, String data, WeakReference theReference, Handler theHandler){
-        this.host = host;
-        this.socket = socket;
-        this.data = data;
-        this.theReference = theReference;
-        this.theHandler = theHandler;
+    private DataSync() {
+        syncList = new LinkedList<Syncable>();
+        dataGetter = new DataGetter();
+        syncInProgress = false;
     }
 
-    @Override
-    public void run() {
-        try{
-            Socket toServer = new Socket(host, socket);
-            final JSONInputStream inFromServer = new JSONInputStream(toServer.getInputStream());
-            JSONOutputStream outToServer = new JSONOutputStream(toServer.getOutputStream());
-            outToServer.writeObject(data);
-            theHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    MyActivity theActivity = (MyActivity) theReference.get();
-                    //theActivity.getFromThread(inFromServer.readObject()); //System.out.println(inFromServer.readObject());
-                }
-            });
+    public static DataSync getInstance() {
+        if(instance == null){
+            instance = new DataSync();
         }
-        catch(Exception e){
-            System.out.println("Fail");
-            e.printStackTrace();
+        return instance;
+    }
+
+    public void nextSync() {
+        if(!syncList.isEmpty()) {
+            Syncable sync = syncList.peekFirst();
+            dataGetter.startThread(sync);
+        } else {
+            syncInProgress = false;
         }
+    }
+
+    public void startSync() {
+        if(!syncInProgress) {
+            syncInProgress = true;
+            // populate items into syncList
+            // download all areas
+            // start the first item
+        }
+    }
+
+    /**
+     * Removes the first element from the top of the list
+     */
+    public void popTop() {
+        syncList.pollFirst();
+    }
+
+    /**
+     * adds an item to the back of the sync list
+     * @param sync
+     */
+    public void pushBack(Syncable sync) {
+        if (sync != null)
+            syncList.addLast(sync);
     }
 }
