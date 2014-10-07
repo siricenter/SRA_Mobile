@@ -22,4 +22,33 @@
     <string name="house">Add Household</string>
     <string name="House">Add Household</string>
 
+    <!--Interview strings-->
+    <string name="nutrition_tab_title">Nutrition</string>
+    <string name="agronomy_tab_title">Agronomy</string>
+    <string name="sas_tab_title">Small Animal Science</string>
+    <string name="add_food_item_button">+</string>
+    <string name="remove_food_item_button">-</string>
+    <string name="food_item">Food Item</string>
+    <string name="serving_size">Serving Size</string>
+    <string name="servings">Number of Servings</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="cooked">Cooked</string>
+    <string name="raw">Raw</string>
+    <string-array name="serving_units">
+        <item>oz.</item>
+        <item>lt.</item>
+        <item>lbs.</item>
+    </string-array>
+    <string-array name="frequency">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+    <string-array name="cooked_raw">
+        <item>Cooked</item>
+        <item>Raw</item>
+    </string-array>
+
 </resources>
