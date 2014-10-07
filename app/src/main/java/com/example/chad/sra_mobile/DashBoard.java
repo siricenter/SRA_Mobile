@@ -18,8 +18,10 @@ import LocalDatabase.Area;
 
 
 public class DashBoard extends Activity {
+
     ListView listView;
     Spinner spinner;
+
 
 
     @Override
@@ -32,7 +34,7 @@ public class DashBoard extends Activity {
         Area area = new Area();
             area.name = "ZombieLand";
             area.created_at = "now";
-            area.updated_at =
+            area.updated_at = "later";
             area.save();
 
         List<Area> areas = area.getAllAreas();
