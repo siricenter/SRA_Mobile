@@ -9,17 +9,17 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
 import DataSync.httprequests.DataGetter;
-import DataSync.httprequests.SyncTypes.Syncable;
+import DataSync.httprequests.SyncTypes.Gettable;
 
 /**
  * Created by Chad Carey on 9/22/2014.
  */
-public class TestThreadRunner extends InstrumentationTestCase implements Syncable {
+public class TestThreadRunner extends InstrumentationTestCase implements Gettable {
 
     private Handler handler;
     private SoftReference softy;
     private String address;
-    private Syncable updater;
+    private Gettable updater;
     private HashMap<String, Object> pokemonData;
 
     @Override
@@ -31,7 +31,7 @@ public class TestThreadRunner extends InstrumentationTestCase implements Syncabl
 
     public void testThreadRunner() {
 
-        updater = this; // this class is an Syncable class to be used in thread runner
+        updater = this; // this class is an Gettable class to be used in thread runner
         try {
             runTestOnUiThread(new Runnable() {
                 @Override
