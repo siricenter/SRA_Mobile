@@ -30,6 +30,10 @@ public class DashBoard extends Activity {
         listView = (ListView) findViewById(R.id.Interviews);
         spinner = (Spinner) findViewById(R.id.areaSpinner);
         Area area = new Area();
+            area.name = "ZombieLand";
+            area.created_at = "now";
+            area.updated_at =
+            area.save();
 
         List<Area> areas = area.getAllAreas();
 
@@ -44,10 +48,10 @@ public class DashBoard extends Activity {
         areaValues.add("Zimbabwa");
         areaValues.add("France");
         System.out.println(areas.size());
-        /*for(int i = 0;i < areas.size();i++){
+        for(int i = 0;i < areas.size();i++){
             String item = areas.get(i).name;
             areaValues.add(item);
-        }*/
+        }
 
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,

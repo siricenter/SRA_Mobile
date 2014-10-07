@@ -2,6 +2,10 @@ package LocalDatabase;
 
 import com.activeandroid.Model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * This is the base Model class for the SRA database
  * It include methods that will be needed by all of the SRA tables
@@ -18,6 +22,9 @@ public class SRAModel extends Model {
      * @return
      */
     public String generateTimestamp() {
-        return null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        String formattedDate = dateFormat.format(date);
+        return formattedDate;
     }
 }
