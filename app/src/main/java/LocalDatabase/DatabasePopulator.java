@@ -1,5 +1,7 @@
 package LocalDatabase;
 
+import java.util.List;
+
 import LocalDatabase.Area;
 
 /**
@@ -11,7 +13,17 @@ public class DatabasePopulator {
         "Africa", "South America", "Central America", "Asia", "Europe", "North America"
     };
 
-    public void populateAreas() {
+    final public static String[] HOUSEHOLD_NAMES = {
+            "Katana", "Applesmith", "Johnson", "Gonzalez", "Hartman", ""
+    };
+
+    public void populate() {
+        populateAreas();
+        populateHouseholds();
+        //populateInterviews();
+    }
+
+    private void populateAreas() {
         for(String areaName : AREA_NAMES) {
             Area area = new Area();
             area.name = areaName;
@@ -19,5 +31,22 @@ public class DatabasePopulator {
             area.updated_at = "now";
             area.save();
         }
+    }
+
+    private void populateHouseholds() {
+        List<Area> areaList = Area.getAllAreas();
+        for(String householdName : HOUSEHOLD_NAMES) {
+            Household household = new Household();
+            household.name = householdName;
+            household.area = areaList.get((int)(Math.random() * areaList.size()));
+            household.created_at = "now";
+            household.updated_at = "now";
+            household.percent = 0;
+            household.save();
+        }
+    }
+
+    private void populateInterviews(){
+        // to be created
     }
 }
