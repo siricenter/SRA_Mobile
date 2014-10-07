@@ -21,6 +21,7 @@ public class TestDatabasePopulator extends InstrumentationTestCase {
     @Override
     public void setUp() {
         populator = new DatabasePopulator();
+        populator.deleteAll();
         populator.populate();
     }
 

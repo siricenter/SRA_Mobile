@@ -1,5 +1,7 @@
 package LocalDatabase;
 
+import com.activeandroid.query.Delete;
+
 import java.util.List;
 
 import LocalDatabase.Area;
@@ -21,6 +23,16 @@ public class DatabasePopulator {
         populateAreas();
         populateHouseholds();
         //populateInterviews();
+    }
+
+    public void deleteAll() {
+        new Delete().from(Interview.class);
+        new Delete().from(Household.class);
+        new Delete().from(Area.class);
+    }
+
+    public void dropAll() {
+        
     }
 
     private void populateAreas() {
