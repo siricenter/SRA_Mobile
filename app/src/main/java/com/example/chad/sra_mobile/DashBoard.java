@@ -1,6 +1,8 @@
 package com.example.chad.sra_mobile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,12 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
@@ -30,13 +31,12 @@ public class DashBoard extends Activity {
     List<Household> households;
     ArrayAdapter<String> spinnerAdapter;
     ArrayAdapter<String> adapter;
-    DatabasePopulator create;
+    String newHousehold;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        create = new DatabasePopulator();
         areaValues = new ArrayList<String>();
         area = new Area();
         household = new Household();
@@ -50,6 +50,7 @@ public class DashBoard extends Activity {
 
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, householdValues);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
@@ -96,10 +97,13 @@ public class DashBoard extends Activity {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("Position is " + i);
                 households = household.getHousehold(i);
                 householdValues.clear();
                 householdValues.add("Households");
+                System.out.println(households.size() + " Rows");
                 for(int p = 0;p < households.size();++p){
+                    int percent = households.get(p).percent;
                     String item = households.get(p).name;
                     householdValues.add(item);
                 }
@@ -136,7 +140,8 @@ public class DashBoard extends Activity {
     }
 
     public void syncDatabase(View v){
-        create.deleteAll();
+
+        DatabasePopulator create = new DatabasePopulator();
         create.populate();
         areaValues.clear();
         areaValues.add("Select Area");
@@ -147,4 +152,37 @@ public class DashBoard extends Activity {
         spinnerAdapter.notifyDataSetChanged();
 
     }
+
+    public void addHousehold(View v){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Title");
+        alert.setMessage("Message");
+
+// Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                newHousehold = input.getText();
+                int position = spinner.getSelectedItemPosition();
+                Household newhouse = new Household();
+                        newhouse.percent = 0;
+                        newhouse.area = area.getArea(position);
+                        newhouse.name = newHousehold;
+                        newhouse.created_at = "now";
+                        newhouse.updated_at = "now";
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+    }
+
 }

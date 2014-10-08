@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "sra_areas")
 public class Area extends Model {
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true,onUniqueConflict = Column.ConflictAction.IGNORE)
     public String name;
     @Column(name = "created_at")
     public String created_at;

@@ -22,7 +22,7 @@
     <string name="house">Add Household</string>
     <string name="House">Add Household</string>
 
-    <!--Interview strings-->
+    <!-- Interview strings -->
     <string name="nutrition_tab_title">Nutrition</string>
     <string name="agronomy_tab_title">Agronomy</string>
     <string name="sas_tab_title">Small Animal Science</string>
@@ -36,6 +36,7 @@
     <string name="monthly">Monthly</string>
     <string name="cooked">Cooked</string>
     <string name="raw">Raw</string>
+
     <string-array name="serving_units">
         <item>oz.</item>
         <item>lt.</item>
@@ -50,5 +51,8 @@
         <item>Cooked</item>
         <item>Raw</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="addInterview">Add Interview</string>
 
 </resources>

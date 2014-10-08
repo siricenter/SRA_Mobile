@@ -1,5 +1,7 @@
 package LocalDatabase;
 
+import android.util.Log;
+
 import com.activeandroid.query.Delete;
 
 import java.util.List;
@@ -26,9 +28,9 @@ public class DatabasePopulator {
     }
 
     public void deleteAll() {
-        new Delete().from(Interview.class);
-        new Delete().from(Household.class);
-        new Delete().from(Area.class);
+        new Delete().from(Interview.class).execute();
+        new Delete().from(Household.class).execute();
+        new Delete().from(Area.class).execute();
     }
 
     public void dropAll() {
@@ -41,7 +43,11 @@ public class DatabasePopulator {
             area.name = areaName;
             area.created_at = "now";
             area.updated_at = "now";
-            area.save();
+            try {
+                area.save();
+            } catch (Exception e) {
+                Log.d("DatabasePopulator: populateAreas()","Already In the Database");
+            }
         }
     }
 
@@ -50,7 +56,7 @@ public class DatabasePopulator {
         for(String householdName : HOUSEHOLD_NAMES) {
             Household household = new Household();
             household.name = householdName;
-            household.area = areaList.get((int)(Math.random() * areaList.size()));
+            household.area = areaList.get((int)(Math.random() * (areaList.size()-1)));
             household.created_at = "now";
             household.updated_at = "now";
             household.percent = 0;
