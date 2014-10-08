@@ -12,7 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
-import DataSync.httprequests.SyncTypes.Gettable;
+import DataSync.GetSync;
 import quickconnectfamily.json.JSONInputStream;
 
 
@@ -27,15 +27,18 @@ public class DataGetter implements Runnable {
     private SoftReference softData;
     private SoftReference softAddress;
     private SoftReference softCaller;
+    private static DataGetter instance;
 
-    /*public ThreadRunner(Handler handler, SoftReference<HashMap<String,String>> softData, String address, Gettable caller) {
-        this.handler = handler;
-        this.softData = softData;
-        this.address = address;
-        this.caller = caller;
-    }*/
+    private DataGetter() {}
 
-    public Thread startThread(Gettable caller) {
+    public static DataGetter getInstance() {
+        if (instance == null) {
+            instance = new DataGetter();
+        }
+        return instance;
+    }
+
+    public Thread startThread(GetSync caller) {
         Log.d("ThreadRunner", "Creating handler on current thread");
         this.handler = new Handler();
         Log.d("ThreadRunner", "Loading soft references");
@@ -69,7 +72,7 @@ public class DataGetter implements Runnable {
                 @Override
                 public void run() {
                     Log.d("ThreadRunner ", "posting runnable to ui thread");
-                    ((Gettable)softCaller.get()).update();
+                    ((GetSync)softCaller.get()).update();
                 }
             });
         } catch (MalformedURLException e) {
