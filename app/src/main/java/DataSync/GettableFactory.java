@@ -10,7 +10,7 @@ public class GettableFactory {
      * this object will download every single area from the API
      * @return
      */
-    public DataSync.GetSync DownloadAllAreas() {
+    public GetSync DownloadAllAreas() {
         return new DownloadAllAreas();
     }
 }
