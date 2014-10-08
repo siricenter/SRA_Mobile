@@ -1,4 +1,4 @@
-package httprequests.tests;
+package DataSync.httprequests.tests;
 
 import android.os.Handler;
 import android.test.InstrumentationTestCase;
@@ -8,18 +8,18 @@ import android.util.Log;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
-import httprequests.HttpThreadRunner;
-import httprequests.Updateable;
+import DataSync.httprequests.DataGetter;
+import DataSync.GetSync;
 
 /**
  * Created by Chad Carey on 9/22/2014.
  */
-public class TestThreadRunner extends InstrumentationTestCase implements Updateable {
+public class TestThreadRunner extends InstrumentationTestCase implements GetSync {
 
     private Handler handler;
     private SoftReference softy;
     private String address;
-    private Updateable updater;
+    private GetSync updater;
     private HashMap<String, Object> pokemonData;
 
     @Override
@@ -31,7 +31,7 @@ public class TestThreadRunner extends InstrumentationTestCase implements Updatea
 
     public void testThreadRunner() {
 
-        updater = this; // this class is an Updateable class to be used in thread runner
+        updater = this; // this class is an GetSync class to be used in thread runner
         try {
             runTestOnUiThread(new Runnable() {
                 @Override
@@ -45,7 +45,7 @@ public class TestThreadRunner extends InstrumentationTestCase implements Updatea
 
                     address = "http://pokeapi.co/api/v1/pokemon/25/";
 
-                    HttpThreadRunner runner = new HttpThreadRunner();
+                    DataGetter runner = new DataGetter();
                     Thread t = runner.startThread(pokemonData, address, updater);
                     try {
                         t.join(); // makes test wait for the other thread to finish

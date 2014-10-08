@@ -1,50 +1,81 @@
 package DataSync;
- import quickconnectfamily.json.JSONInputStream;
- import quickconnectfamily.json.JSONInputStream;
- import java.net.Socket;
- import quickconnectfamily.json.JSONInputStream;
- import quickconnectfamily.json.JSONOutputStream;
- import java.lang.ref.WeakReference;
- import java.io.*;
- import android.os.Handler;
 
- import com.example.chad.sra_mobile.MyActivity;
+import java.util.LinkedList;
 
 
-public class DataSync implements Runnable {
-    private String host = "https://www.sra-api.com";
-    private String data = "default";
-    private int socket = 80;
-    private WeakReference theReference = null;
-    private android.os.Handler theHandler = null;
+public class DataSync {
+    // IDEA: this class is singleton. We have a static queque of updateables, after each update the
+    // a function is called to start the next item. Strategy pattern to allow different update types to be ran
+    // example different function for update all areas. factory can create the kind of sync the user wants
+
+    private static DataSync instance;
+    private static LinkedList<Syncable> syncList;
+    private boolean syncInProgress;
 
 
-    public DataSync (String host, int socket, String data, WeakReference theReference, Handler theHandler){
-        this.host = host;
-        this.socket = socket;
-        this.data = data;
-        this.theReference = theReference;
-        this.theHandler = theHandler;
+    private DataSync() {
+        syncList = new LinkedList<Syncable>();
+        syncInProgress = false;
     }
 
-    @Override
-    public void run() {
-        try{
-            Socket toServer = new Socket(host, socket);
-            final JSONInputStream inFromServer = new JSONInputStream(toServer.getInputStream());
-            JSONOutputStream outToServer = new JSONOutputStream(toServer.getOutputStream());
-            outToServer.writeObject(data);
-            theHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    MyActivity theActivity = (MyActivity) theReference.get();
-                    //theActivity.getFromThread(inFromServer.readObject()); //System.out.println(inFromServer.readObject());
-                }
-            });
+    /**
+     * gets the instance of this class
+     * @return
+     */
+    public static DataSync getInstance() {
+        if(instance == null){
+            instance = new DataSync();
         }
-        catch(Exception e){
-            System.out.println("Fail");
-            e.printStackTrace();
+        return instance;
+    }
+
+    /**
+     * nextSync: this method will start the listed sync tasks
+     */
+    void nextSync() {
+        // if the list isn't empty we start the next sync task
+        if(!syncList.isEmpty()) {
+            syncList.pollFirst();
+            Syncable sync = syncList.peekFirst();
+            sync.startSync();
+        } else {
+            // we finished all of the sync tasks, set the busy flag to false
+            syncInProgress = false;
         }
+        return;
+    }
+
+
+    /**
+     * This will start the sync process if it is not already in progress
+     */
+    public void startSync() {
+        if(!syncInProgress) {
+            syncInProgress = true;
+            // prepare the syncPost list
+            // prepare the syncGet task
+            // start
+            Syncable sync = syncList.peekFirst();
+            sync.startSync();
+        }
+    }
+
+
+    /**
+     * this will add a sync task to the list and start the sync tasks
+     * @param sync
+     */
+    public void sync(Syncable sync) {
+        this.pushBack(sync);
+        startSync();
+    }
+
+    /**
+     * adds an item to the back of the sync list
+     * @param sync
+     */
+    public void pushBack(Syncable sync) {
+        if (sync != null)
+            syncList.addLast(sync);
     }
 }
