@@ -66,7 +66,7 @@ public class login extends Activity {
             editor.putString("password", password.trim());
             editor.commit();
             // forward to MyActivity
-            Intent intent = new Intent(this, MyActivity.class);
+            Intent intent = new Intent(this, DashBoard.class);
             startActivity(intent);
         }
     }

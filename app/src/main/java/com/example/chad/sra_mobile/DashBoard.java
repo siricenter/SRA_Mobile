@@ -15,57 +15,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 import LocalDatabase.Area;
+import LocalDatabase.DatabasePopulator;
 
 
 public class DashBoard extends Activity {
 
     ListView listView;
     Spinner spinner;
+    ArrayList<String> areaValues;
+    Area area;
+    List<Area> areas;
+    String[] values;
+    ArrayAdapter<String> spinnerAdapter;
+    ArrayAdapter<String> adapter;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        areaValues = new ArrayList<String>();
+        area = new Area();
+        values = new String[] {
+                "Households"
+        };
+
+        areas = area.getAllAreas();
+
+        spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
         listView = (ListView) findViewById(R.id.Interviews);
         spinner = (Spinner) findViewById(R.id.areaSpinner);
-        Area area = new Area();
-            area.name = "ZombieLand";
-            area.created_at = "now";
-            area.updated_at = "later";
-            area.save();
 
-        List<Area> areas = area.getAllAreas();
 
-        String[] values = new String[] {
-                "Bob",
-                "Hudu",
-                "Ben",
-                "Papa Smurf",
-        };
 
-        ArrayList<String> areaValues = new ArrayList<String>();
-        areaValues.add("Zimbabwa");
-        areaValues.add("France");
-        System.out.println(areas.size());
+        areaValues.add("Select Area");
+
         for(int i = 0;i < areas.size();i++){
             String item = areas.get(i).name;
             areaValues.add(item);
         }
 
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         listView.setAdapter(adapter);
         spinner.setAdapter(spinnerAdapter);
 
-        final Intent intent = new Intent(this,Interview.class);
+        final Intent intent = new Intent(this, Interview.class);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -89,6 +91,16 @@ public class DashBoard extends Activity {
 
         });
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
     }
 
 
@@ -109,5 +121,19 @@ public class DashBoard extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void syncDatabase(View v){
+
+        DatabasePopulator create = new DatabasePopulator();
+        create.deleteAll();
+        create.populate();
+
+        for(int i = 0;i < areas.size();i++){
+            String item = areas.get(i).name;
+            areaValues.add(item);
+        }
+        spinnerAdapter.notifyDataSetChanged();
+
     }
 }

@@ -19,8 +19,8 @@ public class MyActivity extends Activity {
         // if username and password are entered then forward to MyActivity
         String username = preferences.getString("username", null);
         String password = preferences.getString("password", null);
-        if(!validate(username, password)) {
-            goToLogin();
+        if(validate(username, password)) {
+           goToDashboard();
         } else {
             // set up the activity
         }
@@ -51,6 +51,13 @@ public class MyActivity extends Activity {
 
     public void goToLogin(){
         Intent intent0 = new Intent(this, login.class);
+        startActivity(intent0);
+    }
+
+    public void goToDashboard(View v) { goToDashboard(); }
+
+    public void goToDashboard(){
+        Intent intent0 = new Intent(this, DashBoard.class);
         startActivity(intent0);
     }
 

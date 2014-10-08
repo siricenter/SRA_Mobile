@@ -1,4 +1,4 @@
-package com.example.jordanreed.interview;
+package com.example.chad.sra_mobile;
 
 import android.app.Activity;
 import android.net.Uri;
