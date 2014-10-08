@@ -14,7 +14,7 @@ public abstract class GetSync implements Syncable {
 
     private int syncFails;
     private DataGetter dataGetter;
-    private HashMap<String, Object> data;
+    protected HashMap<String, Object> data;
     private DataSync dataSync;
 
     public GetSync() {
@@ -32,7 +32,7 @@ public abstract class GetSync implements Syncable {
      * syncData handles how the data is synced to the database after the data has been retrieved
      * @return
      */
-    public abstract boolean syncLocalData();
+    abstract boolean syncLocalData();
     public abstract String getSyncAddress();
 
     /**
