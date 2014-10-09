@@ -6,17 +6,38 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 
-public class Interview extends Activity {
+import java.util.List;
+
+public class InterviewActivity extends Activity {
 
     Fragment nutritionTab = new NutritionTab();
     Fragment agronomyTab  = new AgronomyTab();
     Fragment sasTab       = new SASTab();
 
+    int householdID = -1;
+    int areaID = -1;
+    LocalDatabase.Interview interview = null;
+    public int getHouseholdID() { return householdID; }
+    public int getAreaID() { return areaID; }
+    public LocalDatabase.Interview getInterview() { return interview; }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview);
+
+        Intent intent = getIntent();
+        householdID = intent.getIntExtra("household", -1);
+        areaID = intent.getIntExtra("area", -1);
+        List<LocalDatabase.Interview> interviews = LocalDatabase.Interview.getHouseholdInterviews(householdID);
+        if (interviews.size() > 0) {
+            interview = interviews.get(0);
+        }
+        else {
+            interview = new LocalDatabase.Interview();
+        }
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
