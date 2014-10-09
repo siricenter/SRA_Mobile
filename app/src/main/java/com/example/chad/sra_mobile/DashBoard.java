@@ -77,7 +77,7 @@ public class DashBoard extends Activity {
         listView.setAdapter(adapter);
         spinner.setAdapter(spinnerAdapter);
 
-        final Intent intent = new Intent(this, Interview.class);
+        final Intent intent = new Intent(this, InterviewActivity.class);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
