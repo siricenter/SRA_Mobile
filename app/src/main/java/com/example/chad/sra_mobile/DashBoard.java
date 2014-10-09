@@ -2,26 +2,34 @@ package com.example.chad.sra_mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
-
+import LocalDatabase.SRAModel;
 
 public class DashBoard extends Activity {
-
+    SRAModel model = new SRAModel();
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
@@ -30,31 +38,34 @@ public class DashBoard extends Activity {
     List<Area> areas;
     List<Household> households;
     ArrayAdapter<String> spinnerAdapter;
-    ArrayAdapter<String> adapter;
-    String newHousehold;
+    customList adapter;
+    ArrayList<String> householdValues;
+    ArrayList<String> percents;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         areaValues = new ArrayList<String>();
+        percents = new ArrayList<String>();
         area = new Area();
         household = new Household();
-        final ArrayList<String> householdValues = new ArrayList<String>();
+          householdValues = new ArrayList<String>();
         householdValues.add("Households");
-
+        percents.add("%Complete");
         areas = area.getAllAreas();
 
         spinnerAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
 
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, householdValues);
+        adapter = new customList(DashBoard.this,householdValues,percents);
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
         listView = (ListView) findViewById(R.id.Interviews);
+
         spinner = (Spinner) findViewById(R.id.areaSpinner);
 
 
@@ -78,38 +89,30 @@ public class DashBoard extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
+                int areaSpinner = spinner.getSelectedItemPosition();
                 // ListView Clicked item index
-                int itemP = position;
-
-                intent.putExtra("household",itemP);
-
-
-
-                /* ListView Clicked item value */
-                String  itemValue    = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-
-                }
+                intent.putExtra("household", position);
+                intent.putExtra("area",areaSpinner);
+                startActivity(intent);
+            }
 
         });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("Position is " + i);
                 households = household.getHousehold(i);
                 householdValues.clear();
+                percents.clear();
                 householdValues.add("Households");
-                System.out.println(households.size() + " Rows");
+                percents.add("%Complete");
                 for(int p = 0;p < households.size();++p){
                     int percent = households.get(p).percent;
+                    String showPercent = "%" + percent;
                     String item = households.get(p).name;
+                    percents.add(showPercent);
                     householdValues.add(item);
                 }
-                System.out.println(householdValues);
                 adapter.notifyDataSetChanged();
-                System.out.println("Finished");
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -156,8 +159,8 @@ public class DashBoard extends Activity {
     public void addHousehold(View v){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Title");
-        alert.setMessage("Message");
+        alert.setTitle("Name of new household?");
+        alert.setMessage("Create a new Household");
 
 // Set an EditText view to get user input
         final EditText input = new EditText(this);
@@ -165,14 +168,30 @@ public class DashBoard extends Activity {
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                newHousehold = input.getText();
+               Editable newHousehold = input.getText();
                 int position = spinner.getSelectedItemPosition();
-                Household newhouse = new Household();
-                        newhouse.percent = 0;
-                        newhouse.area = area.getArea(position);
-                        newhouse.name = newHousehold;
-                        newhouse.created_at = "now";
-                        newhouse.updated_at = "now";
+                Household newHouse = new Household();
+                        newHouse.percent = 0;
+                        newHouse.area = Area.load(Area.class,position);
+                        newHouse.name = newHousehold.toString();
+                        newHouse.created_at = model.generateTimestamp();
+                        newHouse.updated_at = model.generateTimestamp();
+                        newHouse.save();
+
+                households = household.getHousehold(position);
+                householdValues.clear();
+                percents.clear();
+                percents.add("%Complete");
+                householdValues.add("Households");
+                for(int p = 0;p < households.size();++p){
+                    int percent = households.get(p).percent;
+                    String showPercent = "%" + percent;
+                    String item = households.get(p).name;
+                    householdValues.add(item);
+                    percents.add(showPercent);
+                }
+                adapter.notifyDataSetChanged();
+                System.out.println(newHousehold.toString() + "created");
             }
         });
 
