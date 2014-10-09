@@ -13,6 +13,8 @@ import java.util.List;
 @Table(name = "consumed_foods")
 public class ConsumedFood extends SRAModel {
 
+    @Column(name = "interview_id")
+    public int interview_id;
     @Column(name = "servings")
     public int servings;
     @Column(name = "frequency")
