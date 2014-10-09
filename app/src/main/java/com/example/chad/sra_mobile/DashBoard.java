@@ -2,7 +2,6 @@ package com.example.chad.sra_mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +12,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,11 +84,13 @@ public class DashBoard extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                int areaSpinner = spinner.getSelectedItemPosition();
-                // ListView Clicked item index
-                intent.putExtra("household", position);
-                intent.putExtra("area",areaSpinner);
-                startActivity(intent);
+                if(position != 0){
+                    int areaSpinner = spinner.getSelectedItemPosition();
+                    // ListView Clicked item index
+                    intent.putExtra("household", position);
+                    intent.putExtra("area",areaSpinner);
+                    startActivity(intent);
+                }
             }
 
         });
