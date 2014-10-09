@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import LocalDatabase.ConsumedFood;
+import LocalDatabase.Household;
 import LocalDatabase.Interview;
 
 public class NutritionTab extends Fragment {
@@ -39,6 +41,10 @@ public class NutritionTab extends Fragment {
 //        }
 
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
+
+        TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
+        Household house = Household.load(Household.class, householdID);
+        householdLabel.setText(house.name + " family Interview");
 
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {
