@@ -34,22 +34,19 @@
     <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
     <string name="monthly">Monthly</string>
-    <string name="cooked">Cooked</string>
-    <string name="raw">Raw</string>
 
     <string-array name="serving_units">
         <item>oz.</item>
-        <item>lt.</item>
+        <item>ltr.</item>
         <item>lbs.</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
     </string-array>
     <string-array name="frequency">
         <item>Daily</item>
         <item>Weekly</item>
         <item>Monthly</item>
-    </string-array>
-    <string-array name="cooked_raw">
-        <item>Cooked</item>
-        <item>Raw</item>
     </string-array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

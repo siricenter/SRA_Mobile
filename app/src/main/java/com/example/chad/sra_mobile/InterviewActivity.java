@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.content.Intent;
 
 import java.util.List;
+import LocalDatabase.Interview;
 
 public class InterviewActivity extends Activity {
 
@@ -17,11 +18,9 @@ public class InterviewActivity extends Activity {
     Fragment sasTab       = new SASTab();
 
     int householdID = -1;
-    int areaID = -1;
-    LocalDatabase.Interview interview = null;
+    Interview interview = null;
     public int getHouseholdID() { return householdID; }
-    public int getAreaID() { return areaID; }
-    public LocalDatabase.Interview getInterview() { return interview; }
+    public Interview getInterview() { return interview; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +29,7 @@ public class InterviewActivity extends Activity {
 
         Intent intent = getIntent();
         householdID = intent.getIntExtra("household", -1);
-        areaID = intent.getIntExtra("area", -1);
-        List<LocalDatabase.Interview> interviews = LocalDatabase.Interview.getHouseholdInterviews(householdID);
+        List<Interview> interviews = Interview.getHouseholdInterviews(householdID);
         if (interviews.size() > 0) {
             interview = interviews.get(0);
         }

@@ -1,9 +1,8 @@
 package com.example.chad.sra_mobile;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,31 +13,62 @@ import android.widget.TableRow;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
+import java.util.List;
 import java.util.ArrayList;
+
+import LocalDatabase.ConsumedFood;
+import LocalDatabase.Interview;
 
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
-    //private TableRow defaultFoodItemRow;
+    int householdID = -1;
+    Interview interview = null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_nutrition_tab, container, false);
-        //defaultFoodItemRow = (TableRow) inflater.inflate(R.layout.fragment_nutrition_row, container, false);
 
-        Button addFoodButton = (Button) view.findViewById(R.id.add_food_button_id);
+        InterviewActivity interviewActivity = (InterviewActivity) getActivity();
+        householdID = interviewActivity.getHouseholdID();
+        interview = interviewActivity.getInterview();
+//        List<ConsumedFood> foods = ConsumedFood.getConsumedFoodsByInterviewID(interview.getId());
+//        int numFoodItems = foods.size();
+//        for (int i = 0; i < numFoodItems; i++) {
+//            addNewFoodItemRow(foods.get(i).frequency);
+//        }
+
+        foodTable = (TableLayout) view.findViewById(R.id.food_table);
+
+        Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addNewFoodItem(view);
             }
         });
-        foodTable = (TableLayout) view.findViewById(R.id.food_table);
+
+        Button saveInterviewButton = (Button) view.findViewById(R.id.save_interview_button);
+        saveInterviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int numRows = foodTable.getChildCount();
+                for (int i = 1; i < numRows - 1; i++) {
+                    TableRow row = (TableRow) foodTable.getChildAt(i);
+                    EditText item = (EditText) row.getChildAt(0);
+                    System.out.println(item.getText());
+                }
+            }
+        });
 
         return view;
     }
 
     public void addNewFoodItem(View v) {
+        addNewFoodItemRow("");
+    }
+
+    public void addNewFoodItemRow(String food_item) {
         final TableRow row = new TableRow(this.getActivity());
 
         // Food item name
@@ -48,6 +78,7 @@ public class NutritionTab extends Fragment {
 
         // Food serving size
         EditText servingSize = new EditText(this.getActivity());
+        servingSize.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         servingSize.setHint("serving size");
         row.addView(servingSize);
 
@@ -74,13 +105,6 @@ public class NutritionTab extends Fragment {
         consumptionFreq.setAdapter(freqAdapter);
         row.addView(consumptionFreq);
 
-        // Cooked or raw
-        Spinner cookedOrRaw = new Spinner(this.getActivity());
-        ArrayAdapter<CharSequence> cookedAdapter = ArrayAdapter.createFromResource(this.getActivity(),
-                R.array.cooked_raw, android.R.layout.simple_spinner_item);
-        cookedOrRaw.setAdapter(cookedAdapter);
-        row.addView(cookedOrRaw);
-
         // Remove food item button
         Button removeFoodItem = new Button(this.getActivity());
         removeFoodItem.setText(R.string.remove_food_item_button);
@@ -92,6 +116,8 @@ public class NutritionTab extends Fragment {
         });
         row.addView(removeFoodItem);
 
-        foodTable.addView(row, 0);
+        int numChildren = foodTable.getChildCount();
+        int insertionIndex = numChildren - 1;
+        foodTable.addView(row, insertionIndex);
     }
 }
