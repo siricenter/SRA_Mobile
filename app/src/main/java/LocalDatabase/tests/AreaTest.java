@@ -85,6 +85,7 @@ public class AreaTest extends AndroidTestCase {
     }
 
     public void testGetAllAreas() {
+        generateArea();
         List<Area> list = Area.getAllAreas();
         assertNotNull(list);
         assertFalse(list.isEmpty());
