@@ -23,7 +23,7 @@ public class AreaTest extends AndroidTestCase {
         Area area = generateArea();
         assertNotNull(area);
         long id = area.getId();
-        assertTrue((int) id >= 0);
+        assertTrue(id >= 0);
     }
 
     public void testLoad() {
@@ -36,7 +36,7 @@ public class AreaTest extends AndroidTestCase {
         // now test load
         area = Area.load(Area.class, id);
         assertNotNull(area);
-        assertTrue(area.name.equals("Jimmy"));
+        assertTrue(area.name.split(" ")[0].equals("Jimmy"));
         assertTrue(area.created_at.equals("now"));
         assertTrue(area.updated_at.equals("then"));
     }
@@ -47,13 +47,14 @@ public class AreaTest extends AndroidTestCase {
         // the user would load an item by id
         Area area = Area.load(Area.class, id);
         // then the user makes a change and saves
-        area.name = "another name";
+        String saveName = "another name " + Math.random();
+        area.name = saveName;
         area.updated_at = "2000";
         area.save();
         area = null;
         // now reload the object  by id and check to see if it was changed
         area = Area.load(Area.class, id);
-        assertTrue(area.name.equals("another name"));
+        assertTrue(area.name.equals(saveName));
         assertTrue(area.updated_at.equals("2000"));
         assertTrue(area.created_at.equals("now"));
     }
@@ -95,7 +96,7 @@ public class AreaTest extends AndroidTestCase {
     public Area generateArea() {
         try {
             Area area = new Area();
-            area.name = "Jimmy";
+            area.name = "Jimmy " + Math.random();
             area.created_at = "now";
             area.updated_at = "then";
             area.save();
