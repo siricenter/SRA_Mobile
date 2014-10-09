@@ -3,6 +3,9 @@ package LocalDatabase;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 /**
  * Created by Chad Carey on 10/1/2014.
@@ -19,8 +22,11 @@ public class ConsumedFood extends SRAModel {
     @Column (name = "updated_at")
     public String updated_at;
 
-
     public ConsumedFood() {
         super();
+    }
+
+    public static List<ConsumedFood> getConsumedFoodsByInterviewID(long interviewID){
+        return new Select().from(ConsumedFood.class).where("interview_id=" + interviewID).execute();
     }
 }
