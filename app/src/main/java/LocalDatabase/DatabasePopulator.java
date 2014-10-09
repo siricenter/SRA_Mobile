@@ -37,7 +37,7 @@ public class DatabasePopulator {
         
     }
 
-    private void populateAreas() {
+    public void populateAreas() {
         for(String areaName : AREA_NAMES) {
             Area area = new Area();
             area.name = areaName;
@@ -51,7 +51,7 @@ public class DatabasePopulator {
         }
     }
 
-    private void populateHouseholds() {
+    public void populateHouseholds() {
         List<Area> areaList = Area.getAllAreas();
         for(String householdName : HOUSEHOLD_NAMES) {
             Household household = new Household();
