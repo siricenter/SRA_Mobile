@@ -9,7 +9,7 @@ import com.activeandroid.query.Select;
  * Created by jordanreed on 10/2/14.
  */
 @Table(name = "people")
-public class Person extends Model {
+public class Person extends SRAModel {
 
     @Column(name = "given_name")
     public String given_name;

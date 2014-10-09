@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
  * Created by Chad Carey on 10/1/2014.
  */
 @Table(name = "consumed_foods")
-public class ConsumedFood extends Model {
+public class ConsumedFood extends SRAModel {
 
     @Column(name = "servings")
     public int servings;

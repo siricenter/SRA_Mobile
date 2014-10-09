@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Chad Carey on 10/1/2014.
  */
 @Table(name = "households")
-public class Household extends Model {
+public class Household extends SRAModel {
 
 	@Column(name = "name")
     public String name;

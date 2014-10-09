@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Chad Carey on 10/1/2014.
  */
 @Table(name = "sra_areas")
-public class Area extends Model {
+public class Area extends SRAModel {
 
     @Column(name = "name", unique = true,onUniqueConflict = Column.ConflictAction.IGNORE)
     public String name;

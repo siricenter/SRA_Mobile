@@ -88,7 +88,6 @@ public class AreaTest extends AndroidTestCase {
         List<Area> list = Area.getAllAreas();
         assertNotNull(list);
         assertFalse(list.isEmpty());
-        assertTrue(list.get(0).name.equals("Jimmy"));
         assertTrue(list.size() > 0);
     }
 
