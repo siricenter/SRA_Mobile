@@ -101,14 +101,19 @@ public class HouseholdTest extends AndroidTestCase {
 
     /****FUNCTIONS****/
     public Area generateArea() {
-        Area area = new Area();
-        area.name = "Jimmy";
-        area.created_at = "now";
-        area.updated_at = "then";
-        area.save();
-        long areaId = area.getId();
-        Log.d("HouseholdTest: generateArea", "area id = " + Long.toString(areaId));
-        return  area;
+        try {
+            Area area = new Area();
+            area.name = "Jimmy " + Math.random();
+            area.created_at = "now";
+            area.updated_at = "then";
+            area.save();
+            long areaId = area.getId();
+            Log.d("AreaTest: generateArea", "area id = " + Long.toString(areaId));
+            return area;
+        } catch (Exception e) {
+            Log.e("AreaTest : generateArea","Failed to create area");
+            return null;
+        }
     }
 
     public Household generateHousehold() {

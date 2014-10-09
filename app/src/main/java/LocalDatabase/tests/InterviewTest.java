@@ -2,6 +2,7 @@ package LocalDatabase.tests;
 
 import android.test.AndroidTestCase;
 import android.test.InstrumentationTestCase;
+import android.util.Log;
 
 import junit.framework.Assert;
 
@@ -163,14 +164,20 @@ public class InterviewTest extends AndroidTestCase {
     }
 
     /****FUNCTIONS****/
-    private Area generateArea() {
-        Area area = new Area();
-        area.name = "Jimmy";
-        area.created_at = "now";
-        area.updated_at = "then";
-        area.save();
-
-        return area;
+    public Area generateArea() {
+        try {
+            Area area = new Area();
+            area.name = "Jimmy " + Math.random();
+            area.created_at = "now";
+            area.updated_at = "then";
+            area.save();
+            long areaId = area.getId();
+            Log.d("AreaTest: generateArea", "area id = " + Long.toString(areaId));
+            return area;
+        } catch (Exception e) {
+            Log.e("AreaTest : generateArea","Failed to create area");
+            return null;
+        }
     }
 
     public Household generateHousehold() {
