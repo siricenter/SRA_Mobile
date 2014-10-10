@@ -4,22 +4,26 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import LocalDatabase.ConsumedFood;
+import LocalDatabase.DatabasePopulator;
 
 /**
  * Created by Chad Carey on 10/1/2014.
  */
 public class ConsumedFoodTest extends AndroidTestCase {
+
+    DatabasePopulator populator = new DatabasePopulator();
+
     public void testObjectCreation() {
         ConsumedFood food = new ConsumedFood();
         assertNotNull(food);
     }
     public void testSave() {
-        ConsumedFood food = generateFood();
+        ConsumedFood food = populator.generateDummyFood();
         assertNotNull(food);
     }
 
     public void testLoad() {
-        ConsumedFood food = generateFood();
+        ConsumedFood food = populator.generateDummyFood();
         assertNotNull(food);
         long id = food.getId();
         food = null;
@@ -38,7 +42,7 @@ public class ConsumedFoodTest extends AndroidTestCase {
     }
 
     public void testUpdate() {
-        ConsumedFood food = generateFood();
+        ConsumedFood food = populator.generateDummyFood();
         long id = food.getId();
         food.servings = 100;
         food.updated_at = "2001";
@@ -61,7 +65,7 @@ public class ConsumedFoodTest extends AndroidTestCase {
     }
 
     public void testDelete() {
-        ConsumedFood food = generateFood();
+        ConsumedFood food = populator.generateDummyFood();
         long id = food.getId();
 
         try {
@@ -80,21 +84,4 @@ public class ConsumedFoodTest extends AndroidTestCase {
         }
     }
 
-    /****Functions****/
-    private ConsumedFood generateFood() {
-        try {
-            ConsumedFood food = new ConsumedFood();
-            food.frequency = "daily";
-            food.servings = 2;
-            food.created_at = "now";
-            food.updated_at = "now";
-            food.save();
-            Log.d("ConsumedFood: generateFood", "Id = " + food.getId());
-            return food;
-        } catch (Exception e) {
-            Log.e("ConsumedFood: generateFood", "Failed to create object");
-            return null;
-        }
-
-    }
 }

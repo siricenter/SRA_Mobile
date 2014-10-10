@@ -26,6 +26,8 @@ public class TestDatabasePopulator extends InstrumentationTestCase {
     }
 
     public void testAreaPopulator() {
+        DatabasePopulator populator = new DatabasePopulator();
+        populator.populate();
         List<Area> list = Area.getAllAreas();
         assertNotNull(list);
         assertTrue(list.size() > 0);
