@@ -13,8 +13,8 @@ import java.util.List;
 @Table(name = "consumed_foods")
 public class ConsumedFood extends SRAModel {
 
-    @Column(name = "interview_id")
-    public int interview_id;
+    @Column(name = "interview")
+    public Interview interview;
     @Column(name = "servings")
     public int servings;
     @Column(name = "frequency")
@@ -28,7 +28,7 @@ public class ConsumedFood extends SRAModel {
         super();
     }
 
-    public static List<ConsumedFood> getConsumedFoodsByInterviewID(long interviewID){
-        return new Select().from(ConsumedFood.class).where("interview_id=" + interviewID).execute();
+    public static List<ConsumedFood> getConsumedFoods(long interviewID){
+        return new Select().from(ConsumedFood.class).where("interview=" + interviewID).execute();
     }
 }
