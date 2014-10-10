@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
+import com.activeandroid.query.Delete;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,8 +26,7 @@ import LocalDatabase.Interview;
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
-    int householdID = -1;
-    int areaID = -1;
+    Household household = null;
     Interview interview = null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,11 +34,12 @@ public class NutritionTab extends Fragment {
         View view = inflater.inflate(R.layout.fragment_nutrition_tab, container, false);
 
         InterviewActivity interviewActivity = (InterviewActivity) getActivity();
-        householdID = interviewActivity.getHouseholdID();
-        areaID = interviewActivity.getAreaID();
+        household = interviewActivity.getHousehold();
         interview = interviewActivity.getInterview();
-//        List<ConsumedFood> foods = ConsumedFood.getConsumedFoodsByInterviewID(interview.getId());
+
+//        List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
 //        int numFoodItems = foods.size();
+//        System.out.println("Number of food items: " + numFoodItems);
 //        for (int i = 0; i < numFoodItems; i++) {
 //            addNewFoodItemRow(foods.get(i).frequency);
 //        }
@@ -45,13 +47,7 @@ public class NutritionTab extends Fragment {
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
 
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        List<Household> households = Household.getHousehold(areaID);
-        for (int i = 0; i < households.size(); i++) {
-            Household h = households.get(i);
-            System.out.println("household name: " + h.name);
-        }
-        Household house = households.get(householdID - 1);
-        householdLabel.setText(house.name + " family Interview");
+        householdLabel.setText(household.name + " family Interview");
 
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {
