@@ -20,7 +20,7 @@
         android:background="#fff"/>
 
     <Spinner
-        android:layout_width="500dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/areaSpinner"
         android:layout_alignParentTop="true"
