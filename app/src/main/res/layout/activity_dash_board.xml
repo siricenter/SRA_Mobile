@@ -44,7 +44,6 @@
                 android:layout_alignRight="@+id/Interviews"
                 android:layout_alignEnd="@+id/Interviews"
                 android:layout_alignBottom="@+id/button"
-                android:onClick="syncDatabase"
                 android:layout_weight="3"/>
 
 

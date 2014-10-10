@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -36,7 +37,7 @@ public class DashBoard extends Activity {
     customList adapter;
     ArrayList<String> householdValues;
     ArrayList<String> percents;
-
+    Button syncButton;
 
 
 
@@ -46,7 +47,7 @@ public class DashBoard extends Activity {
         percents = new ArrayList<String>();
         area = new Area();
         household = new Household();
-          householdValues = new ArrayList<String>();
+        householdValues = new ArrayList<String>();
         householdValues.add("Households");
         percents.add("%Complete");
         areas = area.getAllAreas();
@@ -117,6 +118,13 @@ public class DashBoard extends Activity {
             }
         });
 
+        syncButton = (Button) findViewById(R.id.button2);
+        syncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                syncDatabase();
+            }
+        });
     }
 
 
@@ -139,8 +147,7 @@ public class DashBoard extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void syncDatabase(View v){
-
+    public void syncDatabase(){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
         areaValues.clear();
@@ -150,7 +157,6 @@ public class DashBoard extends Activity {
             areaValues.add(item);
         }
         spinnerAdapter.notifyDataSetChanged();
-
     }
 
     public void addHousehold(View v){
