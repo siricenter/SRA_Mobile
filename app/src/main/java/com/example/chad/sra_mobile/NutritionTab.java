@@ -25,6 +25,7 @@ public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
     int householdID = -1;
+    int areaID = -1;
     Interview interview = null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +34,7 @@ public class NutritionTab extends Fragment {
 
         InterviewActivity interviewActivity = (InterviewActivity) getActivity();
         householdID = interviewActivity.getHouseholdID();
+        areaID = interviewActivity.getAreaID();
         interview = interviewActivity.getInterview();
 //        List<ConsumedFood> foods = ConsumedFood.getConsumedFoodsByInterviewID(interview.getId());
 //        int numFoodItems = foods.size();
@@ -43,7 +45,12 @@ public class NutritionTab extends Fragment {
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
 
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        Household house = Household.load(Household.class, householdID);
+        List<Household> households = Household.getHousehold(areaID);
+        for (int i = 0; i < households.size(); i++) {
+            Household h = households.get(i);
+            System.out.println("household name: " + h.name);
+        }
+        Household house = households.get(householdID - 1);
         householdLabel.setText(house.name + " family Interview");
 
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);

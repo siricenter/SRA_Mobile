@@ -7,8 +7,11 @@ import android.view.MenuItem;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
+import android.widget.TextView;
 
 import java.util.List;
+
+import LocalDatabase.Household;
 import LocalDatabase.Interview;
 
 public class InterviewActivity extends Activity {
@@ -18,8 +21,10 @@ public class InterviewActivity extends Activity {
     Fragment sasTab       = new SASTab();
 
     int householdID = -1;
+    int areaID = -1;
     Interview interview = null;
     public int getHouseholdID() { return householdID; }
+    public int getAreaID() { return areaID; }
     public Interview getInterview() { return interview; }
 
     @Override
@@ -29,6 +34,7 @@ public class InterviewActivity extends Activity {
 
         Intent intent = getIntent();
         householdID = intent.getIntExtra("household", -1);
+        areaID = intent.getIntExtra("area", -1);
         List<Interview> interviews = Interview.getHouseholdInterviews(householdID);
         if (interviews.size() > 0) {
             interview = interviews.get(0);
@@ -39,7 +45,6 @@ public class InterviewActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         ActionBar.Tab tab1 = actionBar.newTab().setText("Nutrition");
         ActionBar.Tab tab2 = actionBar.newTab().setText("Agronomy");
         ActionBar.Tab tab3 = actionBar.newTab().setText("Small Animal Science");

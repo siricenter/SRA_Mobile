@@ -14,7 +14,7 @@ public class AgronomyTab extends Fragment {
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_interview_tab, container, false);
         TextView textview = (TextView) view.findViewById(R.id.tabtextview);
-        textview.setText("Banana");
+        textview.setText("Agronomy");
         return view;
     }
 }
