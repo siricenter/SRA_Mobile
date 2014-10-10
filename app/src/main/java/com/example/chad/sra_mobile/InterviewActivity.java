@@ -22,11 +22,9 @@ public class InterviewActivity extends Activity {
 
     int householdID = -1;
     int areaID = -1;
-    Household household = null;
     Interview interview = null;
     public int getHouseholdID() { return householdID; }
     public int getAreaID() { return areaID; }
-    public Household getHousehold() { return household; }
     public Interview getInterview() { return interview; }
 
     @Override
@@ -37,18 +35,12 @@ public class InterviewActivity extends Activity {
         Intent intent = getIntent();
         householdID = intent.getIntExtra("household", -1);
         areaID = intent.getIntExtra("area", -1);
-
-        List<Household> households = Household.getHousehold(areaID);
-        household = households.get(householdID - 1);
-
         List<Interview> interviews = Interview.getHouseholdInterviews(householdID);
         if (interviews.size() > 0) {
             interview = interviews.get(0);
         }
         else {
-            interview = new Interview();
-            interview.household = household;
-            interview.save();
+            interview = new LocalDatabase.Interview();
         }
 
         ActionBar actionBar = getActionBar();

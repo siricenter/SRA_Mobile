@@ -28,7 +28,7 @@ public class ConsumedFood extends SRAModel {
         super();
     }
 
-    public static List<ConsumedFood> getConsumedFoods(long interviewID) {
+    public static List<ConsumedFood> getConsumedFoods(long interviewID){
         return new Select().from(ConsumedFood.class).where("interview=" + interviewID).execute();
     }
 }
