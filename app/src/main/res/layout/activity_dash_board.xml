@@ -22,42 +22,46 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:background="#fff"
-                android:layout_weight="6"/>
+                android:layout_weight="1"/>
 
             <Button
-                android:layout_width="0px"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="Add Household"
                 android:id="@+id/button"
                 android:layout_alignBottom="@+id/areaSpinner"
                 android:layout_toEndOf="@+id/areaSpinner"
                 android:layout_toRightOf="@+id/areaSpinner"
-                android:onClick="addHousehold"
-                android:layout_weight="4" />
+                android:onClick="addHousehold" />
 
             <Button
-                android:layout_width="0px"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="Sync"
                 android:id="@+id/button2"
                 android:layout_toEndOf="@+id/button"
                 android:layout_alignRight="@+id/Interviews"
                 android:layout_alignEnd="@+id/Interviews"
-                android:layout_alignBottom="@+id/button"
-                android:layout_weight="3"/>
+                android:layout_alignBottom="@+id/button"/>
 
 
         </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <ListView
+        android:layout_height="wrap_content">
+        <ScrollView
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:id="@+id/Interviews"
+            android:id="@+id/interviewScrollView"
             android:background="#fff"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/innerTable"></TableLayout>
+        </ScrollView>
     </TableRow>
 
 </TableLayout>
