@@ -174,15 +174,14 @@ public class DashBoard extends Activity {
                 percents.clear();
                 percents.add("%Complete");
                 householdValues.add("Households");
-                for(int p = 0;p < households.size();++p){
-                    int percent = households.get(p).percent;
+                for(Household household : households){
+                    int percent = household.percent;
                     String showPercent = "%" + percent;
-                    String item = households.get(p).name;
+                    String item = household.name;
                     householdValues.add(item);
                     percents.add(showPercent);
                 }
                 adapter.notifyDataSetChanged();
-                System.out.println(newHousehold.toString() + "created");
             }
         });
 
