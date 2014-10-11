@@ -2,32 +2,21 @@ package com.example.chad.sra_mobile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.activeandroid.annotation.Table;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
@@ -46,64 +35,74 @@ public class DashBoard extends Activity {
     customList adapter;
     ArrayList<String> householdValues;
     ArrayList<String> percents;
-
-    Button syncButton;
-    ScrollView scrollView;
     TableLayout innerTableLayout;
-    View.OnClickListener householdClickListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-
+        areaValues = new ArrayList<String>();
         areas = area.getAllAreas();
-
-        //listView = (ListView) findViewById(R.id.Interviews);
-
+        percents = new ArrayList<String>();
+        listView = (ListView) findViewById(R.id.Interviews);
+        householdValues = new ArrayList<String>();
         spinner = (Spinner) findViewById(R.id.areaSpinner);
 
         areaValues.add("Select Area");
-        for(int i = 0;i < areas.size();i++){
-            String item = areas.get(i).name;
-            areaValues.add(item);
+        householdValues.add("Households");
+        percents.add("%Complete");
+
+        for(Area area : areas) {
+            areaValues.add(area.name);
         }
+
+        spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
+        adapter = new customList(DashBoard.this,householdValues,percents);
+
+        listView.setAdapter(adapter);
+        spinner.setAdapter(spinnerAdapter);
+
+        final Intent intent = new Intent(this, InterviewActivity.class);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fillScrollView(Household.getHousehold(i));
+                if (i != 0) {
+                    households = household.getHousehold(i);
+                    householdValues.clear();
+                    percents.clear();
+                    householdValues.add("Households");
+                    percents.add("%Complete");
+                    for (Household household : households) {
+                        int percent = household.percent;
+                        String showPercent = "%" + percent;
+                        String item = household.name;
+                        percents.add(showPercent);
+                        householdValues.add(item);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 innerTableLayout.removeAllViews();
             }
         });
 
-        /****/
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        syncButton = (Button) findViewById(R.id.button2);
-        syncButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                syncDatabase();
+         @Override
+         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if(position != 0){
+                int areaSpinner = spinner.getSelectedItemPosition();
+                intent.putExtra("household", position);
+                intent.putExtra("area",areaSpinner);
+                startActivity(intent);
             }
-        });
+         }
 
-        // = (ScrollView) findViewById(R.id.interviewScrollView);
-        innerTableLayout = (TableLayout) findViewById(R.id.innerTable);
-
-        // listeners
-        householdClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                long id = (Long) view.getTag();
-                Log.d("householdClickListener got value", "id=" + id);
-            }
-        };
-
+         });
     }
 
 
@@ -126,17 +125,27 @@ public class DashBoard extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void syncDatabase(){
+    public void syncDatabase(View v){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
         areaValues.clear();
         areaValues.add("Select Area");
-        for(int i = 0;i < areas.size();i++){
-            String item = areas.get(i).name;
+        for(Area area : areas){
+            String item = area.name;
+            System.out.println(item);
             areaValues.add(item);
         }
         spinnerAdapter.notifyDataSetChanged();
-    }
+        AlertDialog.Builder complete = new AlertDialog.Builder(this);
+        complete.setTitle("Sync Complete");
+        complete.setMessage("Data has been loaded into the database");
+        complete.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+            }
+            });
+        complete.show();
+        }
 
     public void addHousehold(View v){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -185,35 +194,4 @@ public class DashBoard extends Activity {
 
         alert.show();
     }
-
-    public void householdClick(View v) {
-
-    }
-
-
-    public void fillScrollView(List<Household> households) {
-        for(Household household : households) {
-            addRow(household);
-        }
-    }
-
-    /**
-     * Ths will add a row to the scroll view when givien a household
-     * @param household
-     */
-    public void addRow(Household household) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View newRow = (TableRow) inflater.inflate(R.layout.row, null);
-        TextView newNameTextView = (TextView) newRow.findViewById(R.id.txt1);
-        TextView newPercentTextView = (TextView) newRow.findViewById(R.id.txt2);
-
-        newNameTextView.setText(household.name);
-        newPercentTextView.setText(household.percent);
-
-        newRow.setOnClickListener(householdClickListener);
-        newRow.setTag(household.getId());
-
-        innerTableLayout.addView(newRow);
-    }
-
 }

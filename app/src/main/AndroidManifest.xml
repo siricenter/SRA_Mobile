@@ -33,7 +33,7 @@
             android:label="@string/title_activity_dash_board" >
         </activity>
         <activity
-            android:name=".Interview"
+            android:name=".InterviewActivity"
             android:label="@string/title_activity_interview" >
         </activity>
     </application>
