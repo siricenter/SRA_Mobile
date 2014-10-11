@@ -30,11 +30,13 @@
 
         <activity
             android:name=".DashBoard"
-            android:label="@string/title_activity_dash_board" >
+            android:label="@string/title_activity_dash_board"
+            android:screenOrientation="landscape" >  <!-- locked until we set orientation change listeners -->
         </activity>
         <activity
             android:name=".InterviewActivity"
-            android:label="@string/title_activity_interview" >
+            android:label="@string/title_activity_interview"
+            android:screenOrientation="landscape" >  <!-- locked until we set orientation change listeners -->
         </activity>
     </application>
 
