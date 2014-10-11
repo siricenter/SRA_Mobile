@@ -41,6 +41,10 @@ public class InterviewActivity extends Activity {
         }
         else {
             interview = new LocalDatabase.Interview();
+            List<Household> households = Household.getHousehold(areaID);
+            Household house = households.get(householdID - 1);
+            interview.household = house;
+            interview.save();
         }
 
         ActionBar actionBar = getActionBar();

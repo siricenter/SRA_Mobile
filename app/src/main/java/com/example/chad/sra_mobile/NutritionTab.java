@@ -31,27 +31,22 @@ public class NutritionTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_nutrition_tab, container, false);
+        foodTable = (TableLayout) view.findViewById(R.id.food_table);
 
         InterviewActivity interviewActivity = (InterviewActivity) getActivity();
         householdID = interviewActivity.getHouseholdID();
         areaID = interviewActivity.getAreaID();
         interview = interviewActivity.getInterview();
-//        List<ConsumedFood> foods = ConsumedFood.getConsumedFoodsByInterviewID(interview.getId());
-//        int numFoodItems = foods.size();
-//        for (int i = 0; i < numFoodItems; i++) {
-//            addNewFoodItemRow(foods.get(i).frequency);
-//        }
-
-        foodTable = (TableLayout) view.findViewById(R.id.food_table);
+        List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
+        int numFoodItems = foods.size();
+        for (int i = 0; i < numFoodItems; i++) {
+            addFoodItemRow(foods.get(i));
+        }
 
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
         List<Household> households = Household.getHousehold(areaID);
-        for (int i = 0; i < households.size(); i++) {
-            Household h = households.get(i);
-            System.out.println("household name: " + h.name);
-        }
         Household house = households.get(householdID - 1);
-        householdLabel.setText(house.name + " family Interview");
+        householdLabel.setText(house.name + " household Interview");
 
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {
@@ -65,34 +60,72 @@ public class NutritionTab extends Fragment {
         saveInterviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int numRows = foodTable.getChildCount();
-                for (int i = 1; i < numRows - 1; i++) {
-                    TableRow row = (TableRow) foodTable.getChildAt(i);
-                    EditText item = (EditText) row.getChildAt(0);
-                    System.out.println(item.getText());
-                }
+                saveFoodItems();
             }
         });
 
         return view;
     }
 
-    public void addNewFoodItem(View v) {
-        addNewFoodItemRow("");
+    public void onDestroyView() {
+        saveFoodItems();
+        super.onDestroyView();
     }
 
-    public void addNewFoodItemRow(String food_item) {
+    public void saveFoodItems() {
+        int numRows = foodTable.getChildCount();
+        for (int i = 1; i < numRows - 1; i++) {
+            TableRow row = (TableRow) foodTable.getChildAt(i);
+            TextView idField = (TextView) row.getChildAt(0);
+            EditText enteredFood = (EditText) row.getChildAt(1);
+
+            ConsumedFood food;
+            if (idField.getText().toString().equals("-1")) {
+                food = new ConsumedFood();
+            }
+            else {
+                long id = Integer.parseInt(idField.getText().toString());
+                food = ConsumedFood.load(ConsumedFood.class, id);
+            }
+            food.interview = interview;
+            food.entered_food = enteredFood.getText().toString();
+            food.save();
+            idField.setText(food.getId().toString());
+        }
+    }
+
+    public void addNewFoodItem(View v) {
+        addFoodItemRow(new ConsumedFood());
+    }
+
+    public void addFoodItemRow(ConsumedFood food) {
         final TableRow row = new TableRow(this.getActivity());
+
+        // Food database id (will be hidden in view)
+        final TextView foodIDView = new TextView(this.getActivity());
+        Long id = food.getId();
+        String strID;
+        if (id == null) {
+            strID = "-1";
+        }
+        else {
+            strID = id.toString();
+        }
+        foodIDView.setText(strID);
+        foodIDView.setVisibility(View.GONE);
+        row.addView(foodIDView);
 
         // Food item name
         EditText foodName = new EditText(this.getActivity());
         foodName.setHint("food item");
+        foodName.setText(food.entered_food);
         row.addView(foodName);
 
         // Food serving size
         EditText servingSize = new EditText(this.getActivity());
         servingSize.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         servingSize.setHint("serving size");
+        servingSize.setText(food.servings); // Integer.toString(food.servings));
         row.addView(servingSize);
 
         // Food item amount units
@@ -108,6 +141,7 @@ public class NutritionTab extends Fragment {
         for (int i = 1; i <= 10; i++) { list.add(i); }
         ArrayAdapter<Integer> servingsAdapter = new ArrayAdapter<Integer>(this.getActivity(),
                 android.R.layout.simple_spinner_item, list);
+        servings.setSelection(food.quantity - 1);
         servings.setAdapter(servingsAdapter);
         row.addView(servings);
 
@@ -124,6 +158,12 @@ public class NutritionTab extends Fragment {
         removeFoodItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TextView idView = (TextView) row.getChildAt(0);
+                if (idView.getText().toString().equals("-1")) { }
+                else {
+                    long id = Integer.parseInt(idView.getText().toString());
+                    ConsumedFood.delete(ConsumedFood.class, id);
+                }
                 foodTable.removeView(row);
             }
         });
