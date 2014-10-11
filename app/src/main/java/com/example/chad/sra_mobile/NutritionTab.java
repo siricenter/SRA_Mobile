@@ -78,6 +78,7 @@ public class NutritionTab extends Fragment {
             TableRow row = (TableRow) foodTable.getChildAt(i);
             TextView idField = (TextView) row.getChildAt(0);
             EditText enteredFood = (EditText) row.getChildAt(1);
+            //EditText servingSize = (EditText) row.getChildAt(2);
 
             ConsumedFood food;
             if (idField.getText().toString().equals("-1")) {
@@ -89,6 +90,7 @@ public class NutritionTab extends Fragment {
             }
             food.interview = interview;
             food.entered_food = enteredFood.getText().toString();
+            //food.servings = Integer.parseInt(servingSize.getText().toString());
             food.save();
             idField.setText(food.getId().toString());
         }
@@ -125,7 +127,7 @@ public class NutritionTab extends Fragment {
         EditText servingSize = new EditText(this.getActivity());
         servingSize.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         servingSize.setHint("serving size");
-        servingSize.setText(food.servings); // Integer.toString(food.servings));
+        //servingSize.setText(Integer.toString(food.servings));
         row.addView(servingSize);
 
         // Food item amount units
@@ -141,7 +143,7 @@ public class NutritionTab extends Fragment {
         for (int i = 1; i <= 10; i++) { list.add(i); }
         ArrayAdapter<Integer> servingsAdapter = new ArrayAdapter<Integer>(this.getActivity(),
                 android.R.layout.simple_spinner_item, list);
-        servings.setSelection(food.quantity - 1);
+        //servings.setSelection(food.quantity - 1);
         servings.setAdapter(servingsAdapter);
         row.addView(servings);
 
