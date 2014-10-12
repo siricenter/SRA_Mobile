@@ -122,7 +122,6 @@ public class HouseholdTest extends AndroidTestCase {
         household.name = "Johns";
         household.created_at = "1980";
         household.updated_at = "1981";
-        household.percent = 50;
 
         household.save();
         return household;

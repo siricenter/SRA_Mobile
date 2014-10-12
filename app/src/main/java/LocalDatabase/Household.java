@@ -31,8 +31,6 @@ public class Household extends SRAModel {
      * all interviews associated with the household with these percentages.
      * For the prototype it needs to be here.
      */
-    @Column(name = "percent")
-    public int percent;
 
     public Household() {
         super();
@@ -42,5 +40,10 @@ public class Household extends SRAModel {
         List<Household> list = new Select().from(Household.class).where("area="+areaId).execute();
         return list;
     }
+
+    public  static List<Household> getHouseholdByName(String newname){
+        return new Select().from(Household.class).where("name='" + newname +"'").execute();
+    }
+
 
 }

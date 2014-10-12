@@ -59,7 +59,6 @@ public class DatabasePopulator {
             household.area = areaList.get((int)(Math.random() * (areaList.size()-1)));
             household.created_at = "now";
             household.updated_at = "now";
-            household.percent = 0;
             household.save();
         }
     }
@@ -86,7 +85,6 @@ public class DatabasePopulator {
         household.name = "Johns";
         household.created_at = "1980";
         household.updated_at = "1981";
-        household.percent = 50;
 
         household.save();
         return household;

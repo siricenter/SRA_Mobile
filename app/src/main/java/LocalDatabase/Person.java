@@ -5,6 +5,8 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.List;
+
 /**
  * Created by jordanreed on 10/2/14.
  */
@@ -33,6 +35,8 @@ public class Person extends SRAModel {
     public String updated_at;
     @Column(name = "household_id")
     public int household_id;
+    @Column(name = "percent")
+    public int percent;
 
     public Person() {
         super();
@@ -44,7 +48,12 @@ public class Person extends SRAModel {
         this.family_name = family_name;
     }
 
-    public static Person getByName(String name) {
-        return new Select().from(Person.class).where("name='" + name+ "'").executeSingle();
+    public static List <Person> getByName(String name) {
+        return new Select().from(Person.class).where("name='" + name+ "'").execute();
     }
+
+    public static List<Person> getMembers(long id){
+        return new Select().from(Person.class).where("household_id='" + id + "'").execute();
+    }
+
 }
