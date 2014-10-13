@@ -21,7 +21,8 @@ public class Household extends SRAModel {
     public String updated_at;
     @Column(name = "area")
     public Area area;
-
+    @Column(name = "percent")
+    public int percent;
     /**
      * IMPORTANT INFO READ THIS!!!
      * This percentage is the percentage of the household's interview.

@@ -3,7 +3,6 @@ package LocalDatabase;
 import android.util.Log;
 
 import com.activeandroid.query.Delete;
-
 import java.util.List;
 
 import LocalDatabase.Area;
@@ -12,6 +11,7 @@ import LocalDatabase.Area;
  * Created by Chad Carey on 10/6/2014.
  */
 public class DatabasePopulator {
+    SRAModel model = new SRAModel();
 
     final public static String[] AREA_NAMES = {
         "Africa", "South America", "Central America", "Asia", "Europe", "North America"
@@ -41,8 +41,8 @@ public class DatabasePopulator {
         for(String areaName : AREA_NAMES) {
             Area area = new Area();
             area.name = areaName;
-            area.created_at = "now";
-            area.updated_at = "now";
+            area.created_at = model.generateTimestamp();
+            area.updated_at = model.generateTimestamp();
             try {
                 area.save();
             } catch (Exception e) {
@@ -57,8 +57,9 @@ public class DatabasePopulator {
             Household household = new Household();
             household.name = householdName;
             household.area = areaList.get((int)(Math.random() * (areaList.size()-1)));
-            household.created_at = "now";
-            household.updated_at = "now";
+            household.percent = 0;
+            household.created_at = model.generateTimestamp();
+            household.updated_at = model.generateTimestamp();
             household.save();
         }
     }
