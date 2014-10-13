@@ -124,8 +124,12 @@ public class DashBoard extends Activity {
                             member = person;
                         }
                     }
-                    intent.putExtra("HouseHold", member.household_id);
-                    intent.putExtra("Person",member.getId());
+                    Household house = household.load(Household.class,member.household_id);
+                    Area area = house.area;
+                    int areaid = area.getId().intValue();
+                    intent.putExtra("household", member.household_id);
+                    intent.putExtra("person",member.getId());
+                    intent.putExtra("area",areaid);
                     startActivity(intent);
                 }
                 adapter.notifyDataSetChanged();
