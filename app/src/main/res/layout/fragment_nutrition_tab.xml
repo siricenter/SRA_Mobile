@@ -14,11 +14,11 @@
 
     <TableLayout
         android:id="@+id/food_table"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent">
 
         <TableRow
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal">
 
