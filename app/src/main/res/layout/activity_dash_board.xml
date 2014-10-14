@@ -28,6 +28,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:text="+ Area"
+        android:id="@+id/button3"
+        android:layout_alignBottom="@+id/areaSpinner"
+        android:layout_toEndOf="@+id/areaSpinner"
+        android:layout_toRightOf="@+id/areaSpinner"
+        android:layout_alignParentTop="true"
+        android:onClick="createArea"
+        android:maxWidth="150dp"
+        android:textSize="12dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:text="+ Family"
         android:id="@+id/button"
         android:layout_alignBottom="@+id/areaSpinner"

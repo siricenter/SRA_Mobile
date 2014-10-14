@@ -47,9 +47,7 @@ public class DashBoard extends Activity {
     ArrayAdapter<String> spinnerAdapter;
     customList adapter;
     ArrayList<String> householdValues;
-    ArrayList<String> peopleValues;
     ArrayList<String> percents;
-    TableLayout innerTableLayout;
     int navigationMarker;
     int flag;
     int numberOfMembers;
@@ -82,7 +80,7 @@ public class DashBoard extends Activity {
             areaValues.add(area.name);
         }
 
-        spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, areaValues);
+        spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, areaValues);
         adapter = new customList(DashBoard.this,householdValues,percents);
 
         listView.setAdapter(adapter);
@@ -138,6 +136,40 @@ public class DashBoard extends Activity {
          });
     }
 
+    public void createArea(View v){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Name of new Area?");
+        alert.setMessage("Create a new Area");
+
+// Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Editable newAreaName = input.getText();
+                Area newArea = new Area();
+                newArea.name = newAreaName.toString();
+                newArea.created_at = model.generateTimestamp();
+                newArea.updated_at = model.generateTimestamp();
+                newArea.save();
+                loadAreasIntoSpinner();
+                spinnerAdapter.notifyDataSetChanged();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+
+    }
+
     public void goToInterview(){
         final Intent intent = new Intent(this, InterviewActivity.class);
         intent.putExtra("household", currentHousehold);
@@ -150,6 +182,8 @@ public class DashBoard extends Activity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.dashboard);
         Spinner spin =(Spinner) findViewById(R.id.areaSpinner);
+        Button areaButton = (Button)findViewById(R.id.button3);
+        layout.removeView(areaButton);
         layout.removeView(spin);
         //set the properties for button
         Button btnTag = new Button(this);
