@@ -26,8 +26,6 @@ import LocalDatabase.Interview;
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
-    int householdID = -1;
-    int areaID = -1;
     Interview interview = null;
 
 //    public class ConsumedFoodRow extends TableRow {
@@ -44,8 +42,6 @@ public class NutritionTab extends Fragment {
         foodTable.setStretchAllColumns(true);
 
         InterviewActivity interviewActivity = (InterviewActivity) getActivity();
-        householdID = interviewActivity.getHouseholdID();
-        areaID = interviewActivity.getAreaID();
         interview = interviewActivity.getInterview();
         List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
         int numFoodItems = foods.size();
@@ -54,9 +50,7 @@ public class NutritionTab extends Fragment {
         }
 
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        List<Household> households = Household.getHousehold(areaID);
-        Household house = households.get(householdID - 1);
-        householdLabel.setText("Nutrition for household: " + house.name);
+        householdLabel.setText(interview.household.name + ": Consumed Foods");
 
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {

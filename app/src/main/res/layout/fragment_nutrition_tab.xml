@@ -14,6 +14,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:textSize="32dip"
         android:id="@+id/interview_household_label" />
 
     <TableLayout
@@ -24,14 +25,15 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:background="#fff">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Food Item"
                 android:id="@+id/food_item_header"
-                android:textSize="32dip"
+                android:textSize="24dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -39,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:text="Serving size"
                 android:id="@+id/serving_size_header"
-                android:textSize="32dip"
+                android:textSize="24dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -47,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:text="Units"
                 android:id="@+id/units_header"
-                android:textSize="32dip"
+                android:textSize="24dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -55,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:text="Qty"
                 android:id="@+id/quantity_header"
-                android:textSize="32dip"
+                android:textSize="24dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -63,9 +65,14 @@
                 android:layout_height="match_parent"
                 android:text="Frequency"
                 android:id="@+id/frequency_header"
-                android:textSize="32dip"
+                android:textSize="24dip"
                 android:layout_gravity="center_horizontal" />
 
+            <!--Hidden fields-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
