@@ -20,7 +20,7 @@ public class ConsumedFood extends SRAModel {
     @Column(name = "interview")
     public Interview interview;
     @Column(name = "servings")
-    public int servings;
+    public float servings;
     @Column(name = "units")
     public String units;
     @Column(name = "quantity")
@@ -34,6 +34,15 @@ public class ConsumedFood extends SRAModel {
 
     public ConsumedFood() {
         super();
+        n_id = "";
+        entered_food = "";
+        interview = null;
+        servings = -1;
+        units = "";
+        quantity = 1;
+        frequency = "";
+        created_at = "";
+        updated_at = "";
     }
 
     public static List<ConsumedFood> getConsumedFoods(long interviewID){
