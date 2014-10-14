@@ -33,7 +33,6 @@ import LocalDatabase.Person;
 import LocalDatabase.SRAModel;
 
 public class DashBoard extends Activity {
-    SRAModel model = new SRAModel();
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
@@ -431,8 +430,8 @@ public class DashBoard extends Activity {
                 Household newHouse = new Household();
                         newHouse.area = Area.load(Area.class,position);
                         newHouse.name = newHousehold.toString();
-                        newHouse.created_at = model.generateTimestamp();
-                        newHouse.updated_at = model.generateTimestamp();
+                        newHouse.created_at = newHouse.generateTimestamp();
+                        newHouse.updated_at = newHouse.generateTimestamp();
                         newHouse.save();
                 loadHouseholdsIntoView(position);
                 adapter.notifyDataSetChanged();
