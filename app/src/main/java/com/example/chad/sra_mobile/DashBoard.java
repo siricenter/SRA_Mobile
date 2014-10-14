@@ -1,5 +1,6 @@
 package com.example.chad.sra_mobile;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -99,7 +100,6 @@ public class DashBoard extends Activity {
                         loadHouseholdsIntoView(i);
                     }
                     else{
-                        loadMembersIntoViewFromSpinner();
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -127,7 +127,6 @@ public class DashBoard extends Activity {
                         addButton();
                         flag = 1;
                     }
-                    loadHouseholdsIntoSpinner();
                     navigationMarker = 1;
                 }
                 else{
@@ -150,12 +149,16 @@ public class DashBoard extends Activity {
 
     public void addButton(){
         //the layout on which you are working
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.dashboard);
 
+        LinearLayout layout = (LinearLayout) findViewById(R.id.dashboard);
+        Spinner spin =(Spinner) findViewById(R.id.areaSpinner);
+        layout.removeView(spin);
         //set the properties for button
         Button btnTag = new Button(this);
-        btnTag.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btnTag.setLayoutParams(new ViewGroup.LayoutParams(params));
         btnTag.setText("Interview");
+        btnTag.setTextSize(12);
         btnTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,10 +166,8 @@ public class DashBoard extends Activity {
             }
         });
 
-
-
         //add button to the layout
-        layout.addView(btnTag);
+        layout.addView(btnTag,0);
     }
 
     public void loadHouseholdsIntoView(int position){
@@ -182,28 +183,6 @@ public class DashBoard extends Activity {
             percents.add("%" + household.percent);
             householdValues.add(housename);
         }
-    }
-
-    public void loadMembersIntoViewFromSpinner(){
-        int pos = spinner.getSelectedItemPosition();
-        String h = areaValues.get(pos);
-        List <Household> checkHouse = household.getHouseholdByName(h);
-        for(Household household : checkHouse){
-            if(household.name == h){
-                numberOfMembers = household.getId().intValue();
-            }
-        }
-        householdValues.clear();
-        percents.clear();
-        householdValues.add(h);
-        percents.add(numberOfMembers + " Members");
-        people =  new Select().from(Person.class).where("family_name='" + h + "'").execute();
-        for(Person person : people){
-            householdValues.add(person.given_name);
-            percents.add("");
-        }
-        adapter.notifyDataSetChanged();
-
     }
 
     public void loadMembersIntoView(final int position){
@@ -359,15 +338,6 @@ public class DashBoard extends Activity {
         areaValues.add("Select Area");
         for(Area area : areas){
             String item = area.name;
-            areaValues.add(item);
-        }
-    }
-
-    public void loadHouseholdsIntoSpinner(){
-        areaValues.clear();
-        areaValues.add("Select Household");
-        for (Household household : households){
-            String item = household.name;
             areaValues.add(item);
         }
     }
