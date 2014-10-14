@@ -5,6 +5,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical">
 
     <TextView
@@ -27,8 +31,7 @@
                 android:layout_height="match_parent"
                 android:text="Food Item"
                 android:id="@+id/food_item_header"
-                android:minWidth="32dp"
-                android:textSize="15dip"
+                android:textSize="32dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -36,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:text="Serving size"
                 android:id="@+id/serving_size_header"
-                android:textSize="15dip"
+                android:textSize="32dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -44,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:text="Units"
                 android:id="@+id/units_header"
-                android:textSize="15dip"
+                android:textSize="32dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -52,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:text="Qty"
                 android:id="@+id/quantity_header"
-                android:textSize="15dip"
+                android:textSize="32dip"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -60,8 +63,13 @@
                 android:layout_height="match_parent"
                 android:text="Frequency"
                 android:id="@+id/frequency_header"
-                android:textSize="15dip"
+                android:textSize="32dip"
                 android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
         </TableRow>
 
         <TableRow
@@ -72,12 +80,6 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/add_food_item_button" />
-
-            <!--<Button-->
-                <!--android:id="@+id/save_interview_button"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:text="Save" />-->
         </TableRow>
 
     </TableLayout>

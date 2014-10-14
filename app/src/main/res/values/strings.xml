@@ -34,6 +34,8 @@
     <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
     <string name="monthly">Monthly</string>
+    <string name="entered_food_hint">food</string>
+    <string name="serving_size_hint">serving size</string>
 
     <string-array name="serving_units">
         <item>oz.</item>
