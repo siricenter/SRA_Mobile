@@ -2,7 +2,10 @@ package com.example.chad.sra_mobile;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import LocalDatabase.ConsumedFood;
 import LocalDatabase.Household;
@@ -27,6 +31,13 @@ public class NutritionTab extends Fragment {
     int householdID = -1;
     int areaID = -1;
     Interview interview = null;
+
+//    public class ConsumedFoodRow extends TableRow {
+//        int databaseID = -1;
+//        public ConsumedFoodRow(Context context) {
+//            super(context);
+//        }
+//    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -56,13 +67,13 @@ public class NutritionTab extends Fragment {
             }
         });
 
-        Button saveInterviewButton = (Button) view.findViewById(R.id.save_interview_button);
-        saveInterviewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveFoodItems();
-            }
-        });
+//        Button saveInterviewButton = (Button) view.findViewById(R.id.save_interview_button);
+//        saveInterviewButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                saveFoodItems();
+//            }
+//        });
 
         return view;
     }
@@ -76,9 +87,12 @@ public class NutritionTab extends Fragment {
         int numRows = foodTable.getChildCount();
         for (int i = 1; i < numRows - 1; i++) {
             TableRow row = (TableRow) foodTable.getChildAt(i);
-            TextView idField = (TextView) row.getChildAt(0);
+            TextView idField     = (TextView) row.getChildAt(0);
             EditText enteredFood = (EditText) row.getChildAt(1);
-            //EditText servingSize = (EditText) row.getChildAt(2);
+            EditText servingSize = (EditText) row.getChildAt(2);
+            Spinner  units       = (Spinner)  row.getChildAt(3);
+            Spinner  quantity    = (Spinner)  row.getChildAt(4);
+            Spinner  frequency   = (Spinner)  row.getChildAt(5);
 
             ConsumedFood food;
             if (idField.getText().toString().equals("-1")) {
@@ -90,7 +104,12 @@ public class NutritionTab extends Fragment {
             }
             food.interview = interview;
             food.entered_food = enteredFood.getText().toString();
-            //food.servings = Integer.parseInt(servingSize.getText().toString());
+            if (servingSize.getText().length() > 0) {
+                food.servings = Float.parseFloat(servingSize.getText().toString());
+            }
+            food.units        = (String)  units.getSelectedItem();
+            food.quantity     = (Integer) quantity.getSelectedItem();
+            food.frequency    = (String)  frequency.getSelectedItem();
             food.save();
             idField.setText(food.getId().toString());
         }
@@ -125,33 +144,44 @@ public class NutritionTab extends Fragment {
 
         // Food serving size
         EditText servingSize = new EditText(this.getActivity());
-        servingSize.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        servingSize.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         servingSize.setHint("serving size");
-        //servingSize.setText(Integer.toString(food.servings));
+        if (food.servings >= 0) {
+            servingSize.setText("" + food.servings);
+        }
         row.addView(servingSize);
 
         // Food item amount units
         Spinner servingUnits = new Spinner(this.getActivity());
-        ArrayAdapter<CharSequence> unitsAdapter = ArrayAdapter.createFromResource(this.getActivity(),
-                R.array.serving_units, android.R.layout.simple_spinner_item);
+        String[] unitsArray = getResources().getStringArray(R.array.serving_units);
+        ArrayList<String> unitsArrayList = new ArrayList<String>(Arrays.asList(unitsArray));
+        int indexOfUnits = unitsArrayList.indexOf(food.units);
+        ArrayAdapter<String> unitsAdapter = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_item, unitsArrayList);
         servingUnits.setAdapter(unitsAdapter);
+        servingUnits.setSelection(indexOfUnits);
         row.addView(servingUnits);
 
-        // Number of servings
-        Spinner servings = new Spinner(this.getActivity());
+        // Quantity - number of servings
+        Spinner quantity = new Spinner(this.getActivity());
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i = 1; i <= 10; i++) { list.add(i); }
-        ArrayAdapter<Integer> servingsAdapter = new ArrayAdapter<Integer>(this.getActivity(),
+        for (int i = 1; i <= 15; i++) { list.add(i); }
+        int quantityPosition = list.indexOf((Integer) food.quantity);
+        ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<Integer>(this.getActivity(),
                 android.R.layout.simple_spinner_item, list);
-        //servings.setSelection(food.quantity - 1);
-        servings.setAdapter(servingsAdapter);
-        row.addView(servings);
+        quantity.setAdapter(quantityAdapter);
+        quantity.setSelection(quantityPosition);
+        row.addView(quantity);
 
         // Consumption frequency
         Spinner consumptionFreq = new Spinner(this.getActivity());
-        ArrayAdapter<CharSequence> freqAdapter = ArrayAdapter.createFromResource(this.getActivity(),
-                R.array.frequency, android.R.layout.simple_spinner_item);
+        String[] freqArray = getResources().getStringArray(R.array.frequency);
+        ArrayList<String> freqArrayList = new ArrayList<String>(Arrays.asList(freqArray));
+        ArrayAdapter<String> freqAdapter = new ArrayAdapter<String>(this.getActivity(),
+                android.R.layout.simple_spinner_item, freqArrayList);
+        int freqPosition = freqArrayList.indexOf(food.frequency);
         consumptionFreq.setAdapter(freqAdapter);
+        consumptionFreq.setSelection(freqPosition);
         row.addView(consumptionFreq);
 
         // Remove food item button
