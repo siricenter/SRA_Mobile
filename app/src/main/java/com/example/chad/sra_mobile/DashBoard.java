@@ -10,12 +10,15 @@ import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -86,7 +89,7 @@ public class DashBoard extends Activity {
         listView.setAdapter(adapter);
         spinner.setAdapter(spinnerAdapter);
 
-        final Intent intent = new Intent(this, InterviewActivity.class);
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -121,23 +124,49 @@ public class DashBoard extends Activity {
                         List<Person> getpeople = new Select().from(Person.class).where("household_id ='" + currentHousehold + "'").execute();
                         numberOfMembers = getpeople.size();
                         loadMembersIntoView(currentHousehold);
+                        addButton();
                         flag = 1;
                     }
                     loadHouseholdsIntoSpinner();
                     navigationMarker = 1;
                 }
                 else{
-
-                    intent.putExtra("household", currentHousehold);
-                    intent.putExtra("area",currentArea);
-                    startActivity(intent);
                 }
             }
              adapter.notifyDataSetChanged();
+
              spinnerAdapter.notifyDataSetChanged();
          }
 
          });
+    }
+
+    public void goToInterview(){
+        final Intent intent = new Intent(this, InterviewActivity.class);
+        intent.putExtra("household", currentHousehold);
+        intent.putExtra("area",currentArea);
+        startActivity(intent);
+    }
+
+    public void addButton(){
+        //the layout on which you are working
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.dashboard);
+
+        //set the properties for button
+        Button btnTag = new Button(this);
+        btnTag.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        btnTag.setText("Interview");
+        btnTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToInterview();
+            }
+        });
+
+
+
+        //add button to the layout
+        layout.addView(btnTag);
     }
 
     public void loadHouseholdsIntoView(int position){
