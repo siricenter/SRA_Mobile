@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 
@@ -39,6 +38,7 @@ public class DashBoard extends Activity {
     Spinner spinner;
     ArrayList<String> areaValues;
     Area area;
+
     Household household;
     Person person;
     List<Area> areas;
@@ -48,6 +48,7 @@ public class DashBoard extends Activity {
     customList adapter;
     ArrayList<String> householdValues;
     ArrayList<String> percents;
+    ArrayList<String> householdId;
     int navigationMarker;
     int flag;
     int numberOfMembers;
@@ -63,7 +64,7 @@ public class DashBoard extends Activity {
         householdValues = new ArrayList<String>();
         areaValues = new ArrayList<String>();
         percents = new ArrayList<String>();
-
+        householdId = new ArrayList<String>();
         person = new Person();
         areas = area.getAllAreas();
 
@@ -99,7 +100,6 @@ public class DashBoard extends Activity {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                spinnerAdapter.notifyDataSetChanged();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -115,8 +115,7 @@ public class DashBoard extends Activity {
             if(position != 0){
                 if(navigationMarker == 0){
                     if(flag == 0){
-                        Household newh = household.load(Household.class,position);
-                        currentHousehold = newh.getId().intValue();
+                        currentHousehold = Integer.parseInt(householdId.get(position));
                         List<Person> getpeople = new Select().from(Person.class).where("household_id ='" + currentHousehold + "'").execute();
                         numberOfMembers = getpeople.size();
                         loadMembersIntoView(currentHousehold);
@@ -129,8 +128,6 @@ public class DashBoard extends Activity {
                 }
             }
              adapter.notifyDataSetChanged();
-
-             spinnerAdapter.notifyDataSetChanged();
          }
 
          });
@@ -156,7 +153,7 @@ public class DashBoard extends Activity {
                 newArea.updated_at = model.generateTimestamp();
                 newArea.save();
                 loadAreasIntoSpinner();
-                spinnerAdapter.notifyDataSetChanged();
+                updateSpinner();
             }
         });
 
@@ -172,8 +169,8 @@ public class DashBoard extends Activity {
 
     public void goToInterview(){
         final Intent intent = new Intent(this, InterviewActivity.class);
+        System.out.println(currentHousehold);
         intent.putExtra("household", currentHousehold);
-        intent.putExtra("area",currentArea);
         startActivity(intent);
     }
 
@@ -209,12 +206,16 @@ public class DashBoard extends Activity {
         percents.clear();
         householdValues.add("Households");
         percents.add("%Complete");
+        householdId.add("0");
 
         for (Household household : households) {
             String housename = household.name;
+            householdId.add("" + household.getId());
             percents.add("%" + household.percent);
             householdValues.add(housename);
         }
+        System.out.println(householdId);
+
     }
 
     public void loadMembersIntoView(final int position){
@@ -372,6 +373,10 @@ public class DashBoard extends Activity {
             String item = area.name;
             areaValues.add(item);
         }
+    }
+
+    public void updateSpinner(){
+        spinnerAdapter.notifyDataSetChanged();
     }
 
     @Override
