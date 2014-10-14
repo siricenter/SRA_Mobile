@@ -41,7 +41,7 @@ public class InterviewActivity extends Activity {
         }
         else {
             interview = new LocalDatabase.Interview();
-            List<Household> households = Household.getHousehold(householdID);
+            List<Household> households = Household.getHousehold(areaID);
             System.out.println(householdID);
             Household house = households.get(householdID);
             interview.household = house;

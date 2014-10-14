@@ -86,7 +86,7 @@ public class DatabasePopulator {
         household.name = "Johns";
         household.created_at = "1980";
         household.updated_at = "1981";
-
+        household.percent = 0;
         household.save();
         return household;
     }

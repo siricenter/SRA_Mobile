@@ -51,21 +51,27 @@ public class DashBoard extends Activity {
     int navigationMarker;
     int flag;
     int numberOfMembers;
+    int currentHousehold;
+    int currentArea;
     Dialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-        person = new Person();
 
-        areaValues = new ArrayList<String>();
-        areas = area.getAllAreas();
-        percents = new ArrayList<String>();
-        listView = (ListView) findViewById(R.id.Interviews);
         householdValues = new ArrayList<String>();
+        areaValues = new ArrayList<String>();
+        percents = new ArrayList<String>();
+
+        person = new Person();
+        areas = area.getAllAreas();
+
+        listView = (ListView) findViewById(R.id.Interviews);
         spinner = (Spinner) findViewById(R.id.areaSpinner);
+
         flag = 0;
+
         areaValues.add("Select Area");
         householdValues.add("Households");
         percents.add("%Complete");
@@ -92,13 +98,13 @@ public class DashBoard extends Activity {
                     else{
                         loadMembersIntoViewFromSpinner();
                     }
-                    adapter.notifyDataSetChanged();
-                    spinnerAdapter.notifyDataSetChanged();
                 }
+                adapter.notifyDataSetChanged();
+                spinnerAdapter.notifyDataSetChanged();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                innerTableLayout.removeAllViews();
+
             }
         });
 
@@ -111,42 +117,32 @@ public class DashBoard extends Activity {
                 if(navigationMarker == 0){
                     if(flag == 0){
                         Household newh = household.load(Household.class,position);
-                        loadMembersIntoView(position);
-                        flag = 1;
-                        List<Person> getpeople = new Select().from(Person.class).where("household_id ='" + newh.getId() + "'").execute();
+                        currentHousehold = newh.getId().intValue();
+                        List<Person> getpeople = new Select().from(Person.class).where("household_id ='" + currentHousehold + "'").execute();
                         numberOfMembers = getpeople.size();
+                        loadMembersIntoView(currentHousehold);
+                        flag = 1;
                     }
                     loadHouseholdsIntoSpinner();
                     navigationMarker = 1;
                 }
                 else{
-                    Person member = new Person();
 
-                    for(Person person : people){
-                        if (householdValues.get(position) == person.given_name ){
-                            member = person;
-                        }
-                    }
-
-                    Household house = household.load(Household.class,member.household_id);
-                    Area area = house.area;
-                    int areaid = area.getId().intValue();
-                    intent.putExtra("household", member.household_id);
-                    intent.putExtra("person",member.getId());
-                    intent.putExtra("area",areaid);
+                    intent.putExtra("household", currentHousehold);
+                    intent.putExtra("area",currentArea);
                     startActivity(intent);
                 }
-                adapter.notifyDataSetChanged();
-                spinnerAdapter.notifyDataSetChanged();
             }
+             adapter.notifyDataSetChanged();
+             spinnerAdapter.notifyDataSetChanged();
          }
 
          });
     }
 
     public void loadHouseholdsIntoView(int position){
+        currentArea = position;
         households = household.getHousehold(position);
-        people =  person.getMembers(position);
         householdValues.clear();
         percents.clear();
         householdValues.add("Households");
@@ -186,7 +182,7 @@ public class DashBoard extends Activity {
         final String House;
         try {
              House = householdValues.get(position);
-            System.out.println(House);
+             System.out.println(House);
              people =  new Select().from(Person.class).where("family_name='" + House + "'").execute();
         }catch (Exception e){
             return;
@@ -294,7 +290,7 @@ public class DashBoard extends Activity {
                 Editable edutop = edu.getText();
                 Household current = new Household();
                 Person newPerson = new Person();
-                newPerson.household_id = 1;
+                newPerson.household_id = currentHousehold;
                 newPerson.family_name = selected;
                 System.out.println(newPerson.family_name);
                 newPerson.is_alive = isalive;
@@ -320,7 +316,6 @@ public class DashBoard extends Activity {
                     percents.add("");
                 }
                 adapter.notifyDataSetChanged();
-
              }
         });
 
