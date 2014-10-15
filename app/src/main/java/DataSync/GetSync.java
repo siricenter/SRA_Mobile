@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import DataSync.httprequests.AsyncGetter;
 import DataSync.httprequests.DataGetter;
 
 /**
@@ -13,26 +14,26 @@ import DataSync.httprequests.DataGetter;
 public abstract class GetSync implements Syncable {
 
     private int syncFails;
-    private DataGetter dataGetter;
+    private AsyncGetter dataGetter;
     protected HashMap<String, Object> data;
     private DataSync dataSync;
 
     public GetSync() {
-        dataGetter = DataGetter.getInstance();
+        dataGetter = new AsyncGetter();
         dataSync = DataSync.getInstance();
         syncFails = 0;
     }
 
     @Override
     public void startSync() {
-        dataGetter.startThread(this);
+        dataGetter.start(this);
     }
 
     /**
      * syncData handles how the data is synced to the database after the data has been retrieved
      * @return
      */
-    abstract boolean syncLocalData();
+    protected abstract boolean syncLocalData();
     public abstract String getSyncAddress();
 
     /**

@@ -148,8 +148,8 @@ public class DashBoard extends Activity {
                 Editable newAreaName = input.getText();
                 Area newArea = new Area();
                 newArea.name = newAreaName.toString();
-                newArea.created_at = model.generateTimestamp();
-                newArea.updated_at = model.generateTimestamp();
+                newArea.created_at = newArea.generateTimestamp();
+                newArea.updated_at = newArea.generateTimestamp();
                 newArea.save();
                 loadAreasIntoSpinner();
                 updateSpinner();
@@ -340,8 +340,8 @@ public class DashBoard extends Activity {
                 newPerson.family_relationship_id = 0;
                 newPerson.birthday = memberbirthday.toString();
                 newPerson.given_name = newMember.toString();
-                newPerson.created_at = model.generateTimestamp();
-                newPerson.updated_at = model.generateTimestamp();
+                newPerson.created_at = newPerson.generateTimestamp();
+                newPerson.updated_at = newPerson.generateTimestamp();
                 newPerson.save();
                 alert.dismiss();
                 householdValues.clear();

@@ -22,12 +22,11 @@ import quickconnectfamily.json.JSONInputStream;
  * Created by Chad Carey on 9/22/2014.
  */
 public class DataGetter implements Runnable {
-
-    private Handler handler;
     private SoftReference softData;
     private SoftReference softAddress;
     private SoftReference softCaller;
     private static DataGetter instance;
+    private final Handler handler = new Handler();
 
     private DataGetter() {}
 
@@ -40,7 +39,7 @@ public class DataGetter implements Runnable {
 
     public Thread startThread(GetSync caller) {
         Log.d("ThreadRunner", "Creating handler on current thread");
-        this.handler = new Handler();
+
         Log.d("ThreadRunner", "Loading soft references");
         this.softData = new SoftReference(caller.getReturnData());
         this.softAddress = new SoftReference(caller.getSyncAddress());
@@ -51,9 +50,6 @@ public class DataGetter implements Runnable {
         return t;
     }
 
-    public void mainThreadPost(Runnable runnable) {
-        handler.post(runnable);
-    }
 
     @Override
     public void run() {
@@ -62,7 +58,7 @@ public class DataGetter implements Runnable {
             URL url = new URL( (String)softAddress.get() );
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             readStream(connection.getInputStream());
-            connection.disconnect();
+
 
         // change the data in the soft data reference
             //((HashMap<String,String>)softData.get()).put("state", "changed");
@@ -75,6 +71,7 @@ public class DataGetter implements Runnable {
                     ((GetSync)softCaller.get()).update();
                 }
             });
+            connection.disconnect();
         } catch (MalformedURLException e) {
             Log.e("ThreadRunner", "failed to ope url connection");
             e.printStackTrace();
@@ -93,13 +90,6 @@ public class DataGetter implements Runnable {
             Object o = inputStream.readObject();
             Log.d("ThreadRunner", "object class was = " + o.getClass());
             ((HashMap<String,String>)softData.get()).putAll((HashMap<String, String>) o);
-            /*reader = new BufferedReader(new InputStreamReader(stream));
-            String data = "";
-            String line = "";
-            while ((line = reader.readLine()) != null){
-                data += line;
-            }
-            Log.d("ThreadRunner:read stream", "Data contained" + data);*/
         } catch (Exception e) {
             Log.e("ThreadRunner:read stream", "failed to read input stream");
         }

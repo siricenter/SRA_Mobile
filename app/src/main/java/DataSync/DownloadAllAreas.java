@@ -14,7 +14,7 @@ public class DownloadAllAreas extends GetSync {
     }
 
     @Override
-    boolean syncLocalData() {
+    protected boolean syncLocalData() {
         // break up into areas and send to Area.parse(area)
         //return Area.parse(area);
         return  false;
