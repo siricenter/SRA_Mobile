@@ -68,7 +68,7 @@ public class DataGetter implements Runnable {
                 @Override
                 public void run() {
                     Log.d("ThreadRunner ", "posting runnable to ui thread");
-                    ((GetSync)softCaller.get()).update();
+                   // ((GetSync)softCaller.get()).update();
                 }
             });
             connection.disconnect();

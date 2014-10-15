@@ -2,6 +2,8 @@ package DataSync;
 
 import java.util.LinkedList;
 
+import DataSync.httprequests.tests.GetSyncTestCaller;
+
 
 public class DataSync {
     // IDEA: this class is singleton. We have a static queque of updateables, after each update the
@@ -34,8 +36,8 @@ public class DataSync {
      */
     void nextSync() {
         // if the list isn't empty we start the next sync task
+        syncList.pollFirst();
         if(!syncList.isEmpty()) {
-            syncList.pollFirst();
             Syncable sync = syncList.peekFirst();
             sync.startSync();
         } else {
@@ -49,7 +51,7 @@ public class DataSync {
     /**
      * This will start the sync process if it is not already in progress
      */
-    public void startSync() {
+    private void startSync() {
         if(!syncInProgress) {
             syncInProgress = true;
             // prepare the syncPost list
@@ -62,20 +64,31 @@ public class DataSync {
 
 
     /**
-     * this will add a sync task to the list and start the sync tasks
+     * this will add a sync task to the list and start the sync tasks if not already running
      * @param sync
      */
     public void sync(Syncable sync) {
-        this.pushBack(sync);
+        this.add(sync);
         startSync();
     }
 
     /**
-     * adds an item to the back of the sync list
+     * adds an item to the back of the sync list without starting the sync process (unless already started
      * @param sync
      */
-    public void pushBack(Syncable sync) {
+    public void add(Syncable sync) {
         if (sync != null)
             syncList.addLast(sync);
+    }
+
+    /**
+     * This will start a full database sync
+     */
+    public void sync() {
+        syncList.addLast(new GetSyncTestCaller("25"));
+        syncList.addLast(new GetSyncTestCaller("26"));
+        syncList.addLast(new GetSyncTestCaller("27"));
+        syncList.addLast(new GetSyncTestCaller("28"));
+        startSync();
     }
 }

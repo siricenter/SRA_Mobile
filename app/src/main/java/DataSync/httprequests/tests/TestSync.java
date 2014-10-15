@@ -9,7 +9,7 @@ import android.test.InstrumentationTestCase;
 public class TestSync extends InstrumentationTestCase {
     public void testSync() {
 
-        new SyncTestCaller().startSync();
+        new GetSyncTestCaller().startSync();
         try {
             Thread.sleep(15000);
         } catch (InterruptedException e) {

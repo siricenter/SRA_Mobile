@@ -1,5 +1,7 @@
 package DataSync;
 
+import org.json.JSONObject;
+
 import LocalDatabase.Area;
 
 /**
@@ -14,10 +16,8 @@ public class DownloadAllAreas extends GetSync {
     }
 
     @Override
-    protected boolean syncLocalData() {
-        // break up into areas and send to Area.parse(area)
-        //return Area.parse(area);
-        return  false;
+    protected boolean syncLocalData(JSONObject json) {
+        return false;
     }
 
     @Override

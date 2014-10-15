@@ -26,17 +26,21 @@ import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import DataSync.DataSync;
+import DataSync.httprequests.tests.GetSyncTestCaller;
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
 import LocalDatabase.Person;
-import LocalDatabase.SRAModel;
 
 public class DashBoard extends Activity {
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
     Area area;
+
+    private static DataSync dataSync = DataSync.getInstance();
 
     Household household;
     Person person;
@@ -400,6 +404,10 @@ public class DashBoard extends Activity {
     public void syncDatabase(View v){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
+
+        // this is a test of the DataSync class, real usage will be similar
+        dataSync.sync(); // performs a full database sync
+
         loadAreasIntoSpinner();
         spinnerAdapter.notifyDataSetChanged();
         AlertDialog.Builder complete = new AlertDialog.Builder(this);

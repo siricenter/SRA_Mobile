@@ -7,7 +7,7 @@ import com.loopj.android.http.*;
 
 
 import org.apache.http.Header;
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import DataSync.GetSync;
@@ -15,11 +15,22 @@ import DataSync.GetSync;
 /**
  * Created by Chad Carey on 10/15/2014.
  */
-public class AsyncGetter {
-    private static AsyncHttpClient client = new AsyncHttpClient();
-    private static final String LOG_TAG = "AsyncGetter";
+public class AsyncGetRequest {
+    private AsyncHttpClient client = new AsyncHttpClient();
+    private final String LOG_TAG = "AsyncGet";
+    private static AsyncGetRequest instance;
 
-    public void start(GetSync caller) {
+    private AsyncGetRequest() {
+    }
+
+    public static AsyncGetRequest getInstance() {
+        if(instance == null) {
+            instance = new AsyncGetRequest();
+        }
+        return instance;
+    }
+
+    public void start(final GetSync caller) {
         Log.d("Started start() function", "");
         client.get(caller.getSyncAddress(), new JsonHttpResponseHandler () {
 
@@ -36,7 +47,8 @@ public class AsyncGetter {
              * @param response   parsed response if any
              */
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.w(LOG_TAG, "onSuccess(int, Header[], JSONObject) was not overriden, but callback was received");
+                Log.d(LOG_TAG, "Get was Successful");
+                caller.update(response);
             }
 
             /**
@@ -46,9 +58,9 @@ public class AsyncGetter {
              * @param headers    response headers if any
              * @param response   parsed response if any
              */
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.w(LOG_TAG, "onSuccess(int, Header[], JSONArray) was not overriden, but callback was received");
-            }
+            //public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+              //  Log.w(LOG_TAG, "onSuccess(int, Header[], JSONArray) was not overriden, but callback was received");
+            //}
 
             /**
              * Returns when request failed
@@ -70,19 +82,19 @@ public class AsyncGetter {
              * @param throwable     throwable describing the way request failed
              * @param errorResponse parsed response if any
              */
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.w(LOG_TAG, "onFailure(int, Header[], Throwable, JSONArray) was not overriden, but callback was received", throwable);
-            }
+            //public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+              //  Log.w(LOG_TAG, "onFailure(int, Header[], Throwable, JSONArray) was not overriden, but callback was received", throwable);
+            //}
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.w(LOG_TAG, "onFailure(int, Header[], String, Throwable) was not overriden, but callback was received", throwable);
-            }
+            //@Override
+            //public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+              //  Log.w(LOG_TAG, "onFailure(int, Header[], String, Throwable) was not overriden, but callback was received", throwable);
+            //}
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.w(LOG_TAG, "onSuccess(int, Header[], String) was not overriden, but callback was received");
-            }
+            //@Override
+            //public void onSuccess(int statusCode, Header[] headers, String responseString) {
+              //  Log.w(LOG_TAG, "onSuccess(int, Header[], String) was not overriden, but callback was received");
+            //}
         });
     }
 }
