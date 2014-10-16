@@ -23,6 +23,8 @@ public class Household extends SRAModel {
     public Area area;
     @Column(name = "percent")
     public int percent;
+    @Column(name = "db_id")
+    public long id;
     /**
      * IMPORTANT INFO READ THIS!!!
      * This percentage is the percentage of the household's interview.

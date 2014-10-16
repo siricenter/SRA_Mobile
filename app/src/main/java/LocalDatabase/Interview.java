@@ -72,6 +72,8 @@ public class Interview extends SRAModel {
     public String tv;
     @Column(name = "refrigerator")
     public String refrigerator;
+    @Column(name = "db_id")
+    public long id;
 
     @Column(name = "created_at")
     public String created_at;

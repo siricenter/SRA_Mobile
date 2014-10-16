@@ -26,11 +26,6 @@ public class DatabasePopulator {
         //populateInterviews();
     }
 
-    public void deleteAll() {
-        new Delete().from(Interview.class).execute();
-        new Delete().from(Household.class).execute();
-        new Delete().from(Area.class).execute();
-    }
 
     public void dropAll() {
         
