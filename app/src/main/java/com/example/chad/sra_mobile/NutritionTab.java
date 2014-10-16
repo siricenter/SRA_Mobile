@@ -25,6 +25,7 @@ import LocalDatabase.Interview;
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
+    private TableRow columnHeaderRow;
     Interview interview = null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,11 +37,12 @@ public class NutritionTab extends Fragment {
 
         // Header
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        householdLabel.setText(interview.household.name + ": Consumed Foods");
+        householdLabel.setText(interview.household.name + "'s Nutrition");
 
         // Set food table attributes
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
         foodTable.setStretchAllColumns(true);
+        columnHeaderRow = (TableRow) view.findViewById(R.id.food_item_header_row);
 
         // Get all consumed foods associated with that interview and add them to the table
         List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
@@ -102,6 +104,8 @@ public class NutritionTab extends Fragment {
 
         // Insert at that index
         foodTable.addView(row, insertionIndex);
+
+        columnHeaderRow.setVisibility(View.VISIBLE);
     }
 
     /*
@@ -124,10 +128,14 @@ public class NutritionTab extends Fragment {
                 ConsumedFood.delete(ConsumedFood.class, databaseID);
             }
             foodTable.removeView(this);
+            if (foodTable.getChildCount() < 3) {
+                columnHeaderRow.setVisibility(View.GONE);
+            }
         }
 
         public ConsumedFoodRow(Context context, ConsumedFood food) {
             super(context);
+            this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT));
 
             // Entered food field
             enteredFood = new EditText(context);
