@@ -15,6 +15,8 @@ public class Area extends SRAModel {
 
     @Column(name = "name", unique = true,onUniqueConflict = Column.ConflictAction.IGNORE)
     public String name;
+    @Column(name = "db_id")
+    public long id;
     @Column(name = "created_at")
     public String created_at;
     @Column(name = "updated_at")

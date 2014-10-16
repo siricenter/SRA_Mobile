@@ -15,6 +15,8 @@ public class ConsumedFood extends SRAModel {
 
     @Column(name = "n_id")
     public String n_id;
+    @Column(name = "db_id")
+    public long id;
     @Column(name = "entered_food")
     public String entered_food;
     @Column(name = "interview")

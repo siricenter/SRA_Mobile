@@ -35,6 +35,8 @@ public class Person extends SRAModel {
     public String updated_at;
     @Column(name = "household_id")
     public int household_id;
+    @Column(name = "db_id")
+    public long id;
 
 
     public Person() {
