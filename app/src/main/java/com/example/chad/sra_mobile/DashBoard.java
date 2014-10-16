@@ -198,12 +198,12 @@ public class DashBoard extends Activity {
         //add button to the layout
         layout.addView(btnTag,0);
     }
-
     public void loadHouseholdsIntoView(int position){
         currentArea = position;
         households = household.getHousehold(position);
         householdValues.clear();
         percents.clear();
+        householdId.clear();
         householdValues.add("Households");
         percents.add("%Complete");
         householdId.add("0");
@@ -217,7 +217,6 @@ public class DashBoard extends Activity {
         System.out.println(householdId);
 
     }
-
     public void loadMembersIntoView(final int position){
 
         final String House;
@@ -255,13 +254,11 @@ public class DashBoard extends Activity {
                     }
                 });
     }
-
     public void goBack(){
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
-
     public void createMember(final String position){
         alert = new Dialog(this);
         alert.setContentView(R.layout.newmember);
@@ -329,7 +326,6 @@ public class DashBoard extends Activity {
                 Editable newMember = name.getText();
                 Editable memberbirthday = birthday.getText();
                 Editable edutop = edu.getText();
-                Household current = new Household();
                 Person newPerson = new Person();
                 newPerson.household_id = currentHousehold;
                 newPerson.family_name = selected;
@@ -365,7 +361,6 @@ public class DashBoard extends Activity {
 
 
     }
-
     public void loadAreasIntoSpinner(){
         areaValues.clear();
         areaValues.add("Select Area");
@@ -374,7 +369,6 @@ public class DashBoard extends Activity {
             areaValues.add(item);
         }
     }
-
     public void updateSpinner(){
         spinnerAdapter.notifyDataSetChanged();
     }
