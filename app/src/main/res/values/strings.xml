@@ -26,6 +26,7 @@
     <string name="nutrition_tab_title">Nutrition</string>
     <string name="agronomy_tab_title">Agronomy</string>
     <string name="sas_tab_title">Small Animal Science</string>
+    <string name="nutrition_tab_header">Consumed Foods</string>
     <string name="add_food_item_button">+</string>
     <string name="remove_food_item_button">-</string>
     <string name="food_item">Food Item</string>

@@ -26,18 +26,21 @@ import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import DataSync.DataSync;
+import DataSync.httprequests.tests.GetSyncTestCaller;
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
 import LocalDatabase.Person;
-import LocalDatabase.SRAModel;
 
 public class DashBoard extends Activity {
-    SRAModel model = new SRAModel();
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
     Area area;
+
+    private static DataSync dataSync = DataSync.getInstance();
 
     Household household;
     Person person;
@@ -149,8 +152,8 @@ public class DashBoard extends Activity {
                 Editable newAreaName = input.getText();
                 Area newArea = new Area();
                 newArea.name = newAreaName.toString();
-                newArea.created_at = model.generateTimestamp();
-                newArea.updated_at = model.generateTimestamp();
+                newArea.created_at = newArea.generateTimestamp();
+                newArea.updated_at = newArea.generateTimestamp();
                 newArea.save();
                 loadAreasIntoSpinner();
                 updateSpinner();
@@ -337,8 +340,8 @@ public class DashBoard extends Activity {
                 newPerson.family_relationship_id = 0;
                 newPerson.birthday = memberbirthday.toString();
                 newPerson.given_name = newMember.toString();
-                newPerson.created_at = model.generateTimestamp();
-                newPerson.updated_at = model.generateTimestamp();
+                newPerson.created_at = newPerson.generateTimestamp();
+                newPerson.updated_at = newPerson.generateTimestamp();
                 newPerson.save();
                 alert.dismiss();
                 householdValues.clear();
@@ -395,6 +398,10 @@ public class DashBoard extends Activity {
     public void syncDatabase(View v){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
+
+        // this is a test of the DataSync class, real usage will be similar
+        dataSync.sync(); // performs a full database sync
+
         loadAreasIntoSpinner();
         spinnerAdapter.notifyDataSetChanged();
         AlertDialog.Builder complete = new AlertDialog.Builder(this);
@@ -425,8 +432,8 @@ public class DashBoard extends Activity {
                 Household newHouse = new Household();
                         newHouse.area = Area.load(Area.class,position);
                         newHouse.name = newHousehold.toString();
-                        newHouse.created_at = model.generateTimestamp();
-                        newHouse.updated_at = model.generateTimestamp();
+                        newHouse.created_at = newHouse.generateTimestamp();
+                        newHouse.updated_at = newHouse.generateTimestamp();
                         newHouse.save();
                 loadHouseholdsIntoView(position);
                 adapter.notifyDataSetChanged();

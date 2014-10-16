@@ -2,9 +2,9 @@ package DataSync;
 
 import android.util.Log;
 
-import java.util.HashMap;
+import org.json.JSONObject;
 
-import DataSync.httprequests.DataGetter;
+import DataSync.httprequests.AsyncGetRequest;
 
 /**
  * This is an interface for updateable objects
@@ -13,26 +13,26 @@ import DataSync.httprequests.DataGetter;
 public abstract class GetSync implements Syncable {
 
     private int syncFails;
-    private DataGetter dataGetter;
-    protected HashMap<String, Object> data;
+    private AsyncGetRequest dataGetter;
+    protected JSONObject data;
     private DataSync dataSync;
 
     public GetSync() {
-        dataGetter = DataGetter.getInstance();
+        dataGetter = AsyncGetRequest.getInstance();
         dataSync = DataSync.getInstance();
         syncFails = 0;
     }
 
     @Override
     public void startSync() {
-        dataGetter.startThread(this);
+        dataGetter.start(this);
     }
 
     /**
      * syncData handles how the data is synced to the database after the data has been retrieved
      * @return
      */
-    abstract boolean syncLocalData();
+    protected abstract boolean syncLocalData(JSONObject json);
     public abstract String getSyncAddress();
 
     /**
@@ -41,8 +41,8 @@ public abstract class GetSync implements Syncable {
      * list so it can try to retrieve the data again. This will happen 3 times then assume the task
      * is malformed and remove it from the list.
      */
-    public final void update() {
-        if(syncLocalData()) {
+    public final void update(JSONObject json) {
+        if(syncLocalData(json)) {
             dataSync.nextSync();
         } else if(syncFails > 3) {
             Log.w("GetSync : update() ", "failed to sync an item to the local database. Removing it from the list");
@@ -53,8 +53,7 @@ public abstract class GetSync implements Syncable {
         }
     }
 
-    public final HashMap<String, Object> getReturnData() {
-        data = new HashMap<String, Object>();
+    public final JSONObject getReturnData() {
         return data;
     }
 }

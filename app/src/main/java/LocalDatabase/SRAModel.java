@@ -11,7 +11,7 @@ import java.util.Date;
  * It include methods that will be needed by all of the SRA tables
  * Created by Chad Carey on 10/1/2014.
  */
-public class SRAModel extends Model {
+public abstract class SRAModel extends Model {
 
     public SRAModel() {
         super();
@@ -21,10 +21,11 @@ public class SRAModel extends Model {
      * Generate Timestamp will generate a current timestamp for tables
      * @return
      */
-    public String generateTimestamp() {
+    public static String generateTimestamp() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String formattedDate = dateFormat.format(date);
-        return formattedDate;
+        formattedDate = formattedDate.replace("/", "-");
+        return formattedDate + ".0";
     }
 }

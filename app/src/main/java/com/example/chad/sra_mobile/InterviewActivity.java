@@ -19,11 +19,7 @@ public class InterviewActivity extends Activity {
     Fragment agronomyTab  = new AgronomyTab();
     Fragment sasTab       = new SASTab();
 
-    int householdID = -1;
-    int areaID = -1;
     Interview interview = null;
-    public int getHouseholdID() { return householdID; }
-    public int getAreaID() { return areaID; }
     public Interview getInterview() { return interview; }
 
     @Override
@@ -31,19 +27,27 @@ public class InterviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview);
 
+        // Get data passed in through intent
         Intent intent = getIntent();
-        householdID = intent.getIntExtra("household", -1);
-        areaID = intent.getIntExtra("area", -1);
+        int householdID = intent.getIntExtra("household", -1);
+        System.out.println("Household ID received from dashboard: " + householdID);
+        if (householdID == -1) {
+            System.out.println("Household ID is -1");
+            return;
+        }
+
+        // Get the interviews of the household and take the first one.
+        // If there aren't any, create one.
         List<Interview> interviews = Interview.getHouseholdInterviews(householdID);
         if (interviews.size() > 0) {
             interview = interviews.get(0);
+            if (interview.household == null) {
+                System.out.println("Household in queried interview is null!!!");
+            }
         }
         else {
-            interview = new LocalDatabase.Interview();
-            List<Household> households = Household.getHousehold(areaID);
-
-            Household house = Household.load(Household.class,householdID);
-            interview.household = house;
+            interview = new Interview();
+            interview.household = Household.load(Household.class, householdID);
             interview.save();
         }
 

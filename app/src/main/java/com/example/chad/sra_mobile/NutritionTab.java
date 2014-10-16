@@ -1,6 +1,6 @@
 package com.example.chad.sra_mobile;
 
-import android.app.ActionBar;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.InputType;
@@ -20,49 +20,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import LocalDatabase.ConsumedFood;
-import LocalDatabase.Household;
 import LocalDatabase.Interview;
 
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
-    int householdID = -1;
-    int areaID = -1;
     Interview interview = null;
-
-//    public class ConsumedFoodRow extends TableRow {
-//        int databaseID = -1;
-//        public ConsumedFoodRow(Context context) {
-//            super(context);
-//        }
-//    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_nutrition_tab, container, false);
+
+        // Get interview object from main activity
+        InterviewActivity interviewActivity = (InterviewActivity) getActivity();
+        interview = interviewActivity.getInterview();
+
+        // Header
+        TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
+        householdLabel.setText(interview.household.name + ": Consumed Foods");
+
+        // Set food table attributes
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
         foodTable.setStretchAllColumns(true);
 
-        InterviewActivity interviewActivity = (InterviewActivity) getActivity();
-        householdID = interviewActivity.getHouseholdID();
-        areaID = interviewActivity.getAreaID();
-        interview = interviewActivity.getInterview();
+        // Get all consumed foods associated with that interview and add them to the table
         List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
         int numFoodItems = foods.size();
         for (int i = 0; i < numFoodItems; i++) {
-            addFoodItemRow(foods.get(i));
+            addFoodToTable(foods.get(i));
         }
 
-        TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        List<Household> households = Household.getHousehold(areaID);
-        Household house = households.get(householdID - 1);
-        householdLabel.setText("Nutrition for household: " + house.name);
-
+        // Setup the addFoodButton
         Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
         addFoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewFoodItem(view);
+                addFoodToTable(new ConsumedFood());
             }
         });
 
@@ -77,129 +70,134 @@ public class NutritionTab extends Fragment {
     public void saveFoodItems() {
         int numRows = foodTable.getChildCount();
         for (int i = 1; i < numRows - 1; i++) {
-            TableRow row = (TableRow) foodTable.getChildAt(i);
-            int childCount = row.getChildCount();
-            EditText enteredFood = (EditText) row.getChildAt(0);
-            EditText servingSize = (EditText) row.getChildAt(1);
-            Spinner  units       = (Spinner)  row.getChildAt(2);
-            Spinner  quantity    = (Spinner)  row.getChildAt(3);
-            Spinner  frequency   = (Spinner)  row.getChildAt(4);
-            TextView idField     = (TextView) row.getChildAt(childCount - 1);
+            ConsumedFoodRow row = (ConsumedFoodRow) foodTable.getChildAt(i);
+            long databaseID = row.getDatabaseID();
 
             ConsumedFood food;
-            if (idField.getText().toString().equals("-1")) {
+            if (databaseID == -1) {
                 food = new ConsumedFood();
             }
             else {
-                long id = Integer.parseInt(idField.getText().toString());
-                food = ConsumedFood.load(ConsumedFood.class, id);
+                food = ConsumedFood.load(ConsumedFood.class, databaseID);
             }
             food.interview = interview;
-            food.entered_food = enteredFood.getText().toString();
-            if (servingSize.getText().length() > 0) {
-                food.servings = Float.parseFloat(servingSize.getText().toString());
+            food.entered_food = row.enteredFood.getText().toString();
+            if (row.servingSize.getText().length() > 0) {
+                food.servings = Float.parseFloat(row.servingSize.getText().toString());
             }
-            food.units        = (String)  units.getSelectedItem();
-            food.quantity     = (Integer) quantity.getSelectedItem();
-            food.frequency    = (String)  frequency.getSelectedItem();
+            food.units = (String) row.servingUnits.getSelectedItem();
+            food.quantity = (Integer) row.quantity.getSelectedItem();
+            food.frequency = (String) row.frequency.getSelectedItem();
             food.save();
-            idField.setText(food.getId().toString());
+            row.setDatabaseID(food.getId());
         }
     }
 
-    public void addNewFoodItem(View v) {
-        addFoodItemRow(new ConsumedFood());
-    }
+    public void addFoodToTable(ConsumedFood food) {
+        // Create new consumed food row given the ConsumedFood object
+        ConsumedFoodRow row = new ConsumedFoodRow(this.getActivity(), food);
 
-    public void addFoodItemRow(ConsumedFood food) {
-        final TableRow row = new TableRow(this.getActivity());
-
-        // Entered food field
-        EditText enteredFood = new EditText(this.getActivity());
-        enteredFood.setHint(R.string.entered_food_hint);
-        enteredFood.setText(food.entered_food);
-
-        // Food serving size
-        EditText servingSize = new EditText(this.getActivity());
-        servingSize.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        servingSize.setHint(R.string.serving_size_hint);
-        if (food.servings >= 0) {
-            servingSize.setText("" + food.servings);
-        }
-
-        // Food item amount units
-        Spinner servingUnits = new Spinner(this.getActivity());
-        String[] unitsArray = getResources().getStringArray(R.array.serving_units);
-        ArrayList<String> unitsArrayList = new ArrayList<String>(Arrays.asList(unitsArray));
-        ArrayAdapter<String> unitsAdapter = new ArrayAdapter<String>(this.getActivity(),
-                android.R.layout.simple_spinner_item, unitsArrayList);
-        servingUnits.setAdapter(unitsAdapter);
-        if (!food.units.isEmpty()) {
-            int indexOfUnits = unitsArrayList.indexOf(food.units);
-            servingUnits.setSelection(indexOfUnits);
-        }
-
-        // Quantity - number of servings
-        Spinner quantity = new Spinner(this.getActivity());
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i = 1; i <= 15; i++) { list.add(i); }
-        ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<Integer>(this.getActivity(),
-                android.R.layout.simple_spinner_item, list);
-        quantity.setAdapter(quantityAdapter);
-        int quantityPosition = list.indexOf((Integer) food.quantity);
-        quantity.setSelection(quantityPosition);
-
-        // Consumption frequency
-        Spinner consumptionFreq = new Spinner(this.getActivity());
-        String[] freqArray = getResources().getStringArray(R.array.frequency);
-        ArrayList<String> freqArrayList = new ArrayList<String>(Arrays.asList(freqArray));
-        ArrayAdapter<String> freqAdapter = new ArrayAdapter<String>(this.getActivity(),
-                android.R.layout.simple_spinner_item, freqArrayList);
-        consumptionFreq.setAdapter(freqAdapter);
-        int freqPosition = freqArrayList.indexOf(food.frequency);
-        consumptionFreq.setSelection(freqPosition);
-
-        // Remove food item button
-        Button removeFoodItem = new Button(this.getActivity());
-        removeFoodItem.setText(R.string.remove_food_item_button);
-        removeFoodItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView idView = (TextView) row.getChildAt(row.getChildCount() - 1);
-                if (idView.getText().toString().equals("-1")) { }
-                else {
-                    long id = Integer.parseInt(idView.getText().toString());
-                    ConsumedFood.delete(ConsumedFood.class, id);
-                }
-                foodTable.removeView(row);
-            }
-        });
-
-        // Food database id (will be hidden in view)
-        final TextView foodIDView = new TextView(this.getActivity());
-        Long id = food.getId();
-        String strID;
-        if (id == null) {
-            strID = "-1";
-        }
-        else {
-            strID = id.toString();
-        }
-        foodIDView.setText(strID);
-        foodIDView.setVisibility(View.GONE);
-
-        // Add fields and spinners to row
-        row.addView(enteredFood);
-        row.addView(servingSize);
-        row.addView(servingUnits);
-        row.addView(quantity);
-        row.addView(consumptionFreq);
-        row.addView(removeFoodItem);
-        row.addView(foodIDView);
-
-        // Insert row into table
+        // Find the correct place to insert into the table (right above the + button)
         int numChildren = foodTable.getChildCount();
         int insertionIndex = numChildren - 1;
+
+        // Insert at that index
         foodTable.addView(row, insertionIndex);
+    }
+
+    /*
+     * This class defines a custom table row for a ConsumedFood item.
+    */
+    public class ConsumedFoodRow extends TableRow {
+        long databaseID = -1;
+        public long getDatabaseID() { return databaseID; }
+        public void setDatabaseID(long id) { databaseID = id; }
+
+        public EditText enteredFood;
+        public EditText servingSize;
+        public Spinner  servingUnits;
+        public Spinner  quantity;
+        public Spinner  frequency;
+        private Button removeButton;
+
+        public void removeFromTableAndDeleteFromDatabase() {
+            if (databaseID != -1) {
+                ConsumedFood.delete(ConsumedFood.class, databaseID);
+            }
+            foodTable.removeView(this);
+        }
+
+        public ConsumedFoodRow(Context context, ConsumedFood food) {
+            super(context);
+
+            // Entered food field
+            enteredFood = new EditText(context);
+            enteredFood.setHint(R.string.entered_food_hint);
+            enteredFood.setText(food.entered_food);
+
+            // Food serving size
+            servingSize = new EditText(context);
+            servingSize.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            servingSize.setHint(R.string.serving_size_hint);
+            if (food.servings >= 0) {
+                servingSize.setText("" + food.servings);
+            }
+
+            // Food item amount units
+            servingUnits = new Spinner(context);
+            String[] unitsArray = getResources().getStringArray(R.array.serving_units);
+            ArrayList<String> unitsArrayList = new ArrayList<String>(Arrays.asList(unitsArray));
+            ArrayAdapter<String> unitsAdapter = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, unitsArrayList);
+            servingUnits.setAdapter(unitsAdapter);
+            if (!food.units.isEmpty()) {
+                int indexOfUnits = unitsArrayList.indexOf(food.units);
+                servingUnits.setSelection(indexOfUnits);
+            }
+
+            // Quantity - number of servings
+            quantity = new Spinner(context);
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (int i = 1; i <= 15; i++) { list.add(i); }
+            ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<Integer>(context,
+                    android.R.layout.simple_spinner_item, list);
+            quantity.setAdapter(quantityAdapter);
+            int quantityPosition = list.indexOf((Integer) food.quantity);
+            quantity.setSelection(quantityPosition);
+
+            // Consumption frequency
+            frequency = new Spinner(context);
+            String[] freqArray = getResources().getStringArray(R.array.frequency);
+            ArrayList<String> freqArrayList = new ArrayList<String>(Arrays.asList(freqArray));
+            ArrayAdapter<String> freqAdapter = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, freqArrayList);
+            frequency.setAdapter(freqAdapter);
+            int freqPosition = freqArrayList.indexOf(food.frequency);
+            frequency.setSelection(freqPosition);
+
+            // Remove food item button
+            removeButton = new Button(context);
+            removeButton.setText(R.string.remove_food_item_button);
+            removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    removeFromTableAndDeleteFromDatabase();
+                }
+            });
+
+            // Add fields and spinners to row
+            this.addView(enteredFood);
+            this.addView(servingSize);
+            this.addView(servingUnits);
+            this.addView(quantity);
+            this.addView(frequency);
+            this.addView(removeButton);
+
+            // Get id from ConsumedFood object if it has been saved to the database already
+            Long id = food.getId();
+            if (id != null) {
+                databaseID = food.getId();
+            }
+        }
     }
 }
