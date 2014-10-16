@@ -26,17 +26,21 @@ import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import DataSync.DataSync;
+import DataSync.httprequests.tests.GetSyncTestCaller;
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
 import LocalDatabase.Person;
-import LocalDatabase.SRAModel;
 
 public class DashBoard extends Activity {
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
     Area area;
+
+    private static DataSync dataSync = DataSync.getInstance();
 
     Household household;
     Person person;
@@ -148,8 +152,8 @@ public class DashBoard extends Activity {
                 Editable newAreaName = input.getText();
                 Area newArea = new Area();
                 newArea.name = newAreaName.toString();
-                newArea.created_at = model.generateTimestamp();
-                newArea.updated_at = model.generateTimestamp();
+                newArea.created_at = newArea.generateTimestamp();
+                newArea.updated_at = newArea.generateTimestamp();
                 newArea.save();
                 loadAreasIntoSpinner();
                 updateSpinner();
@@ -197,12 +201,12 @@ public class DashBoard extends Activity {
         //add button to the layout
         layout.addView(btnTag,0);
     }
-
     public void loadHouseholdsIntoView(int position){
         currentArea = position;
         households = household.getHousehold(position);
         householdValues.clear();
         percents.clear();
+        householdId.clear();
         householdValues.add("Households");
         percents.add("%Complete");
         householdId.add("0");
@@ -216,7 +220,6 @@ public class DashBoard extends Activity {
         System.out.println(householdId);
 
     }
-
     public void loadMembersIntoView(final int position){
 
         final String House;
@@ -254,13 +257,11 @@ public class DashBoard extends Activity {
                     }
                 });
     }
-
     public void goBack(){
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
-
     public void createMember(final String position){
         alert = new Dialog(this);
         alert.setContentView(R.layout.newmember);
@@ -328,7 +329,6 @@ public class DashBoard extends Activity {
                 Editable newMember = name.getText();
                 Editable memberbirthday = birthday.getText();
                 Editable edutop = edu.getText();
-                Household current = new Household();
                 Person newPerson = new Person();
                 newPerson.household_id = currentHousehold;
                 newPerson.family_name = selected;
@@ -340,8 +340,8 @@ public class DashBoard extends Activity {
                 newPerson.family_relationship_id = 0;
                 newPerson.birthday = memberbirthday.toString();
                 newPerson.given_name = newMember.toString();
-                newPerson.created_at = model.generateTimestamp();
-                newPerson.updated_at = model.generateTimestamp();
+                newPerson.created_at = newPerson.generateTimestamp();
+                newPerson.updated_at = newPerson.generateTimestamp();
                 newPerson.save();
                 alert.dismiss();
                 householdValues.clear();
@@ -364,7 +364,6 @@ public class DashBoard extends Activity {
 
 
     }
-
     public void loadAreasIntoSpinner(){
         areaValues.clear();
         areaValues.add("Select Area");
@@ -373,7 +372,6 @@ public class DashBoard extends Activity {
             areaValues.add(item);
         }
     }
-
     public void updateSpinner(){
         spinnerAdapter.notifyDataSetChanged();
     }
@@ -400,6 +398,10 @@ public class DashBoard extends Activity {
     public void syncDatabase(View v){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
+
+        // this is a test of the DataSync class, real usage will be similar
+        dataSync.sync(); // performs a full database sync
+
         loadAreasIntoSpinner();
         spinnerAdapter.notifyDataSetChanged();
         AlertDialog.Builder complete = new AlertDialog.Builder(this);
