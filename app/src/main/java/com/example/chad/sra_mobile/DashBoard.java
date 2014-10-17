@@ -217,6 +217,7 @@ public class DashBoard extends Activity {
             percents.add("%" + household.percent);
             householdValues.add(housename);
         }
+
         System.out.println(householdId);
 
     }

@@ -40,7 +40,7 @@
         android:selectAllOnFocus="false"
         android:enabled="true"
         android:focusable="true"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_above="@+id/textView"
         android:layout_alignLeft="@+id/passwordET"
         android:layout_alignStart="@+id/passwordET"
