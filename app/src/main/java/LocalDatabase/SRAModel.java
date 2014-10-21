@@ -22,10 +22,10 @@ public abstract class SRAModel extends Model {
      * @return
      */
     public static String generateTimestamp() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSSS");
         Date date = new Date();
         String formattedDate = dateFormat.format(date);
         formattedDate = formattedDate.replace("/", "-");
-        return formattedDate + ".0";
+        return formattedDate;
     }
 }

@@ -35,8 +35,10 @@ public class Area extends SRAModel {
     public long post() {
         String date = this.generateTimestamp();
         // check to see if a created_at date already exists
-        if(created_at.isEmpty()) {
+        if(created_at == null) {
             // if created_at date doesn't exist create it
+            this.created_at = date;
+        } else if(created_at.isEmpty()) {
             this.created_at = date;
         }
         // create updated_at date

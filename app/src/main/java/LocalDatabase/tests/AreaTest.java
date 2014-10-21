@@ -92,13 +92,36 @@ public class AreaTest extends AndroidTestCase {
         assertTrue(list.size() > 0);
     }
 
-    public void testPsot() {
+    public void testPost() {
         Area area = new Area();
-        area.name = "Andrew";
+        area.name = "Andrew" + Math.random();
         long id = area.post();
-        assertTrue(id >=0);
+        assertTrue(id >=0 );
         Log.d("AreaTest : testPost", "created_at = " + area.created_at);
+        assertNotNull(area.created_at);
+        assertFalse(area.created_at.isEmpty());
         Log.d("AreaTest : testPost", "updated_at = " + area.updated_at);
+        assertNotNull(area.updated_at);
+        assertFalse(area.updated_at.isEmpty());
+        // test second post to be sure it only changes updated_at
+        String oldDate = area.created_at;
+        area = null;
+        area = Area.load(Area.class, id);
+        assertNotNull(area);
+
+        // re-save (post)
+        area.name = "sue" + Math.random();
+        area.post();
+
+        Log.d("AreaTest : testPost", "created_at2 = " + area.created_at);
+        assertNotNull(area.created_at);
+        assertFalse(area.created_at.isEmpty());
+        Log.d("AreaTest : testPost", "updated_at2 = " + area.updated_at);
+        assertNotNull(area.updated_at);
+        assertFalse(area.updated_at.isEmpty());
+
+        assertTrue(area.created_at.equals(oldDate));
+        assertFalse(area.updated_at.equals(oldDate));
     }
 
     /****FUNCTIONS****/
