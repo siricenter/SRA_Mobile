@@ -26,6 +26,24 @@ public class Area extends SRAModel {
         super();
     }
 
+    /**
+     * post
+     * This method will save the item to the database and also generate the correct created_at and
+     * updated_at dates
+     * @return
+     */
+    public long post() {
+        String date = this.generateTimestamp();
+        // check to see if a created_at date already exists
+        if(created_at.isEmpty()) {
+            // if created_at date doesn't exist create it
+            this.created_at = date;
+        }
+        // create updated_at date
+        this.updated_at = date;
+        return this.save();
+    }
+
     public static List<Area> getAllAreas() {
         return new Select().from(Area.class).execute();
     }

@@ -92,6 +92,15 @@ public class AreaTest extends AndroidTestCase {
         assertTrue(list.size() > 0);
     }
 
+    public void testPsot() {
+        Area area = new Area();
+        area.name = "Andrew";
+        long id = area.post();
+        assertTrue(id >=0);
+        Log.d("AreaTest : testPost", "created_at = " + area.created_at);
+        Log.d("AreaTest : testPost", "updated_at = " + area.updated_at);
+    }
+
     /****FUNCTIONS****/
     public Area generateArea() {
         try {
