@@ -192,6 +192,13 @@ public class NutritionTab extends Fragment {
                 }
             });
 
+            enteredFood.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+            servingSize.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            servingUnits.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+            quantity.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+            frequency.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+            removeButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+
             // Add fields and spinners to row
             this.addView(enteredFood);
             this.addView(servingSize);
@@ -199,6 +206,10 @@ public class NutritionTab extends Fragment {
             this.addView(quantity);
             this.addView(frequency);
             this.addView(removeButton);
+
+            enteredFood.setMaxWidth(enteredFood.getWidth());
+            servingSize.setMaxWidth(servingSize.getWidth());
+            servingSize.setHorizontallyScrolling(true);
 
             // Get id from ConsumedFood object if it has been saved to the database already
             Long id = food.getId();

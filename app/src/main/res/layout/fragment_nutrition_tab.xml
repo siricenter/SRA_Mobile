@@ -31,41 +31,42 @@
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Food Item"
                 android:textSize="16dip"
                 android:id="@+id/food_item_header" />
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Serving size"
                 android:textSize="16dip"
                 android:id="@+id/serving_size_header" />
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Units"
                 android:textSize="16dip"
                 android:id="@+id/units_header" />
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Qty"
                 android:textSize="16dip"
                 android:id="@+id/quantity_header" />
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Frequency"
                 android:textSize="16dip"
                 android:id="@+id/frequency_header" />
 
             <!--Hidden fields-->
             <Button
+                android:layout_width="fill_parent"
                 android:text="@string/add_food_item_button"
                 android:visibility="invisible" />
         </TableRow>
