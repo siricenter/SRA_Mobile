@@ -245,4 +245,38 @@ public class InterviewTest extends AndroidTestCase {
         assertNull(interview);
     }
 
+    public void testPost() {
+        Interview subject = new Interview();
+
+        subject.bathroom = "carrot";
+
+        long id = subject.post();
+        assertTrue(id >=0 );
+        Log.d("InterviewTest : testPost", "created_at = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("InterviewTest : testPost", "updated_at = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+        // test second post to be sure it only changes updated_at
+        String oldDate = subject.created_at;
+        subject = null;
+        subject = Interview.load(Interview.class, id);
+        assertNotNull(subject);
+
+        // re-save (post)
+        subject.bathroom = "spin";
+        subject.post();
+
+        Log.d("InterviewTest : testPost", "created_at2 = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("InterviewTest : testPost", "updated_at2 = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+
+        assertTrue(subject.created_at.equals(oldDate));
+        assertFalse(subject.updated_at.equals(oldDate));
+    }
+
 }

@@ -84,4 +84,38 @@ public class ConsumedFoodTest extends AndroidTestCase {
         }
     }
 
+    public void testPost() {
+        ConsumedFood subject = new ConsumedFood();
+
+        subject.entered_food = "carrot";
+
+        long id = subject.post();
+        assertTrue(id >=0 );
+        Log.d("ConsumedFoodTest : testPost", "created_at = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("ConsumedFoodTest : testPost", "updated_at = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+        // test second post to be sure it only changes updated_at
+        String oldDate = subject.created_at;
+        subject = null;
+        subject = ConsumedFood.load(ConsumedFood.class, id);
+        assertNotNull(subject);
+
+        // re-save (post)
+        subject.entered_food = "spin";
+        subject.post();
+
+        Log.d("ConsumedFoodTest : testPost", "created_at2 = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("ConsumedFoodTest : testPost", "updated_at2 = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+
+        assertTrue(subject.created_at.equals(oldDate));
+        assertFalse(subject.updated_at.equals(oldDate));
+    }
+
 }

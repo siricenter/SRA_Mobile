@@ -78,4 +78,40 @@ public class PersonTest extends AndroidTestCase {
         Assert.assertEquals(queriedPerson.updated_at, updatedAt);
         Assert.assertEquals(queriedPerson.household_id, household);
     }
+
+    public void testPost() {
+        Person subject = new Person();
+
+        subject.birthday = "carrot";
+
+        long id = subject.post();
+        assertTrue(id >=0 );
+        Log.d("PersonTest : testPost", "created_at = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("PersonTest : testPost", "updated_at = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+        // test second post to be sure it only changes updated_at
+        String oldDate = subject.created_at;
+        subject = null;
+        subject = Person.load(Person.class, id);
+        assertNotNull(subject);
+
+        // re-save (post)
+        subject.birthday = "spin";
+        subject.post();
+
+        Log.d("PersonTest : testPost", "created_at2 = " + subject.created_at);
+        assertNotNull(subject.created_at);
+        assertFalse(subject.created_at.isEmpty());
+        Log.d("PersonTest : testPost", "updated_at2 = " + subject.updated_at);
+        assertNotNull(subject.updated_at);
+        assertFalse(subject.updated_at.isEmpty());
+
+        assertTrue(subject.created_at.equals(oldDate));
+        assertFalse(subject.updated_at.equals(oldDate));
+    }
+
+
 }
