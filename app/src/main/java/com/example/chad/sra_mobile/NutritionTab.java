@@ -89,7 +89,7 @@ public class NutritionTab extends Fragment {
             food.units = (String) row.servingUnits.getSelectedItem();
             food.quantity = (Integer) row.quantity.getSelectedItem();
             food.frequency = (String) row.frequency.getSelectedItem();
-            food.save();
+            food.post();
             row.setDatabaseID(food.getId());
         }
     }

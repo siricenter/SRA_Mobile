@@ -152,9 +152,7 @@ public class DashBoard extends Activity {
                 Editable newAreaName = input.getText();
                 Area newArea = new Area();
                 newArea.name = newAreaName.toString();
-                newArea.created_at = newArea.generateTimestamp();
-                newArea.updated_at = newArea.generateTimestamp();
-                newArea.save();
+                newArea.post();
                 loadAreasIntoSpinner();
                 updateSpinner();
             }
@@ -341,9 +339,7 @@ public class DashBoard extends Activity {
                 newPerson.family_relationship_id = 0;
                 newPerson.birthday = memberbirthday.toString();
                 newPerson.given_name = newMember.toString();
-                newPerson.created_at = newPerson.generateTimestamp();
-                newPerson.updated_at = newPerson.generateTimestamp();
-                newPerson.save();
+                newPerson.post();
                 alert.dismiss();
                 householdValues.clear();
                 percents.clear();
@@ -431,11 +427,9 @@ public class DashBoard extends Activity {
                Editable newHousehold = input.getText();
                 int position = spinner.getSelectedItemPosition();
                 Household newHouse = new Household();
-                        newHouse.area = Area.load(Area.class,position);
-                        newHouse.name = newHousehold.toString();
-                        newHouse.created_at = newHouse.generateTimestamp();
-                        newHouse.updated_at = newHouse.generateTimestamp();
-                        newHouse.save();
+                newHouse.area = Area.load(Area.class,position);
+                newHouse.name = newHousehold.toString();
+                newHouse.post();
                 loadHouseholdsIntoView(position);
                 adapter.notifyDataSetChanged();
             }

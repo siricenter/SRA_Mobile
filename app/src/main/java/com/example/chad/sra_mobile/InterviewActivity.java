@@ -48,7 +48,7 @@ public class InterviewActivity extends Activity {
         else {
             interview = new Interview();
             interview.household = Household.load(Household.class, householdID);
-            interview.save();
+            interview.post();
         }
 
         ActionBar actionBar = getActionBar();
