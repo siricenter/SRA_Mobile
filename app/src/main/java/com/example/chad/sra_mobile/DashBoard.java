@@ -136,7 +136,7 @@ public class DashBoard extends Activity {
          });
     }
 
-    public void createArea(View v){
+    public void createArea(MenuItem item){
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -180,8 +180,6 @@ public class DashBoard extends Activity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.dashboard);
         Spinner spin =(Spinner) findViewById(R.id.areaSpinner);
-        Button areaButton = (Button)findViewById(R.id.button3);
-        layout.removeView(areaButton);
         layout.removeView(spin);
         //set the properties for button
         Button btnTag = new Button(this);
@@ -392,7 +390,7 @@ public class DashBoard extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void syncDatabase(View v){
+    public void syncDatabase(MenuItem item){
         DatabasePopulator create = new DatabasePopulator();
         create.populate();
 
@@ -412,7 +410,7 @@ public class DashBoard extends Activity {
         complete.show();
         }
 
-    public void addHousehold(View v){
+    public void addHousehold(MenuItem item){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Name of new household?");

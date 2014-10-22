@@ -25,45 +25,6 @@
         android:id="@+id/areaSpinner"
         android:background="#fff"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="+ Area"
-        android:id="@+id/button3"
-        android:layout_alignBottom="@+id/areaSpinner"
-        android:layout_toEndOf="@+id/areaSpinner"
-        android:layout_toRightOf="@+id/areaSpinner"
-        android:layout_alignParentTop="true"
-        android:onClick="createArea"
-        android:maxWidth="150dp"
-        android:textSize="12dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="+ Family"
-        android:id="@+id/button"
-        android:layout_alignBottom="@+id/areaSpinner"
-        android:layout_toEndOf="@+id/areaSpinner"
-        android:layout_toRightOf="@+id/areaSpinner"
-        android:layout_alignParentTop="true"
-        android:maxWidth="150dp"
-        android:onClick="addHousehold"
-        android:textSize="12dp" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:maxWidth="150dp"
-        android:text="Sync"
-        android:id="@+id/button2"
-        android:layout_toEndOf="@+id/button"
-        android:onClick="syncDatabase"
-        android:layout_alignBottom="@+id/button"
-        android:layout_alignTop="@+id/button"
-        android:textSize="12dp"
-        android:layout_alignRight="@+id/Interviews"
-        android:layout_alignEnd="@+id/Interviews" />
 </LinearLayout>
 
 </RelativeLayout>
