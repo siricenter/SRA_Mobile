@@ -135,17 +135,15 @@ public class NutritionTab extends Fragment {
 
         public ConsumedFoodRow(Context context, ConsumedFood food) {
             super(context);
-            this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT));
+            this.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
             // Entered food field
             enteredFood = new EditText(context);
-            enteredFood.setHint(R.string.entered_food_hint);
             enteredFood.setText(food.entered_food);
 
             // Food serving size
             servingSize = new EditText(context);
             servingSize.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            servingSize.setHint(R.string.serving_size_hint);
             if (food.servings >= 0) {
                 servingSize.setText("" + food.servings);
             }
@@ -192,12 +190,12 @@ public class NutritionTab extends Fragment {
                 }
             });
 
-            enteredFood.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
-            servingSize.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            servingUnits.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
-            quantity.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
-            frequency.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
-            removeButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT));
+            enteredFood.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            servingSize.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            servingUnits.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            quantity.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            frequency.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            removeButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
             // Add fields and spinners to row
             this.addView(enteredFood);
