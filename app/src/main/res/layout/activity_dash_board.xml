@@ -20,8 +20,9 @@
     android:layout_height="wrap_content"
     android:id="@+id/dashboard">
     <Spinner
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="100"
         android:id="@+id/areaSpinner"
         android:background="#fff"/>
 
