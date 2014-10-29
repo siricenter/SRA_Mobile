@@ -57,12 +57,14 @@ public class DashBoard extends Activity {
     int numberOfMembers;
     int currentHousehold;
     int currentArea;
+    Menu getMenu;
     Dialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
 
         householdValues = new ArrayList<String>();
         areaValues = new ArrayList<String>();
@@ -202,6 +204,9 @@ public class DashBoard extends Activity {
         layout.addView(btnTag,0);
     }
     public void loadHouseholdsIntoView(int position){
+
+        getMenu.findItem(R.id.add_family).setEnabled(true);
+        getMenu.findItem(R.id.add_area).setEnabled(false);
         currentArea = position;
         households = household.getHousehold(position);
         householdValues.clear();
@@ -219,7 +224,8 @@ public class DashBoard extends Activity {
         }
     }
     public void loadMembersIntoView(){
-
+        getMenu.findItem(R.id.add_member).setEnabled(true);
+        getMenu.findItem(R.id.add_family).setEnabled(false);
         final String House;
         try {
              Household h = household.load(Household.class,(long)currentHousehold);
@@ -347,10 +353,12 @@ public class DashBoard extends Activity {
     public void loadAreasIntoSpinner(){
         areaValues.clear();
         areaValues.add("Select Area");
+        areas = area.getAllAreas();
         for(Area area : areas){
             String item = area.name;
             areaValues.add(item);
         }
+        spinnerAdapter.notifyDataSetChanged();
     }
     public void updateSpinner(){
         spinnerAdapter.notifyDataSetChanged();
@@ -360,6 +368,9 @@ public class DashBoard extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dash_board, menu);
+        getMenu = menu;
+        getMenu.findItem(R.id.add_family).setEnabled(false);
+        getMenu.findItem(R.id.add_member).setEnabled(false);
         return true;
     }
 
