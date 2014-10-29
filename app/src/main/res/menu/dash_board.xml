@@ -16,9 +16,20 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:onClick="addHousehold"/>
+    <item android:id="@+id/add_member"
+        android:title="Add Member"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:onClick="createMember"/>
     <item android:id="@+id/sync_button"
         android:title="Sync"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:onClick="syncDatabase"/>
+    <item android:id="@+id/back"
+        android:title="Back"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:onClick="goBack"/>
+
 </menu>

@@ -118,10 +118,14 @@ public class DashBoard extends Activity {
             if(position != 0){
                 if(navigationMarker == 0){
                     if(flag == 0){
+
                         currentHousehold = Integer.parseInt(householdId.get(position));
-                        List<Person> getpeople = new Select().from(Person.class).where("household_id ='" + currentHousehold + "'").execute();
+                        Person p = new Person();
+
+                        List<Person> getpeople = p.getMembers(currentHousehold);
                         numberOfMembers = getpeople.size();
-                        loadMembersIntoView(currentHousehold);
+                        System.out.println(numberOfMembers);
+                        loadMembersIntoView();
                         addButton();
                         flag = 1;
                     }
@@ -213,17 +217,15 @@ public class DashBoard extends Activity {
             percents.add("%" + household.percent);
             householdValues.add(housename);
         }
-
-        System.out.println(householdId);
-
     }
-    public void loadMembersIntoView(final int position){
+    public void loadMembersIntoView(){
 
         final String House;
         try {
-             House = householdValues.get(position);
+             Household h = household.load(Household.class,(long)currentHousehold);
+             House = h.name;
              System.out.println(House);
-             people =  new Select().from(Person.class).where("family_name='" + House + "'").execute();
+             people = person.getMembers(h.getId());
         }catch (Exception e){
             return;
         }
@@ -235,31 +237,14 @@ public class DashBoard extends Activity {
             householdValues.add(person.given_name);
             percents.add("");
         }
-        TextView view1 = (TextView) findViewById(R.id.button);
-        TextView view2 = (TextView) findViewById(R.id.button2);
-                view1.setText("+ Member");
-                view1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        int place = position;
-                        createMember(House);
-                    }
-                });
-                view2.setText("Back");
-                view2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        goBack();
-                    }
-                });
     }
-    public void goBack(){
+
+    public void goBack(MenuItem item){
         Intent intent = getIntent();
         finish();
         startActivity(intent);
     }
-    public void createMember(final String position){
+    public void createMember(MenuItem item){
         alert = new Dialog(this);
         alert.setContentView(R.layout.newmember);
         alert.setCancelable(false);
@@ -279,7 +264,7 @@ public class DashBoard extends Activity {
 
             @Override
              public void onClick(View v) {
-                String selected = position;
+                String selected = household.load(Household.class,currentHousehold).name;
                 EditText name = (EditText) alert.findViewById(R.id.editText);
                 EditText birthday = (EditText) alert.findViewById(R.id.editText2);
                 EditText edu = (EditText) alert.findViewById(R.id.editText3);
@@ -341,7 +326,7 @@ public class DashBoard extends Activity {
                 alert.dismiss();
                 householdValues.clear();
                 percents.clear();
-                people =  new Select().from(Person.class).where("family_name='" + selected + "'").execute();
+                people =  person.getMembers(currentHousehold);
                 numberOfMembers = people.size();
                 householdValues.add(selected);
                 percents.add( numberOfMembers + " Members");
