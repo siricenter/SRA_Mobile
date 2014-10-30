@@ -42,6 +42,9 @@ public class NutritionTab extends Fragment {
         // Set food table attributes
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
         foodTable.setStretchAllColumns(true);
+        foodTable.setColumnShrinkable(3, true);
+        foodTable.setColumnShrinkable(4, true);
+        foodTable.setColumnShrinkable(5, true);
         columnHeaderRow = (TableRow) view.findViewById(R.id.food_item_header_row);
 
         // Get all consumed foods associated with that interview and add them to the table
@@ -135,7 +138,7 @@ public class NutritionTab extends Fragment {
 
         public ConsumedFoodRow(Context context, ConsumedFood food) {
             super(context);
-            this.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+            this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
             // Entered food field
             enteredFood = new EditText(context);
@@ -190,12 +193,12 @@ public class NutritionTab extends Fragment {
                 }
             });
 
-            enteredFood.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            servingSize.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            servingUnits.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            quantity.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            frequency.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            removeButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            enteredFood.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+            servingSize.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+            servingUnits.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+            quantity.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+            frequency.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+            removeButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
 
             // Add fields and spinners to row
             this.addView(enteredFood);
