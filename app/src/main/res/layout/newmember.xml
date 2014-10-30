@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Name"
         android:ems="10"
         android:id="@+id/editText" />
 
@@ -24,13 +24,13 @@
         android:inputType="date"
         android:ems="10"
         android:id="@+id/editText2"
-        android:text="Birthday" />
+        android:hint="Birthday" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText3"
-        android:text="Education Level" />
+        android:hint="Education Level" />
 
     <RadioGroup
         android:id="@+id/sex"
