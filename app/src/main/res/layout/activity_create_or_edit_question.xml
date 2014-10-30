@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="24dip"
+            android:hint="Question id" />
+
+        <RadioGroup
+            android:id="@+id/is_multi_use_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/is_not_multi_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Single use"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/is_multi_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Multi-use" />
+        </RadioGroup>
+
+        <TableLayout
+            android:id="@+id/data_point_table"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+        </TableLayout>
+
+        <Button
+            android:id="@+id/add_data_point_button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="Add data point"
+            android:onClick="addDataPoint" />
+    </LinearLayout>
+</ScrollView>

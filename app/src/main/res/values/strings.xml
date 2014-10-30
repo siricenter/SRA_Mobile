@@ -54,5 +54,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addInterview">Add Interview</string>
+    <string name="title_activity_create_question_set">CreateQuestionSet</string>
+    <string name="title_activity_create_or_edit_question">CreateOrEditQuestion</string>
 
 </resources>

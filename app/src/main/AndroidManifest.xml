@@ -13,11 +13,13 @@
         <activity
             android:name=".MyActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".login"
@@ -31,11 +33,19 @@
         <activity
             android:name=".DashBoard"
             android:label="@string/title_activity_dash_board"
-            android:screenOrientation="landscape" >  <!-- locked until we set orientation change listeners -->
+            android:screenOrientation="landscape" > <!-- locked until we set orientation change listeners -->
         </activity>
         <activity
             android:name=".InterviewActivity"
             android:label="@string/title_activity_interview" >
+        </activity>
+        <activity
+            android:name=".CreateQuestionSet"
+            android:label="@string/title_activity_create_question_set" >
+        </activity>
+        <activity
+            android:name=".CreateOrEditQuestion"
+            android:label="@string/title_activity_create_or_edit_question" >
         </activity>
     </application>
 

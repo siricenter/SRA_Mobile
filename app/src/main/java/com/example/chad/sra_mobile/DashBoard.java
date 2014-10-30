@@ -19,16 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-
-import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import DataSync.DataSync;
-import DataSync.httprequests.tests.GetSyncTestCaller;
 import LocalDatabase.Area;
 import LocalDatabase.DatabasePopulator;
 import LocalDatabase.Household;
@@ -140,6 +135,11 @@ public class DashBoard extends Activity {
          }
 
          });
+    }
+
+    public void goToQuestionSets() {
+        Intent intent = new Intent(this, CreateQuestionSet.class);
+        startActivity(intent);
     }
 
     public void createArea(MenuItem item){
