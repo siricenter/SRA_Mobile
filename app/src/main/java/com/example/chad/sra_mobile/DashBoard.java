@@ -437,4 +437,10 @@ public class DashBoard extends Activity {
 
         alert.show();
     }
+
+    public void goToQuestionGen(MenuItem item){
+        Intent intent = new Intent(this,CreateQuestionSet.class);
+        startActivity(intent);
+    }
+
 }
