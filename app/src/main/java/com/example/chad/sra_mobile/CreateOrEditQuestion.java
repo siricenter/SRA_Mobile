@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 
 public class CreateOrEditQuestion extends Activity {
 
@@ -56,13 +58,17 @@ public class CreateOrEditQuestion extends Activity {
         alert.setCancelable(false);
         alert.setTitle("Data point");
 
+        Spinner dataTypeSpinner = (Spinner) alert.findViewById(R.id.data_type_spinner);
+        final TableLayout optionsTable = (TableLayout) alert.findViewById(R.id.options_menu_table);
+        optionsTable.setStretchAllColumns(true);
+        Button addOptionButton = (Button) alert.findViewById(R.id.add_option_button);
         Button save = (Button) alert.findViewById(R.id.save_button);
         Button cancel = (Button) alert.findViewById(R.id.cancel_button);
 
-        cancel.setOnClickListener(new View.OnClickListener(){
+        addOptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alert.dismiss();
+                addOptionNewOption(optionsTable);
             }
         });
 
@@ -74,6 +80,33 @@ public class CreateOrEditQuestion extends Activity {
                 alert.dismiss();
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
+
+        dataTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                TextView typeView = (TextView) selectedItemView;
+                String type = typeView.getText().toString();
+                if (type.equals("Option List")) {
+                    optionsTable.setVisibility(View.VISIBLE);
+                }
+                else {
+                    optionsTable.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                optionsTable.setVisibility(View.GONE);
+            }
+        });
+
         alert.show();
     }
 
@@ -94,5 +127,27 @@ public class CreateOrEditQuestion extends Activity {
         row.addView(delete);
 
         dataPointTable.addView(row);
+    }
+
+    public void addOptionNewOption(final TableLayout table) {
+        final TableRow row = new TableRow(this);
+
+        EditText option = new EditText(this);
+        option.setHint("Option");
+
+        Button delete = new Button(this);
+        delete.setText("Delete");
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                table.removeView(row);
+            }
+        });
+
+        row.addView(option);
+        row.addView(delete);
+
+        table.addView(row, table.getChildCount() - 1);
     }
 }

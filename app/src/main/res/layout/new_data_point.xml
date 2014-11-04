@@ -20,25 +20,69 @@
                 android:ems="10"
                 android:id="@+id/label_field" />
 
-            <EditText
+            <Spinner
+                android:id="@+id/data_type_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="data type"
-                android:ems="10"
-                android:id="@+id/data_type_field" />
+                android:entries="@array/data_point_types_array" >
+                </Spinner>
 
-            <Button
+            <TableLayout
+                android:id="@+id/options_menu_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:id="@+id/save_button" />
+                android:layout_height="fill_parent"
+                android:visibility="gone"
+                android:paddingLeft="75dip"
+                android:paddingRight="0dip" >
 
-            <Button
-                android:layout_width="match_parent"
+                <RadioGroup
+                    android:id="@+id/is_multi_use_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="List"
+                        android:checked="true" />
+                    <RadioButton
+                        android:id="@+id/checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Checkbox" />
+                </RadioGroup>
+
+
+                <Button
+                    android:id="@+id/add_option_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Add option" />
+
+                </TableLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:id="@+id/cancel_button"
-                android:singleLine="false" />
+                android:orientation="horizontal" >
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:layout_weight="1"
+                    android:id="@+id/save_button" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:layout_weight="1"
+                    android:id="@+id/cancel_button"
+                    android:singleLine="false" />
+            </LinearLayout>
 
         </LinearLayout>
 

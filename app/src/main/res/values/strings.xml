@@ -57,4 +57,13 @@
     <string name="title_activity_create_question_set">CreateQuestionSet</string>
     <string name="title_activity_create_or_edit_question">CreateOrEditQuestion</string>
 
+    <!-- strings for Creating Question Sets and Questions -->
+    <string-array name="data_point_types_array">
+        <item>Text</item>
+        <item>Number</item>
+        <item>True/False</item>
+        <item>Date</item>
+        <item>Option List</item>
+    </string-array>
+
 </resources>
