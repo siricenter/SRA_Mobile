@@ -30,6 +30,11 @@ import LocalDatabase.Household;
 import LocalDatabase.Person;
 
 public class DashBoard extends Activity {
+
+    public static final int STATE_AREA_SELECT = 0;
+    public static final int STATE_HOUSEHOLD_SELECT = 1;
+    public static final int STATE_INDIVIDUAL_HOUSEHOLD = 2;
+
     ListView listView;
     Spinner spinner;
     ArrayList<String> areaValues;
@@ -87,19 +92,10 @@ public class DashBoard extends Activity {
         listView.setAdapter(adapter);
         spinner.setAdapter(spinnerAdapter);
 
-
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != 0) {
-                    if (navigationMarker == 0){
-                        loadHouseholdsIntoView(i);
-                    }
-                    else{
-                    }
-                }
-                adapter.notifyDataSetChanged();
+                areaWasSelected(i);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -113,7 +109,7 @@ public class DashBoard extends Activity {
          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             if(position != 0){
-                if(navigationMarker == 0){
+                if(navigationMarker == STATE_HOUSEHOLD_SELECT){
                     if(flag == 0){
 
                         currentHousehold = Integer.parseInt(householdId.get(position));
@@ -126,7 +122,7 @@ public class DashBoard extends Activity {
                         addButton();
                         flag = 1;
                     }
-                    navigationMarker = 1;
+                    navigationMarker = STATE_INDIVIDUAL_HOUSEHOLD;
                 }
                 else{
                 }
@@ -135,6 +131,18 @@ public class DashBoard extends Activity {
          }
 
          });
+    }
+
+    public void areaWasSelected(int areaPosition) {
+        if (areaPosition != 0) {
+            if (navigationMarker == STATE_AREA_SELECT) {
+                loadHouseholdsIntoView(areaPosition);
+                navigationMarker = STATE_HOUSEHOLD_SELECT;
+            }
+            else {
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void goToQuestionSets() {
@@ -246,9 +254,17 @@ public class DashBoard extends Activity {
     }
 
     public void goBack(MenuItem item){
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+        System.out.println(navigationMarker);
+        if (navigationMarker == STATE_INDIVIDUAL_HOUSEHOLD) {
+            Intent intent = getIntent();
+            intent.putExtra("AreaID", currentArea);
+            startActivity(intent);
+        }
+        else if (navigationMarker == STATE_HOUSEHOLD_SELECT) {
+            Intent intent = getIntent();
+            intent.putExtra("AreaID", -1);
+            startActivity(intent);
+        }
     }
     public void createMember(MenuItem item){
         alert = new Dialog(this);
@@ -371,6 +387,21 @@ public class DashBoard extends Activity {
         getMenu = menu;
         getMenu.findItem(R.id.add_family).setEnabled(false);
         getMenu.findItem(R.id.add_member).setEnabled(false);
+
+        // Check to see if an AreaID is given in the Intent.
+        // If so we need to load the households from that area.
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.containsKey("AreaID")) {
+                int areaID = extras.getInt("AreaID");
+                System.out.println("GOING TO AREA: " + areaID);
+                if (areaID != -1) {
+                    areaWasSelected(areaID);
+                }
+            }
+        }
+
         return true;
     }
 
