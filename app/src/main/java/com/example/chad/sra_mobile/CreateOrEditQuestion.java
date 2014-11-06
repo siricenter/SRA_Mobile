@@ -51,7 +51,6 @@ public class CreateOrEditQuestion extends Activity {
     public void addDataPoint(View view) {
         addDataPoint();
     }
-
     public void addDataPoint() {
         alert = new Dialog(this);
         alert.setContentView(R.layout.new_data_point);
@@ -76,7 +75,10 @@ public class CreateOrEditQuestion extends Activity {
             @Override
             public void onClick(View v) {
                 EditText label = (EditText) alert.findViewById(R.id.label_field);
-                addDataPointRow(label.getText().toString(), "");
+                Spinner typeSpinner = (Spinner) alert.findViewById(R.id.data_type_spinner);
+                String type = (String) typeSpinner.getSelectedItem();
+
+                addDataPointRow(label.getText().toString(), type);
                 alert.dismiss();
             }
         });
@@ -112,21 +114,34 @@ public class CreateOrEditQuestion extends Activity {
 
     public void addDataPointRow(String label, String type) {
         final TableRow row = new TableRow(this);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT);
+        row.setLayoutParams(params);
 
-        TextView tv = new TextView(this);
-        tv.setText(label);
+        TextView labelView = new TextView(this);
+        labelView.setText(label);
 
         Button edit = new Button(this);
         edit.setText("Edit");
 
         Button delete = new Button(this);
         delete.setText("Delete");
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataPointTable.removeView(row);
+            }
+        });
 
-        row.addView(tv);
+        row.addView(labelView);
         row.addView(edit);
         row.addView(delete);
 
         dataPointTable.addView(row);
+
+        labelView.setMaxWidth(labelView.getWidth());
+        labelView.setHorizontallyScrolling(false);
     }
 
     public void addOptionNewOption(final TableLayout table) {
@@ -137,7 +152,6 @@ public class CreateOrEditQuestion extends Activity {
 
         Button delete = new Button(this);
         delete.setText("Delete");
-
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

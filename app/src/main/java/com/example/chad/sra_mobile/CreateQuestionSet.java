@@ -34,24 +34,7 @@ public class CreateQuestionSet extends Activity {
     }
 
     public void addQuestion() {
-
         Intent intent = new Intent(this, CreateOrEditQuestion.class);
         startActivity(intent);
-
-//        TableRow row = new TableRow(this);
-//
-//        Button question = new Button(this);
-//        question.setText("Question1");
-//
-//        Button delete = new Button(this);
-//        delete.setText("Delete");
-//
-//        row.addView(question);
-//        row.addView(delete);
-//
-//        int index = questionTable.getChildCount() - 1;
-//        questionTable.addView(row, index);
     }
-
-
 }

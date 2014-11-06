@@ -139,6 +139,8 @@ public class DashBoard extends Activity {
             }
         }
         else {
+            getMenu.findItem(R.id.add_family).setEnabled(false);
+            getMenu.findItem(R.id.add_area).setEnabled(true);
             clearHouseholdsFromView();
         }
         adapter.notifyDataSetChanged();
