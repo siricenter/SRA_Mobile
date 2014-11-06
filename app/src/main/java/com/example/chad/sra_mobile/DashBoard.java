@@ -32,8 +32,7 @@ import LocalDatabase.Person;
 public class DashBoard extends Activity {
 
     public static final int STATE_AREA_SELECT = 0;
-    public static final int STATE_HOUSEHOLD_SELECT = 1;
-    public static final int STATE_INDIVIDUAL_HOUSEHOLD = 2;
+    public static final int STATE_INDIVIDUAL_HOUSEHOLD = 1;
 
     ListView listView;
     Spinner spinner;
@@ -108,9 +107,9 @@ public class DashBoard extends Activity {
          @Override
          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            if(position != 0){
-                if(navigationMarker == STATE_HOUSEHOLD_SELECT){
-                    if(flag == 0){
+            if (position != 0) {
+                if (navigationMarker == STATE_AREA_SELECT){
+                    if (flag == 0) {
 
                         currentHousehold = Integer.parseInt(householdId.get(position));
                         Person p = new Person();
@@ -137,10 +136,10 @@ public class DashBoard extends Activity {
         if (areaPosition != 0) {
             if (navigationMarker == STATE_AREA_SELECT) {
                 loadHouseholdsIntoView(areaPosition);
-                navigationMarker = STATE_HOUSEHOLD_SELECT;
             }
-            else {
-            }
+        }
+        else {
+            clearHouseholdsFromView();
         }
         adapter.notifyDataSetChanged();
     }
@@ -206,18 +205,23 @@ public class DashBoard extends Activity {
         //add button to the layout
         layout.addView(btnTag,0);
     }
-    public void loadHouseholdsIntoView(int position){
 
-        getMenu.findItem(R.id.add_family).setEnabled(true);
-        getMenu.findItem(R.id.add_area).setEnabled(false);
-        currentArea = position;
-        households = household.getHousehold(position);
+    public void clearHouseholdsFromView() {
         householdValues.clear();
         percents.clear();
         householdId.clear();
         householdValues.add("Households");
         percents.add("%Complete");
         householdId.add("0");
+    }
+
+    public void loadHouseholdsIntoView(int position){
+
+        getMenu.findItem(R.id.add_family).setEnabled(true);
+        getMenu.findItem(R.id.add_area).setEnabled(false);
+        currentArea = position;
+        households = household.getHousehold(position);
+        clearHouseholdsFromView();
 
         for (Household household : households) {
             String housename = household.name;
@@ -254,11 +258,7 @@ public class DashBoard extends Activity {
             Intent intent = getIntent();
             intent.putExtra("AreaID", currentArea);
             startActivity(intent);
-        }
-        else if (navigationMarker == STATE_HOUSEHOLD_SELECT) {
-            Intent intent = getIntent();
-            intent.putExtra("AreaID", -1);
-            startActivity(intent);
+            finish();
         }
     }
     public void createMember(MenuItem item){
@@ -390,8 +390,8 @@ public class DashBoard extends Activity {
         if (extras != null) {
             if (extras.containsKey("AreaID")) {
                 int areaID = extras.getInt("AreaID");
-                System.out.println("GOING TO AREA: " + areaID);
                 if (areaID != -1) {
+                    spinner.setSelection(areaID);
                     areaWasSelected(areaID);
                 }
             }
