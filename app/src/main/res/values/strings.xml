@@ -66,4 +66,6 @@
         <item>Option List</item>
     </string-array>
 
+    <string name="title_activity_question_set_list">QuestionSetList</string>
+
 </resources>

@@ -13,13 +13,11 @@
         <activity
             android:name=".MyActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".login"
@@ -46,6 +44,10 @@
         <activity
             android:name=".CreateOrEditQuestion"
             android:label="@string/title_activity_create_or_edit_question" >
+        </activity>
+        <activity
+            android:name=".QuestionSetList"
+            android:label="@string/title_activity_question_set_list" >
         </activity>
     </application>
 

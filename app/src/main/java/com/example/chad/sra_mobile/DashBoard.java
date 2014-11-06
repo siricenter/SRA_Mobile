@@ -145,11 +145,6 @@ public class DashBoard extends Activity {
         adapter.notifyDataSetChanged();
     }
 
-    public void goToQuestionSets() {
-        Intent intent = new Intent(this, CreateQuestionSet.class);
-        startActivity(intent);
-    }
-
     public void createArea(MenuItem item){
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -470,7 +465,7 @@ public class DashBoard extends Activity {
     }
 
     public void goToQuestionGen(MenuItem item){
-        Intent intent = new Intent(this,CreateQuestionSet.class);
+        Intent intent = new Intent(this,QuestionSetList.class);
         startActivity(intent);
     }
 
