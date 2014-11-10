@@ -2,6 +2,7 @@ package com.example.chad.sra_mobile;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class CreateOrEditQuestion extends Activity {
 
     private TableLayout dataPointTable;
@@ -24,7 +28,13 @@ public class CreateOrEditQuestion extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_edit_question);
-
+        Intent intent = getIntent();
+        QuestionSet qs = (QuestionSet) intent.getSerializableExtra("questions");
+        for(Questions question : qs.questions){
+            for(Datapoint data :question.dataPoints){
+                addDataPointRow(data.label,data.dataType);
+            }
+        }
         dataPointTable = (TableLayout) findViewById(R.id.data_point_table);
         dataPointTable.setStretchAllColumns(true);
     }

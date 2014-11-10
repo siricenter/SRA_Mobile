@@ -15,8 +15,13 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class QuestionSetList extends Activity {
+
+    QuestionSet currentSet;
 
     private TableLayout questionSetTable;
 
@@ -66,10 +71,29 @@ public class QuestionSetList extends Activity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
+                  final QuestionSet set = new QuestionSet(data.getName(),data.getRef().toString());
+                     for(DataSnapshot qs : data.getChildren()){
+                         Questions question = new Questions(qs.getRef().toString());
+                         for(DataSnapshot dp : qs.getChildren()){
+                             Datapoint dataPoint = new Datapoint(dp.child("label").getValue().toString() , dp.child("data type").getValue().toString());
+                             question.dataPoints.add(dataPoint);
+                         }
+                         set.questions.add(question);
+                     }
                     TableRow row = new TableRow(getBaseContext());
 //
                     Button question = new Button(getBaseContext());
                     question.setText(data.getName());
+                    question.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+
+                            Intent intent = new Intent(getBaseContext(),CreateOrEditQuestion.class);
+                            intent.putExtra("questions",set);
+                            startActivity(intent);
+                        }
+                    });
 
                     Button delete = new Button(getBaseContext());
                     delete.setText("Delete");
