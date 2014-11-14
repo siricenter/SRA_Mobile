@@ -15,6 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 
 public class login extends Activity {
@@ -22,11 +25,21 @@ public class login extends Activity {
     EditText usernameET;
     EditText passwordET;
     SharedPreferences.Editor editor;
+    private boolean status;
+
+
+    public boolean getStatus(){
+        return status;
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Firebase.setAndroidContext(this);
         editor = getSharedPreferences("login", MODE_PRIVATE).edit();
         usernameET = (EditText) findViewById(R.id.usernameET);
         passwordET = (EditText) findViewById(R.id.passwordET);
@@ -61,23 +74,29 @@ public class login extends Activity {
 
 
     public void login() {
-        String username = usernameET.getText().toString();
-        String password = passwordET.getText().toString();
-        if(validate(username, password)) {
-            editor.putString("username", username.trim());
-            editor.putString("password", password.trim());
-            editor.commit();
-            // forward to MyActivity
-            Intent intent = new Intent(this, DashBoard.class);
-            startActivity(intent);
+        final String username = usernameET.getText().toString();
+        final String password = passwordET.getText().toString();
+        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com");
+
+        if(username != null && password != null)
+            if(!username.isEmpty() && !password.isEmpty()) {
+                ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
+                    @Override
+                    public void onAuthenticated(AuthData authData) {
+                        editor.putString("username", username.trim());
+                        editor.putString("password", password.trim());
+                        editor.commit();
+                        // forward to MyActivity
+                        Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void onAuthenticationError(FirebaseError firebaseError) {
+                        status = false;
+                    }
+                });
+            }
+
         }
     }
 
-    public boolean validate(String username, String password) {
-        Log.d("Login : validate", "username==" + username + " password==" + password);
-        if(username != null && password != null)
-            if(!username.isEmpty() && !password.isEmpty())
-                return true;
-        return false;
-    }
-}
