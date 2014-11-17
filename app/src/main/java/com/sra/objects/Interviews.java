@@ -1,11 +1,12 @@
 package com.sra.objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by jakobhartman on 11/17/14.
  */
-public class Interviews {
+public class Interviews implements Serializable {
     private String createdDate;
     private ArrayList<QuestionSet> questionSets;
 
