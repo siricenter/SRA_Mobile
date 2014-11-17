@@ -9,13 +9,38 @@ import java.io.Serializable;
  */
 
 public class Datapoint implements Serializable {
-    public String label;
-    public String dataType;
+    private String label;
+    private String dataType;
+    private String answer;
 
 
-    public Datapoint(String label,String dataType){
-        this.label = label;
+    public Datapoint(){
+        this.label = "";
+        this.dataType = "";
+        this.answer = "";
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public void setDataType(String dataType) {
         this.dataType = dataType;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
 }

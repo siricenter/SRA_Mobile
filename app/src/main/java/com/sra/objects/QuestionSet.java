@@ -15,6 +15,10 @@ public class QuestionSet implements Serializable {
     private  String name;
     private String refUrl;
 
+
+    public void addQuestion(Questions qs){
+          questions.add(qs);
+    }
     public void setName(String name) {
         this.name = name;
     }

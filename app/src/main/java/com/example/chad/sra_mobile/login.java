@@ -23,9 +23,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.sra.objects.Areas;
+import com.sra.objects.Datapoint;
 import com.sra.objects.Households;
 import com.sra.objects.Interviews;
 import com.sra.objects.QuestionSet;
+import com.sra.objects.Questions;
 import com.sra.objects.Region;
 import com.sra.objects.loginObject;
 
@@ -247,12 +249,17 @@ public class login extends Activity {
                                                            newInterview.setCreatedDate(interview.child("Date Created").getValue().toString());
                                                 for(DataSnapshot questionSets:interview.child("QuestionSets").getChildren()){
                                                     QuestionSet qSet = new QuestionSet(questionSets.child("Name").getValue().toString(),questionSets.getRef().toString());
-                                                    for(DataSnapshot questionsSet:questionSets.child("Question").getChildren()){
-
-                                                        for(DataSnapshot questions:questionsSet.getChildren() ){
-
+                                                        for(DataSnapshot questions:questionSets.child("Questions").getChildren() ){
+                                                            Questions question = new Questions(questions.getRef().toString());
+                                                            for(DataSnapshot datapoints:questions.child("Data Points").getChildren()){
+                                                                Datapoint newDatapoint = new Datapoint();
+                                                                newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
+                                                                newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
+                                                                newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
+                                                                question.addDataPoint(newDatapoint);
+                                                            }
+                                                            qSet.addQuestion(question);
                                                         }
-                                                    }
                                                     newInterview.addQuestionSets(qSet);
                                                 }
                                                 household.addInterview(newInterview);

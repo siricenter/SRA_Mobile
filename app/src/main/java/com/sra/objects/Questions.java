@@ -10,8 +10,28 @@ import java.util.ArrayList;
  */
 public class Questions implements Serializable {
 
-    public String referenceUrl;
-    public ArrayList <Datapoint> dataPoints;
+    private String referenceUrl;
+    private ArrayList <Datapoint> dataPoints;
+
+    public void addDataPoint(Datapoint datapoint){
+        dataPoints.add(datapoint);
+    }
+
+    public ArrayList<Datapoint> getDataPoints() {
+        return dataPoints;
+    }
+
+    public void setDataPoints(ArrayList<Datapoint> dataPoints) {
+        this.dataPoints = dataPoints;
+    }
+
+    public String getReferenceUrl() {
+        return referenceUrl;
+    }
+
+    public void setReferenceUrl(String referenceUrl) {
+        this.referenceUrl = referenceUrl;
+    }
 
     public Questions(String url){
         this.dataPoints = new ArrayList<Datapoint>();
