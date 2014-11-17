@@ -16,8 +16,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import com.sra.objects.Datapoint;
+import com.sra.objects.QuestionSet;
+import com.sra.objects.Questions;
 
 public class CreateOrEditQuestion extends Activity {
 

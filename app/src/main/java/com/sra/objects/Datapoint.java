@@ -1,4 +1,4 @@
-package com.example.chad.sra_mobile;
+package com.sra.objects;
 
 import com.firebase.client.DataSnapshot;
 

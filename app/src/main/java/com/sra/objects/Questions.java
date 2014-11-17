@@ -1,4 +1,6 @@
-package com.example.chad.sra_mobile;
+package com.sra.objects;
+
+import com.sra.objects.Datapoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
