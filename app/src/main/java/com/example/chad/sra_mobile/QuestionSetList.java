@@ -75,10 +75,12 @@ public class QuestionSetList extends Activity {
                      for(DataSnapshot qs : data.getChildren()){
                          Questions question = new Questions(qs.getRef().toString());
                          for(DataSnapshot dp : qs.getChildren()){
-                             Datapoint dataPoint = new Datapoint(dp.child("label").getValue().toString() , dp.child("data type").getValue().toString());
-                             question.dataPoints.add(dataPoint);
+                             Datapoint dataPoint = new Datapoint();
+                             dataPoint.setLabel(dp.child("label").getValue().toString());
+                             dataPoint.setDataType(dp.child("data type").getValue().toString());
+                             question.addDataPoint(dataPoint);
                          }
-                         set.questions.add(question);
+                         set.addQuestion(question);
                      }
                     TableRow row = new TableRow(getBaseContext());
 //

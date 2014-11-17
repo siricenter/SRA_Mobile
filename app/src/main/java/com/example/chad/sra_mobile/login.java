@@ -268,12 +268,17 @@ public class login extends Activity {
                                          }
                                          usersRegion.addArea(area);
                                      }
+                                     try{
+                                         KVStore.storeValue("Field",usersRegion);
+                                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                                         startActivity(intent);
+                                     } catch(Exception e){}
                                  }
                              }
                          }
                      }
-//                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
-//                     startActivity(intent);
+
+
                  }
 
                  @Override

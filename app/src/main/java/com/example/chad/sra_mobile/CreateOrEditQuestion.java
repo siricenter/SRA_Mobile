@@ -31,9 +31,9 @@ public class CreateOrEditQuestion extends Activity {
         setContentView(R.layout.activity_create_or_edit_question);
         Intent intent = getIntent();
         QuestionSet qs = (QuestionSet) intent.getSerializableExtra("questions");
-        for(Questions question : qs.questions){
-            for(Datapoint data :question.dataPoints){
-                addDataPointRow(data.label,data.dataType);
+        for(Questions question : qs.getQuestions()){
+            for(Datapoint data :question.getDataPoints()){
+                addDataPointRow(data.getLabel(),data.getDataType());
             }
         }
         dataPointTable = (TableLayout) findViewById(R.id.data_point_table);
