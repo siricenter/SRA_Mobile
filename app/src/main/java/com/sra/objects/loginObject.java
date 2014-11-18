@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class loginObject implements Serializable {
     private String username;
     private ArrayList<String> permissions;
-    private ArrayList<String> organizations;
+    private boolean loggedIn;
 
     public String getUsername() {
         return username;
@@ -25,8 +25,16 @@ public class loginObject implements Serializable {
         permissions.add(addition);
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
 
     public loginObject(String username){
+        this.loggedIn = false;
         this.permissions = new ArrayList<String>();
         this.username = username;
     }

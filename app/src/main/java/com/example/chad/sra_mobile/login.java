@@ -60,11 +60,15 @@ public class login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Set the activity for the firebase
         Firebase.setAndroidContext(this);
-        editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+
+        //Retrieve the UI Elements from xml
         usernameET = (EditText) findViewById(R.id.usernameET);
         passwordET = (EditText) findViewById(R.id.passwordET);
         Button loginButton = (Button) findViewById(R.id.loginButton);
+
+        //set onlcick for button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,8 +76,11 @@ public class login extends Activity {
             }
         });
 
+        //set the application for KVKit
         KVStore.setActivity(getApplication());
         KVStore.setInMemoryStorageCount(10);
+
+        //Listenter for KVKit
         KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
             public void errorHappened(String key, Serializable value, Exception e) {
@@ -110,6 +117,8 @@ public class login extends Activity {
 
             }
         };
+
+        //set the listener
         KVStore.setStoreEventListener(listener);
 
     }
@@ -136,23 +145,32 @@ public class login extends Activity {
 
 
     public void login() {
+        //Store the text from edittexts
         final String username = usernameET.getText().toString();
         final String password = passwordET.getText().toString();
+
+        //Unhide the progress wheel and text
             progress = (ProgressBar)findViewById(R.id.progressBar);
             progress.setVisibility(View.VISIBLE);
             textview = (TextView)findViewById(R.id.textView3);
             textview.setVisibility(View.VISIBLE);
             textview.setText("Logging In....");
 
+        //Start a reference to the base firebase
         Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com");
-
+                //authenticate user using firebase.
                 ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
+                    //Success
                     @Override
                     public void onAuthenticated(final AuthData authData) {
                         status = true;
                         textview.setText("Authenticating....");
+                        //Get referance to User Tree
                         Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users");
+                        //Start download from firebase, once
                          users.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                             //Success
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
                                  System.out.println("Flag");
@@ -171,15 +189,20 @@ public class login extends Activity {
 
                              }
 
+                             //Fail
                              @Override
                              public void onCancelled(FirebaseError firebaseError) {
                                 textview.setText(firebaseError.getMessage());
                              }
                          });
                     }
+
+                    //Fail
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
+                        //Hide progress wheel
                         progress.setVisibility(View.INVISIBLE);
+                        //display Error
                         textview.setText(firebaseError.getMessage());
                         status = false;
                     }
@@ -188,18 +211,25 @@ public class login extends Activity {
 
 
         public void initialDownload(final DataSnapshot data){
+            //Show status
             textview.setText("Saving User For Offline Use");
+
+            // storing user data
             String username = data.child("Email").getValue().toString();
             DataSnapshot ld = data.child("Organizations").child("Organization");
-
-
             DataSnapshot role = ld.child("Roles");
 
+            //create loginInfo Object
             loginObject info = new loginObject(username);
+            info.setLoggedIn(true);
+
+            //add roles to loginInfo
             for(DataSnapshot roles:role.getChildren()){
                 String Roles = roles.getValue().toString();
                 info.addToRoles(Roles);
             }
+
+            //Store User data into the file system
             try{
                 KVStore.storeValue("User",info);
             }
@@ -207,33 +237,57 @@ public class login extends Activity {
 
             }
 
+            //set status to download
+
             textview.setText("Downloading Region");
+
+            //get the name of Organizations
             for(DataSnapshot rf : ld.child("Region").getChildren()){
                 place = rf.child("Name").getValue().toString();
             }
+
+            //get the organization name
             final String orgName = ld.child("Name").getValue().toString();
+
+            //create reference to organization name
             String urlref = "https://intense-inferno-7741.firebaseio.com/Organizations/";
             Firebase areaData = new Firebase(urlref);
-            System.out.println(urlref);
+
+
             areaData.addListenerForSingleValueEvent(new ValueEventListener() {
+                //Success
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
+                     //Start loop from the Top getting the correct organization
+
                      for(DataSnapshot org :dataSnapshot.getChildren()){
                          String orgsName = org.child("Name").getValue().toString();
                          System.out.println(orgsName + " " + orgName);
+
+                         //When find a match
                          if(orgsName.equals(orgName)){
+
+                             //loops through the regions
                              for(DataSnapshot data :org.child("Regions").getChildren()){
+
                                  String regionName = data.child("Name").getValue().toString();
                                  System.out.println(place + " " + regionName);
+
+                                 //When find a region match
                                  if(regionName.equals(place)){
+
+                                     //creates a region object
                                      Region usersRegion = new Region();
+                                     //store the region name
                                      usersRegion.setRegionName(data.child("Name").getValue().toString());
                                      textview.setText("Finished Downloading " + data.child("Name").getValue().toString());
 
                                      for(DataSnapshot areas : data.child("Areas").getChildren()){
+
                                          String name = areas.child("Name").getValue().toString();
                                          textview.setText("Loading " + name);
                                          Areas area = new Areas();
+                                         area.setRef(areas.getRef().toString());
                                          area.setAreaName(name);
                                          long h = 1;
                                          for(DataSnapshot houses : areas.child("Resources").getChildren()){
@@ -277,8 +331,6 @@ public class login extends Activity {
                              }
                          }
                      }
-
-
                  }
 
                  @Override
