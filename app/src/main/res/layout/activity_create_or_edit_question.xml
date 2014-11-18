@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textSize="24dip"
-            android:hint="Question id" />
+            android:hint="Question label" />
 
         <RadioGroup
             android:id="@+id/is_multi_use_question"

@@ -16,10 +16,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.sra.objects.Datapoint;
-import com.sra.objects.QuestionSet;
-import com.sra.objects.Questions;
-
 public class CreateOrEditQuestion extends Activity {
 
     private TableLayout dataPointTable;
@@ -29,15 +25,19 @@ public class CreateOrEditQuestion extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_edit_question);
+
         Intent intent = getIntent();
-        QuestionSet qs = (QuestionSet) intent.getSerializableExtra("questions");
-        for(Questions question : qs.getQuestions()){
-            for(Datapoint data :question.getDataPoints()){
-                addDataPointRow(data.getLabel(),data.getDataType());
-            }
-        }
+        String question = (String) intent.getStringExtra("question");
+        System.out.println("Question: " + question);
+
         dataPointTable = (TableLayout) findViewById(R.id.data_point_table);
         dataPointTable.setStretchAllColumns(true);
+
+//        for(Questions question : qs.getQuestions()){
+//            for(Datapoint data :question.getDataPoints()){
+//                addDataPointRow(data.getLabel(),data.getDataType());
+//            }
+//        }
     }
 
     @Override

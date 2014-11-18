@@ -16,14 +16,16 @@ public class CreateQuestionSet extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_question_set);
 
-        // Set food table attributes
+        Intent intent = getIntent();
+        String questionSet = (String) intent.getStringExtra("questionSet");
+        System.out.println("Question set: " + questionSet);
+
         questionTable = (TableLayout) findViewById(R.id.question_table);
         questionTable.setStretchAllColumns(true);
         questionTable.setColumnShrinkable(0, true);
         questionTable.setColumnShrinkable(1, true);
         questionTable.setColumnShrinkable(2, true);
 
-        // Setup the addFoodButton
         Button addQuestionButton = (Button) findViewById(R.id.add_question_button);
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +37,7 @@ public class CreateQuestionSet extends Activity {
 
     public void addQuestion() {
         Intent intent = new Intent(this, CreateOrEditQuestion.class);
+        intent.putExtra("question", "I am the question");
         startActivity(intent);
     }
 }

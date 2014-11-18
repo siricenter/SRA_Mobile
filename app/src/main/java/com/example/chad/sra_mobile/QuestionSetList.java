@@ -58,6 +58,7 @@ public class QuestionSetList extends Activity {
 
     public void addQuestionSet(View v) {
         Intent intent = new Intent(this, CreateQuestionSet.class);
+        intent.putExtra("questionSet", "I am the question set");
         startActivity(intent);
     }
 
@@ -83,16 +84,14 @@ public class QuestionSetList extends Activity {
                          set.addQuestion(question);
                      }
                     TableRow row = new TableRow(getBaseContext());
-//
+
                     Button question = new Button(getBaseContext());
                     question.setText(data.getName());
                     question.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-
-                            Intent intent = new Intent(getBaseContext(),CreateOrEditQuestion.class);
-                            intent.putExtra("questions",set);
+                            Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
+                            intent.putExtra("questionSet", "I am the question set");
                             startActivity(intent);
                         }
                     });
