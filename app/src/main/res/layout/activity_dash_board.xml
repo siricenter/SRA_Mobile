@@ -9,23 +9,6 @@
     android:background="#efe"
     tools:context="com.example.chad.sra_mobile.DashBoard">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Interviews"
-        android:layout_marginTop="83dp"
-        android:background="#fff"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/dashboard">
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="100"
-        android:id="@+id/areaSpinner"
-        android:background="#fff"/>
 
-</LinearLayout>
 
 </RelativeLayout>

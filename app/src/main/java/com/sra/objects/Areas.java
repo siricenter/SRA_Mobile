@@ -3,7 +3,7 @@ package com.sra.objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import LocalDatabase.Household;
+
 
 /**
  * Created by jakobhartman on 11/15/14.

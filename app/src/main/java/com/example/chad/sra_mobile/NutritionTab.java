@@ -19,25 +19,24 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import LocalDatabase.ConsumedFood;
-import LocalDatabase.Interview;
+
 
 public class NutritionTab extends Fragment {
 
     private TableLayout foodTable;
     private TableRow columnHeaderRow;
-    Interview interview = null;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nutrition_tab, container, false);
 
         // Get interview object from main activity
         InterviewActivity interviewActivity = (InterviewActivity) getActivity();
-        interview = interviewActivity.getInterview();
+
 
         // Header
         TextView householdLabel = (TextView) view.findViewById(R.id.interview_household_label);
-        householdLabel.setText(interview.household.name + "'s Nutrition");
+
 
         // Set food table attributes
         foodTable = (TableLayout) view.findViewById(R.id.food_table);
@@ -47,21 +46,7 @@ public class NutritionTab extends Fragment {
         foodTable.setColumnShrinkable(5, true);
         columnHeaderRow = (TableRow) view.findViewById(R.id.food_item_header_row);
 
-        // Get all consumed foods associated with that interview and add them to the table
-        List<ConsumedFood> foods = ConsumedFood.getConsumedFoods(interview.getId());
-        int numFoodItems = foods.size();
-        for (int i = 0; i < numFoodItems; i++) {
-            addFoodToTable(foods.get(i));
-        }
 
-        // Setup the addFoodButton
-        Button addFoodButton = (Button) view.findViewById(R.id.add_food_button);
-        addFoodButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFoodToTable(new ConsumedFood());
-            }
-        });
 
         return view;
     }
@@ -77,38 +62,12 @@ public class NutritionTab extends Fragment {
             ConsumedFoodRow row = (ConsumedFoodRow) foodTable.getChildAt(i);
             long databaseID = row.getDatabaseID();
 
-            ConsumedFood food;
-            if (databaseID == -1) {
-                food = new ConsumedFood();
-            }
-            else {
-                food = ConsumedFood.load(ConsumedFood.class, databaseID);
-            }
-            food.interview = interview;
-            food.entered_food = row.enteredFood.getText().toString();
-            if (row.servingSize.getText().length() > 0) {
-                food.servings = Float.parseFloat(row.servingSize.getText().toString());
-            }
-            food.units = (String) row.servingUnits.getSelectedItem();
-            food.quantity = (Integer) row.quantity.getSelectedItem();
-            food.frequency = (String) row.frequency.getSelectedItem();
-            food.post();
-            row.setDatabaseID(food.getId());
+
         }
     }
 
-    public void addFoodToTable(ConsumedFood food) {
-        // Create new consumed food row given the ConsumedFood object
-        ConsumedFoodRow row = new ConsumedFoodRow(this.getActivity(), food);
+    public void addFoodToTable() {
 
-        // Find the correct place to insert into the table (right above the + button)
-        int numChildren = foodTable.getChildCount();
-        int insertionIndex = numChildren - 1;
-
-        // Insert at that index
-        foodTable.addView(row, insertionIndex);
-
-        columnHeaderRow.setVisibility(View.VISIBLE);
     }
 
     /*
@@ -128,7 +87,7 @@ public class NutritionTab extends Fragment {
 
         public void removeFromTableAndDeleteFromDatabase() {
             if (databaseID != -1) {
-                ConsumedFood.delete(ConsumedFood.class, databaseID);
+
             }
             foodTable.removeView(this);
             if (foodTable.getChildCount() < 3) {
@@ -136,32 +95,11 @@ public class NutritionTab extends Fragment {
             }
         }
 
-        public ConsumedFoodRow(Context context, ConsumedFood food) {
+        public ConsumedFoodRow(Context context) {
             super(context);
             this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
-            // Entered food field
-            enteredFood = new EditText(context);
-            enteredFood.setText(food.entered_food);
 
-            // Food serving size
-            servingSize = new EditText(context);
-            servingSize.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            if (food.servings >= 0) {
-                servingSize.setText("" + food.servings);
-            }
-
-            // Food item amount units
-            servingUnits = new Spinner(context);
-            String[] unitsArray = getResources().getStringArray(R.array.serving_units);
-            ArrayList<String> unitsArrayList = new ArrayList<String>(Arrays.asList(unitsArray));
-            ArrayAdapter<String> unitsAdapter = new ArrayAdapter<String>(context,
-                    android.R.layout.simple_spinner_item, unitsArrayList);
-            servingUnits.setAdapter(unitsAdapter);
-            if (!food.units.isEmpty()) {
-                int indexOfUnits = unitsArrayList.indexOf(food.units);
-                servingUnits.setSelection(indexOfUnits);
-            }
 
             // Quantity - number of servings
             quantity = new Spinner(context);
@@ -170,8 +108,8 @@ public class NutritionTab extends Fragment {
             ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<Integer>(context,
                     android.R.layout.simple_spinner_item, list);
             quantity.setAdapter(quantityAdapter);
-            int quantityPosition = list.indexOf((Integer) food.quantity);
-            quantity.setSelection(quantityPosition);
+
+
 
             // Consumption frequency
             frequency = new Spinner(context);
@@ -180,8 +118,7 @@ public class NutritionTab extends Fragment {
             ArrayAdapter<String> freqAdapter = new ArrayAdapter<String>(context,
                     android.R.layout.simple_spinner_item, freqArrayList);
             frequency.setAdapter(freqAdapter);
-            int freqPosition = freqArrayList.indexOf(food.frequency);
-            frequency.setSelection(freqPosition);
+
 
             // Remove food item button
             removeButton = new Button(context);
@@ -213,10 +150,7 @@ public class NutritionTab extends Fragment {
             servingSize.setHorizontallyScrolling(true);
 
             // Get id from ConsumedFood object if it has been saved to the database already
-            Long id = food.getId();
-            if (id != null) {
-                databaseID = food.getId();
-            }
+
         }
     }
 }

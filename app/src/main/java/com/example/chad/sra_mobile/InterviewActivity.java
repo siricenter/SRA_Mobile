@@ -10,8 +10,7 @@ import android.content.Intent;
 
 import java.util.List;
 
-import LocalDatabase.Household;
-import LocalDatabase.Interview;
+
 
 public class InterviewActivity extends Activity {
 
@@ -19,8 +18,7 @@ public class InterviewActivity extends Activity {
     Fragment agronomyTab  = new AgronomyTab();
     Fragment sasTab       = new SASTab();
 
-    Interview interview = null;
-    public Interview getInterview() { return interview; }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +34,7 @@ public class InterviewActivity extends Activity {
             return;
         }
 
-        // Get the interviews of the household and take the first one.
-        // If there aren't any, create one.
-        List<Interview> interviews = Interview.getHouseholdInterviews(householdID);
-        if (interviews.size() > 0) {
-            interview = interviews.get(0);
-            if (interview.household == null) {
-                System.out.println("Household in queried interview is null!!!");
-            }
-        }
-        else {
-            interview = new Interview();
-            interview.household = Household.load(Household.class, householdID);
-            interview.post();
-        }
+
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
