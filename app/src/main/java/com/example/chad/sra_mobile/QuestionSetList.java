@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.sra.objects.Datapoint;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.Questions;
+
+import org.quickconnectfamily.kvkit.kv.KVStore;
+import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class QuestionSetList extends Activity {
@@ -32,8 +32,8 @@ public class QuestionSetList extends Activity {
 
         questionSetTable = (TableLayout) findViewById(R.id.question_set_table);
 
-        Firebase.setAndroidContext(this);
-        loadQuestionsFromBaseToLocal();
+        currentSet = new QuestionSet("aaa", "bbb");
+        loadQuestionSets();
     }
 
 
@@ -62,55 +62,144 @@ public class QuestionSetList extends Activity {
         startActivity(intent);
     }
 
-    public void generateRowsFromBase(){
+    public void loadQuestionSets() {
+        //set the application for KVKit
+        KVStore.setActivity(getApplication());
+        KVStore.setInMemoryStorageCount(10);
 
-    }
-
-    public void loadQuestionsFromBaseToLocal(){
-        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com/Question Sets");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        //Listenter for KVKit
+        KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                  final QuestionSet set = new QuestionSet(data.getName(),data.getRef().toString());
-                     for(DataSnapshot qs : data.getChildren()){
-                         Questions question = new Questions(qs.getRef().toString());
-                         for(DataSnapshot dp : qs.getChildren()){
-                             Datapoint dataPoint = new Datapoint();
-                             dataPoint.setLabel(dp.child("label").getValue().toString());
-                             dataPoint.setDataType(dp.child("data type").getValue().toString());
-                             question.addDataPoint(dataPoint);
-                         }
-                         set.addQuestion(question);
-                     }
-                    TableRow row = new TableRow(getBaseContext());
+            public void errorHappened(String key, Serializable value, Exception e) {
+            }
 
-                    Button question = new Button(getBaseContext());
-                    question.setText(data.getName());
-                    question.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
-                            intent.putExtra("questionSet", "I am the question set");
-                            startActivity(intent);
-                        }
-                    });
+            @Override
+            public boolean shouldStore(String key, Serializable value) {
+                return true;
+            }
 
-                    Button delete = new Button(getBaseContext());
-                    delete.setText("Delete");
+            @Override
+            public void willStore(String key, Serializable value) {
+            }
 
-                    row.addView(question);
-                    row.addView(delete);
+            @Override
+            public void didStore(String key, Serializable value) {
+            }
 
-                    int index = questionSetTable.getChildCount() - 1;
-                    questionSetTable.addView(row, index);
+            @Override
+            public boolean shouldDelete(String key) {
+                return false;
+            }
+
+            @Override
+            public void willDelete(String key) {
+            }
+
+            @Override
+            public void didDelete(String key) {
+            }
+        };
+        //set the listener
+        KVStore.setStoreEventListener(listener);
+
+//        ArrayList<QuestionSet> sets = new ArrayList<QuestionSet>();
+//
+//        QuestionSet s = new QuestionSet("ccc", "ddd");
+//        Questions q = new Questions("question1");
+//        Datapoint dp = new Datapoint();
+//        dp.setLabel("juice");
+//        dp.setDataType("Text");
+//        q.addDataPoint(dp);
+//        s.addQuestion(q);
+//        sets.add(s);
+
+//        try {
+//            KVStore.storeValue("QuestionSetBank", sets);
+//        }
+//        catch (Exception e) {
+//            System.out.println("Exception trying to store item in KVStore");
+//        }
+
+//        ArrayList<QuestionSet> qs = (ArrayList<QuestionSet>) KVStore.getValue("QuestionSetBank");
+//        System.out.println("Question Sets: " + qs);
+
+//        JSONObject set = QuestionSet.loadQuestionSet("ccc");
+//        System.out.println("JSON STRING: " + set.toString());
+
+        QuestionSet set = QuestionSet.getQuestionSet("ccc");
+        System.out.println("SET: " + set);
+
+        ArrayList<QuestionSet> questionSets = QuestionSet.getQuestionSets();
+        for (QuestionSet qs : questionSets) {
+            TableRow row = new TableRow(getBaseContext());
+
+            Button question = new Button(getBaseContext());
+            question.setText(qs.getName());
+            question.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
+                    intent.putExtra("questionSet", "I am the question set");
+                    startActivity(intent);
                 }
-            }
+            });
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            Button delete = new Button(getBaseContext());
+            delete.setText("Delete");
 
-            }
-        });
+            row.addView(question);
+            row.addView(delete);
+
+            int index = questionSetTable.getChildCount() - 1;
+            questionSetTable.addView(row, index);
+        }
     }
+
+//    public void loadQuestionsFromBaseToLocal(){
+//        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com/Question Sets");
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot data : dataSnapshot.getChildren()){
+//                  final QuestionSet set = new QuestionSet(data.getName(),data.getRef().toString());
+//                     for(DataSnapshot qs : data.getChildren()){
+//                         Questions question = new Questions(qs.getRef().toString());
+//                         for(DataSnapshot dp : qs.getChildren()){
+//                             Datapoint dataPoint = new Datapoint();
+//                             dataPoint.setLabel(dp.child("label").getValue().toString());
+//                             dataPoint.setDataType(dp.child("data type").getValue().toString());
+//                             question.addDataPoint(dataPoint);
+//                         }
+//                         set.addQuestion(question);
+//                     }
+//                    TableRow row = new TableRow(getBaseContext());
+//
+//                    Button question = new Button(getBaseContext());
+//                    question.setText(data.getName());
+//                    question.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
+//                            intent.putExtra("questionSet", "I am the question set");
+//                            startActivity(intent);
+//                        }
+//                    });
+//
+//                    Button delete = new Button(getBaseContext());
+//                    delete.setText("Delete");
+//
+//                    row.addView(question);
+//                    row.addView(delete);
+//
+//                    int index = questionSetTable.getChildCount() - 1;
+//                    questionSetTable.addView(row, index);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+//    }
 }

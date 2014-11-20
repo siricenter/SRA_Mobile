@@ -2,8 +2,13 @@ package com.sra.objects;
 
 import android.app.Fragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.quickconnectfamily.kvkit.kv.KVStore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by jakobhartman on 11/10/14.
@@ -12,9 +17,8 @@ import java.util.ArrayList;
 public class QuestionSet implements Serializable {
 
     private ArrayList<Questions> questions;
-    private  String name;
+    private String name;
     private String refUrl;
-
 
     public void addQuestion(Questions qs){
           questions.add(qs);
@@ -60,4 +64,65 @@ public class QuestionSet implements Serializable {
 
     }
 
+
+    public QuestionSet(JSONObject set) {
+        try {
+            if (set.has("name")) {
+                name = set.getString("name");
+            }
+            if (set.has("refUrl")) {
+                refUrl = set.getString("refUrl");
+            }
+            if (set.has("questions")) {
+                JSONArray q = set.getJSONArray("questions");
+                for (int i = 0; i < q.length(); i++) {
+                    addQuestion(new Questions(q.getJSONObject(i)));
+                }
+            }
+        }
+        catch (org.json.JSONException e) {
+
+        }
+    }
+
+
+
+    private static ArrayList<QuestionSet> questionSets = null;
+    public static ArrayList<QuestionSet> getQuestionSets() {
+        return questionSets;
+    }
+    private static void loadQuestionSets() {
+        ArrayList<HashMap<String, Object>> sets = (ArrayList<HashMap<String, Object>>) KVStore.getValue("QuestionSetBank");
+        questionSets = new ArrayList<QuestionSet>();
+        for (HashMap<String, Object> mapSet : sets) {
+            JSONObject jsonSet = new JSONObject(mapSet);
+            QuestionSet set = new QuestionSet(jsonSet);
+            questionSets.add(set);
+        }
+    }
+
+    public static void saveQuestionSets() {
+        if (questionSets == null) {
+            loadQuestionSets();
+            return;
+        }
+        try {
+            KVStore.storeValue("QuestionSetBank", questionSets);
+        }
+        catch (Exception e) {
+            System.out.println("Exception: Couldn't store QuestionSet bank using KVStore.");
+        }
+    }
+
+    public static QuestionSet getQuestionSet(String name) {
+        if (questionSets == null) {
+            loadQuestionSets();
+        }
+        for (QuestionSet set : questionSets) {
+            if (set.getName().equals(name)) {
+                return set;
+            }
+        }
+        return null;
+    }
 }
