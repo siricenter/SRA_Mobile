@@ -37,9 +37,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:rotation="-90.0"
-                android:paddingBottom="10dp"
 
-                android:text="Menu Text"
+                android:text="Menu Text That is Really long"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
