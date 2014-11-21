@@ -1,48 +1,30 @@
 package com.example.chad.sra_mobile;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Editable;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 
-import com.sra.objects.Areas;
-import com.sra.objects.Households;
 import com.sra.sliderFragments.CustomDrawerAdapter;
 import com.sra.sliderFragments.DrawerItem;
+import com.sra.sliderFragments.FragmentFive;
+import com.sra.sliderFragments.FragmentFour;
 import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import DataSync.DataSync;
 
 
 public class DashBoard extends Activity {
@@ -76,11 +58,44 @@ public class DashBoard extends Activity {
 
         mDrawerList.setAdapter(adapter);
 
+        dataList.add(new DrawerItem("Areas",R.drawable.map));
+        dataList.add(new DrawerItem("Stats",R.drawable.stats));
         dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
+        dataList.add(new DrawerItem("Question Sets",R.drawable.questionmark));
         dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
+
+        adapter = new CustomDrawerAdapter(this, R.layout.customdrawer,
+                dataList);
+
+        mDrawerList.setAdapter(adapter);
+
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open,
+                R.string.drawer_close) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to
+                // onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to
+                // onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) {
+            SelectItem(0);
+        }
+
 
     }
 
@@ -117,44 +132,44 @@ public class DashBoard extends Activity {
     public void syncDatabase(MenuItem item){
     }
 
-    public void SelectItem(int possition) {
+    public void SelectItem(int position) {
 
         Fragment fragment = null;
         Bundle args = new Bundle();
-        switch (possition) {
+        switch (position) {
             case 0:
                 fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                args.putString(FragmentOne.ITEM_NAME, dataList.get(position)
                         .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 break;
             case 1:
                 fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                args.putString(FragmentTwo.ITEM_NAME, dataList.get(position)
                         .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 break;
             case 2:
                 fragment = new FragmentThree();
-                args.putString(FragmentThree.ITEM_NAME, dataList.get(possition)
+                args.putString(FragmentThree.ITEM_NAME, dataList.get(position)
                         .getItemName());
-                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 break;
             case 3:
-                fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentFour();
+                args.putString(FragmentFour.ITEM_NAME, dataList.get(position)
                         .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentFour.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 break;
             case 4:
-                fragment = new FragmentTwo();
-                args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
+                fragment = new FragmentFive();
+                args.putString(FragmentFive.ITEM_NAME, dataList.get(position)
                         .getItemName());
-                args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
+                args.putInt(FragmentFive.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 break;
         }
@@ -164,8 +179,8 @@ public class DashBoard extends Activity {
         frgManager.beginTransaction().replace(R.id.content_frame, fragment)
                 .commit();
 
-        mDrawerList.setItemChecked(possition, true);
-        setTitle(dataList.get(possition).getItemName());
+        mDrawerList.setItemChecked(position, true);
+        setTitle(dataList.get(position).getItemName());
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
@@ -210,19 +225,6 @@ public class DashBoard extends Activity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
 
     public void addHousehold(MenuItem item){
 
@@ -233,4 +235,15 @@ public class DashBoard extends Activity {
         startActivity(intent);
     }
 
+    public class DrawerItemClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            SelectItem(position);
+
+        }
+    }
+
 }
+

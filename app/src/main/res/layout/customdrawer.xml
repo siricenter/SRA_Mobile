@@ -14,18 +14,23 @@
         android:background="?android:attr/activatedBackgroundIndicator"
         >
 
-        <LinearLayout
+        <RelativeLayout
 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+
             android:minHeight="55dp"
             >
 
             <ImageView
                 android:id="@+id/drawer_icon"
+                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:src="@drawable/ic_action_help"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/drawer_itemName"
+                android:layout_toStartOf="@+id/drawer_itemName" />
 
             <TextView
                 android:id="@+id/drawer_itemName"
@@ -33,8 +38,11 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
 
-                />
-        </LinearLayout>
+                android:gravity="center_vertical"
+                android:text="Menu Text"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

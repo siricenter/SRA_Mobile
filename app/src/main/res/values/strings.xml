@@ -21,6 +21,8 @@
     <string name="plus">+</string>
     <string name="house">Add Household</string>
     <string name="House">Add Household</string>
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
 
     <!-- Interview strings -->
     <string name="nutrition_tab_title">Nutrition</string>
