@@ -60,9 +60,8 @@ public class DashBoard extends Activity {
 
         dataList.add(new DrawerItem("Areas",R.drawable.map));
         dataList.add(new DrawerItem("Stats",R.drawable.stats));
-        dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
-        dataList.add(new DrawerItem("Question Sets",R.drawable.questionmark));
-        dataList.add(new DrawerItem("",R.drawable.ic_action_labels));
+        dataList.add(new DrawerItem("Questions",R.drawable.questionmark));
+
 
         adapter = new CustomDrawerAdapter(this, R.layout.customdrawer,
                 dataList);

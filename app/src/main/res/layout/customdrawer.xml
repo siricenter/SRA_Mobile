@@ -12,36 +12,37 @@
 
         android:layout_marginTop="0dp"
         android:background="?android:attr/activatedBackgroundIndicator"
-        >
+        android:weightSum="1">
 
         <RelativeLayout
 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="225dp"
 
-            android:minHeight="55dp"
-            >
+            android:minHeight="55dp">
 
             <ImageView
                 android:id="@+id/drawer_icon"
-                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_help"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/drawer_itemName"
-                android:layout_toStartOf="@+id/drawer_itemName" />
+                android:layout_alignParentBottom="true"
+                android:rotation="-90.0"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <TextView
                 android:id="@+id/drawer_itemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:rotation="-90.0"
+                android:paddingBottom="10dp"
 
-                android:gravity="center_vertical"
                 android:text="Menu Text"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
         <View
