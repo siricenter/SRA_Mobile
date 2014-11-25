@@ -29,12 +29,7 @@ public class FragmentOne extends Fragment {
         View view = inflater.inflate(R.layout.button1slide, container,
                 false);
 
-        ivIcon = (ImageView) view.findViewById(R.id.frag1_icon);
-        tvItemName = (TextView) view.findViewById(R.id.frag1_text);
 
-        tvItemName.setText(getArguments().getString(ITEM_NAME));
-        ivIcon.setImageDrawable(view.getResources().getDrawable(
-                getArguments().getInt(IMAGE_RESOURCE_ID)));
         return view;
     }
 

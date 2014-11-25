@@ -5,17 +5,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.TypedValue;
-import android.view.Display;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -27,10 +25,6 @@ import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
-import org.quickconnectfamily.kvkit.kv.KVStore;
-import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
