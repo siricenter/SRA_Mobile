@@ -132,8 +132,7 @@ public class DashBoard extends Activity {
     }
     public void createMember(MenuItem item){
     }
-    public void loadAreasIntoSpinner(){
-    }
+
 
 
     public void syncDatabase(MenuItem item){
@@ -146,10 +145,6 @@ public class DashBoard extends Activity {
         switch (position) {
             case 0:
                 fragment = new FragmentOne();
-                args.putString(FragmentOne.ITEM_NAME, dataList.get(position)
-                        .getItemName());
-                args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(position)
-                        .getImgResID());
                 break;
             case 1:
                 fragment = new FragmentTwo();

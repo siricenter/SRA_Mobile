@@ -84,22 +84,22 @@ public class login extends Activity {
         KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
             public void errorHappened(String key, Serializable value, Exception e) {
-
+                System.out.println(key + " " + value + " " + e.getLocalizedMessage());
             }
 
             @Override
             public boolean shouldStore(String key, Serializable value) {
-                return false;
+                return true;
             }
 
             @Override
             public void willStore(String key, Serializable value) {
-
+                System.out.println(key + " " + value + "Trying to Save");
             }
 
             @Override
             public void didStore(String key, Serializable value) {
-
+                System.out.println(key + " " + value + "Saved");
             }
 
             @Override
@@ -173,7 +173,6 @@ public class login extends Activity {
                              //Success
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
-                                 System.out.println("Flag");
                                  //loop through Users
                                 for(DataSnapshot data: dataSnapshot.getChildren()){
                                     String currentLogged = data.child("Email").getValue().toString();
@@ -275,7 +274,6 @@ public class login extends Activity {
 
                      for(DataSnapshot org :dataSnapshot.getChildren()){
                          String orgsName = org.child("Name").getValue().toString();
-                         System.out.println(orgsName + " " + orgName);
 
                          //When find a match
                          if(orgsName.equals(orgName)){
@@ -284,7 +282,6 @@ public class login extends Activity {
                              for(DataSnapshot data :org.child("Regions").getChildren()){
 
                                  String regionName = data.child("Name").getValue().toString();
-                                 System.out.println(place + " " + regionName);
 
                                  //When find a region match
                                  if(regionName.equals(place)){
