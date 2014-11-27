@@ -9,20 +9,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.sra.objects.Region;
+
+import org.quickconnectfamily.kvkit.kv.KVStore;
+
+import java.util.HashMap;
+
 public class MyActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
-        // if username and password are entered then forward to MyActivity
-        String username = preferences.getString("username", null);
-        String password = preferences.getString("password", null);
-        if(validate(username, password)) {
-           goToDashboard();
-        } else {
-            // set up the activity
+
+        KVStore.setActivity(getApplication());
+        HashMap hashMap = (HashMap)KVStore.getValue("User");
+        if(hashMap != null){
+            goToDashboard();
         }
 
     }
@@ -54,7 +57,7 @@ public class MyActivity extends Activity {
         startActivity(intent0);
     }
 
-    public void goToDashboard(View v) { goToDashboard(); }
+    private void goToDashboard(View v) { goToDashboard(); }
 
     public void goToDashboard(){
         Intent intent0 = new Intent(this, DashBoard.class);

@@ -229,6 +229,7 @@ public class login extends Activity {
             for(DataSnapshot rs : area.getChildren()){
                 for(DataSnapshot as : rs.child("Areas").getChildren()){
                     String areaName = as.child("Name").getValue().toString();
+                    System.out.println(areaName);
                     info.addToAreas(areaName);
                 }
             }
@@ -271,7 +272,7 @@ public class login extends Activity {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
                      //Start loop from the Top getting the correct organization
-
+                     Region usersRegion = new Region();
                      for(DataSnapshot org :dataSnapshot.getChildren()){
                          String orgsName = org.child("Name").getValue().toString();
 
@@ -287,64 +288,70 @@ public class login extends Activity {
                                  if(regionName.equals(place)){
 
                                      //creates a region object
-                                     Region usersRegion = new Region();
+
                                      //store the region name
                                      usersRegion.setRegionName(data.child("Name").getValue().toString());
                                      textview.setText("Finished Downloading " + data.child("Name").getValue().toString());
-
+                                      System.out.println(data.getValue().toString());
                                      for(DataSnapshot areas : data.child("Areas").getChildren()) {
 
                                          String name = areas.child("Name").getValue().toString();
+                                         System.out.println(name);
                                          textview.setText("Loading " + name);
                                          ArrayList<String> ars = info.getAreaNames();
-                                         if (ars.contains(name)) {
+                                         System.out.println(ars);
+                                         for (String items : ars) {
 
-                                             Areas area = new Areas();
-                                             area.setRef(areas.getRef().toString());
-                                             area.setAreaName(name);
-                                             long h = 1;
-                                             for (DataSnapshot houses : areas.child("Resources").getChildren()) {
-                                                 String hName = houses.child("Name").getValue().toString();
-                                                 Households household = new Households();
-                                                 household.setHouseholdName(hName);
-                                                 household.setId(h);
-                                                 for (DataSnapshot members : houses.child("Members").getChildren()) {
-                                                     household.addMember(members.child("Name").getValue().toString());
-                                                 }
-                                                 for (DataSnapshot interview : houses.child("Interviews").getChildren()) {
-                                                     Interviews newInterview = new Interviews();
-                                                     newInterview.setCreatedDate(interview.child("Date Created").getValue().toString());
-                                                     for (DataSnapshot questionSets : interview.child("QuestionSets").getChildren()) {
-                                                         QuestionSet qSet = new QuestionSet(questionSets.child("Name").getValue().toString(), questionSets.getRef().toString());
-                                                         for (DataSnapshot questions : questionSets.child("Questions").getChildren()) {
-                                                             Questions question = new Questions(questions.getRef().toString());
-                                                             for (DataSnapshot datapoints : questions.child("Data Points").getChildren()) {
-                                                                 Datapoint newDatapoint = new Datapoint();
-                                                                 newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
-                                                                 newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
-                                                                 newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
-                                                                 question.addDataPoint(newDatapoint);
-                                                             }
-                                                             qSet.addQuestion(question);
-                                                         }
-                                                         newInterview.addQuestionSets(qSet);
+                                             if (items.equals(name)) {
+
+                                                 Areas area = new Areas();
+                                                 area.setRef(areas.getRef().toString());
+                                                 area.setAreaName(name);
+                                                 long h = 1;
+                                                 for (DataSnapshot houses : areas.child("Resources").getChildren()) {
+                                                     String hName = houses.child("Name").getValue().toString();
+                                                     Households household = new Households();
+                                                     household.setHouseholdName(hName);
+                                                     household.setId(h);
+                                                     for (DataSnapshot members : houses.child("Members").getChildren()) {
+                                                         household.addMember(members.child("Name").getValue().toString());
                                                      }
-                                                     household.addInterview(newInterview);
+                                                     for (DataSnapshot interview : houses.child("Interviews").getChildren()) {
+                                                         Interviews newInterview = new Interviews();
+                                                         newInterview.setCreatedDate(interview.child("Date Created").getValue().toString());
+                                                         for (DataSnapshot questionSets : interview.child("QuestionSets").getChildren()) {
+                                                             QuestionSet qSet = new QuestionSet(questionSets.child("Name").getValue().toString(), questionSets.getRef().toString());
+                                                             for (DataSnapshot questions : questionSets.child("Questions").getChildren()) {
+                                                                 Questions question = new Questions(questions.getRef().toString());
+                                                                 for (DataSnapshot datapoints : questions.child("Data Points").getChildren()) {
+                                                                     Datapoint newDatapoint = new Datapoint();
+                                                                     newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
+                                                                     newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
+                                                                     newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
+                                                                     question.addDataPoint(newDatapoint);
+                                                                 }
+                                                                 qSet.addQuestion(question);
+                                                             }
+                                                             newInterview.addQuestionSets(qSet);
+                                                         }
+                                                         household.addInterview(newInterview);
+                                                     }
+                                                     h++;
                                                  }
-                                                 h++;
+                                                 System.out.println("Food " + area);
+                                                 usersRegion.addArea(area);
                                              }
-                                             usersRegion.addArea(area);
                                          }
                                      }
-                                     try{
-                                         KVStore.storeValue("Field",usersRegion);
-                                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
-                                         startActivity(intent);
-                                     } catch(Exception e){}
                                  }
                              }
                          }
                      }
+                     try{
+                         KVStore.storeValue("Field",usersRegion);
+                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                         startActivity(intent);
+                     } catch(Exception e){}
                  }
 
                  @Override

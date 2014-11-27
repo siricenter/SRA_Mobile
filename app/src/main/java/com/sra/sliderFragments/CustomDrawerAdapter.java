@@ -66,8 +66,6 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
             display.getSize(size);
 
             int height = size.y;
-
-            System.out.println(height - i);
             RelativeLayout ld = (RelativeLayout)view.findViewById(R.id.sideButton);
                            ld.getLayoutParams().height = (int)(height - (i * 3.41)) / drawerItemList.size();
 
