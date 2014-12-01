@@ -1,9 +1,8 @@
-package com.example.chad.sra_mobile;
+package com.example.chad.sraMobile;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 

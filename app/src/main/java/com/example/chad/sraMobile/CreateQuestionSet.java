@@ -1,4 +1,4 @@
-package com.example.chad.sra_mobile;
+package com.example.chad.sraMobile;
 
 import android.app.Activity;
 import android.content.Intent;

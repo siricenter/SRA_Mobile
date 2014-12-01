@@ -1,4 +1,4 @@
-package com.example.chad.sra_mobile;
+package com.example.chad.sraMobile;
 
 import  android.app.Activity;
 import android.os.Bundle;
@@ -7,9 +7,6 @@ import android.view.MenuItem;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
-
-import java.util.List;
-
 
 
 public class InterviewActivity extends Activity {

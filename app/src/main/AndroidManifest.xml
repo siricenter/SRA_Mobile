@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chad.sra_mobile" >
+    package="com.example.chad.sraMobile" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MyActivity"
+            android:name="com.example.chad.sraMobile.MyActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login"
+            android:name="com.example.chad.sraMobile.login"
             android:label="@string/title_activity_login" >
         </activity>
 
@@ -28,24 +28,24 @@
             android:value="sra.db" />
 
         <activity
-            android:name=".DashBoard"
+            android:name="com.example.chad.sraMobile.DashBoard"
             android:label="@string/title_activity_dash_board">
 
         </activity>
         <activity
-            android:name=".InterviewActivity"
+            android:name="com.example.chad.sraMobile.InterviewActivity"
             android:label="@string/title_activity_interview" >
         </activity>
         <activity
-            android:name=".CreateQuestionSet"
+            android:name="com.example.chad.sraMobile.CreateQuestionSet"
             android:label="@string/title_activity_create_question_set" >
         </activity>
         <activity
-            android:name=".CreateOrEditQuestion"
+            android:name="com.example.chad.sraMobile.CreateOrEditQuestion"
             android:label="@string/title_activity_create_or_edit_question" >
         </activity>
         <activity
-            android:name=".QuestionSetList"
+            android:name="com.example.chad.sraMobile.QuestionSetList"
             android:label="@string/title_activity_question_set_list" >
         </activity>
     </application>

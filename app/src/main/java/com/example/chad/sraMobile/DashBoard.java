@@ -1,4 +1,4 @@
-package com.example.chad.sra_mobile;
+package com.example.chad.sraMobile;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -225,6 +225,10 @@ public class DashBoard extends Activity {
 
 
         return true;
+    }
+
+    public void logOut(MenuItem menuItem){
+
     }
 
 

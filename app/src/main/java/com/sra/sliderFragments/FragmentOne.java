@@ -6,14 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.example.chad.sra_mobile.R;
+import com.example.chad.sraMobile.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sra.objects.Areas;
 import com.sra.objects.Region;
 
-import org.json.JSONObject;
+
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
 import org.quickconnectfamily.kvkit.kv.KVStore;
@@ -21,9 +22,6 @@ import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class FragmentOne extends Fragment {
 
@@ -83,29 +81,42 @@ public class FragmentOne extends Fragment {
         KVStore.setStoreEventListener(listener);
 
         View view = inflater.inflate(R.layout.button1slide, container,false);
+        listView = (ListView) view.findViewById(R.id.ListView01);
 
         KVStore.setActivity(getActivity().getApplication());
-        HashMap area = (HashMap)KVStore.getValue("Field");
-        Region region = buildRegion(area);
-        loadAreasIntoView(region);
+
+        buildRegion();
+        loadAreasIntoView();
 
         return view;
     }
 
-    public Region buildRegion(HashMap region){
-        Region object = new Region();
-               object.setRegionName(region.get("regionName").toString());
-        for(Object area : region.keySet()){
-            System.out.println(area.toString());
+    public void buildRegion(){
+        try {
+            String json = JSONUtilities.stringify(KVStore.getValue("Field"));
+            Gson gson = new GsonBuilder().create();
+            Region regions = gson.fromJson(json,Region.class);
+            ArrayList<Areas> areas = regions.getAreas();
+            for(Areas area : areas){
+               areasList.add(area.getAreaName());
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            System.out.println("Nothing Here");
         }
-        return object;
+
+
+
     }
 
-    public void loadAreasIntoView(Region area){
-
-
+    public void loadAreasIntoView(){
         list = new ArrayAdapter <String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,areasList);
+        listView.setAdapter(list);
+
     }
+
 
 }
 

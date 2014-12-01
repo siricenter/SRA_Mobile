@@ -1,13 +1,10 @@
 package com.sra.sliderFragments;
 
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Build;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +13,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.chad.sra_mobile.R;
-
-import org.quickconnectfamily.kvkit.kv.KVStore;
+import com.example.chad.sraMobile.R;
 
 public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 

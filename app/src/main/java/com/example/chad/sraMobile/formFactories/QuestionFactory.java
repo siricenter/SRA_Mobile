@@ -1,8 +1,6 @@
-package com.example.chad.sra_mobile.formFactories;
+package com.example.chad.sraMobile.formFactories;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
 import org.json.JSONObject;
 

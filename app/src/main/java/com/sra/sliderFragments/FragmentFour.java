@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chad.sra_mobile.R;
+import com.example.chad.sraMobile.R;
 
 public class FragmentFour extends Fragment {
 

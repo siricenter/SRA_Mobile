@@ -1,15 +1,14 @@
-package com.example.chad.sra_mobile;
+package com.example.chad.sraMobile;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.sra.objects.Region;
+import com.sra.objects.loginObject;
 
 import org.quickconnectfamily.kvkit.kv.KVStore;
 
@@ -23,10 +22,16 @@ public class MyActivity extends Activity {
         setContentView(R.layout.activity_my);
 
         KVStore.setActivity(getApplication());
-        HashMap hashMap = (HashMap)KVStore.getValue("User");
-        if(hashMap != null){
-            goToDashboard();
+        try{
+            HashMap hashMap = (HashMap)KVStore.getValue("User");
+            System.out.println(hashMap);
+            if(hashMap != null){
+                goToDashboard();
+            }
+        }catch (Exception e){
+
         }
+
 
     }
 
@@ -64,14 +69,6 @@ public class MyActivity extends Activity {
         startActivity(intent0);
     }
 
-    public boolean validate(String username, String password) {
-        Log.d("MyActivity : validate", "username==" + username + " password==" + password);
-        if(username != null && password != null)
-            if(!username.isEmpty() && !password.isEmpty())
-                return true;
-
-        return false;
-    }
 
 }
 

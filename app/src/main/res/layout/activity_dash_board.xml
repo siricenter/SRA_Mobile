@@ -7,7 +7,7 @@
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
     android:background="#efe"
-    tools:context="com.example.chad.sra_mobile.DashBoard">
+    tools:context="com.example.chad.sraMobile.DashBoard">
 
 
     <android.support.v4.widget.DrawerLayout
