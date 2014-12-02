@@ -2,6 +2,9 @@ package com.sra.objects;
 
 import android.app.Fragment;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.quickconnectfamily.kvkit.kv.KVStore;
@@ -23,6 +26,10 @@ public class QuestionSet implements Serializable {
     public void addQuestion(Questions qs){
           questions.add(qs);
     }
+    public void deleteQuestion(Questions qs) {
+        questions.remove(qs);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -86,7 +93,14 @@ public class QuestionSet implements Serializable {
         }
     }
 
-
+    public Questions getQuestion(String questionName) {
+        for (Questions q : questions) {
+            if (q.getName().equals(questionName)) {
+                return q;
+            }
+        }
+        return null;
+    }
 
     private static ArrayList<QuestionSet> questionSets = null;
     public static ArrayList<QuestionSet> getQuestionSets() {
@@ -94,12 +108,34 @@ public class QuestionSet implements Serializable {
         return questionSets;
     }
     private static void loadQuestionSets() {
-        ArrayList<HashMap<String, Object>> sets = (ArrayList<HashMap<String, Object>>) KVStore.getValue("QuestionSetBank");
         questionSets = new ArrayList<QuestionSet>();
-        for (HashMap<String, Object> mapSet : sets) {
-            JSONObject jsonSet = new JSONObject(mapSet);
-            QuestionSet set = new QuestionSet(jsonSet);
-            questionSets.add(set);
+        JSONArray sets = null;
+        String setsString = null;
+        try {
+            setsString = (String) KVStore.getValue("QuestionSetBank");
+            System.out.println("Loaded JSON: " + setsString);
+            sets = new JSONArray(setsString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (sets == null) {
+            saveQuestionSets();
+            return;
+        }
+
+        for (int i = 0; i < sets.length(); i++) {
+            try {
+                String json = "";
+                try {
+                    json = sets.getString(i);
+                } catch (Exception e) { }
+                Gson gson = new GsonBuilder().create();
+                QuestionSet set = gson.fromJson(json, QuestionSet.class);
+                questionSets.add(set);
+            } catch (NullPointerException e){
+                System.out.println("Nothing Here");
+            }
         }
     }
 
@@ -109,9 +145,12 @@ public class QuestionSet implements Serializable {
             return;
         }
         try {
-            KVStore.storeValue("QuestionSetBank", questionSets);
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(questionSets);
+            KVStore.storeValue("QuestionSetBank", json);
         }
         catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Exception: Couldn't store QuestionSet bank using KVStore.");
         }
     }

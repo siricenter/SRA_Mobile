@@ -29,6 +29,23 @@ public class QuestionSetList extends Activity {
         setContentView(R.layout.activity_question_set_list);
 
         questionSetTable = (TableLayout) findViewById(R.id.question_set_table);
+        questionSetTable.setStretchAllColumns(true);
+
+        KVStore.setActivity(getApplication());
+        KVStore.setInMemoryStorageCount(10);
+        KVStore.setStoreEventListener(new KVStoreEventListener() {
+            @Override public void errorHappened(String key, Serializable value, Exception e) {}
+            @Override public boolean shouldStore(String key, Serializable value) {
+                return true;
+            }
+            @Override public void willStore(String key, Serializable value) {}
+            @Override public void didStore(String key, Serializable value) {}
+            @Override public boolean shouldDelete(String key) {
+                return true;
+            }
+            @Override public void willDelete(String key) {}
+            @Override public void didDelete(String key) {}
+        });
 
         loadQuestionSets();
     }
@@ -59,7 +76,7 @@ public class QuestionSetList extends Activity {
     }
 
     public void addQuestionSet(View v) {
-        Intent intent = new Intent(this, CreateQuestionSet.class);
+        Intent intent = new Intent(this, EditQuestionSet.class);
         intent.putExtra("questionSetName", "");
         intent.putExtra("isNewQuestionSet", true);
         startActivity(intent);
@@ -67,64 +84,26 @@ public class QuestionSetList extends Activity {
 
     public void loadQuestionSets() {
         questionSetTable.removeAllViews();
-        KVStore.setActivity(getApplication());
-        KVStore.setInMemoryStorageCount(10);
-
-        //Listenter for KVKit
-        KVStoreEventListener listener = new KVStoreEventListener() {
-            @Override
-            public void errorHappened(String key, Serializable value, Exception e) {
-            }
-
-            @Override
-            public boolean shouldStore(String key, Serializable value) {
-                return true;
-            }
-
-            @Override
-            public void willStore(String key, Serializable value) {
-            }
-
-            @Override
-            public void didStore(String key, Serializable value) {
-            }
-
-            @Override
-            public boolean shouldDelete(String key) {
-                return true;
-            }
-
-            @Override
-            public void willDelete(String key) {
-            }
-
-            @Override
-            public void didDelete(String key) {
-            }
-        };
-        //set the listener
-        KVStore.setStoreEventListener(listener);
 
         ArrayList<QuestionSet> questionSets = QuestionSet.getQuestionSets();
         for (final QuestionSet qs : questionSets) {
             final TableRow row = new TableRow(getBaseContext());
 
-            Button questionSet = new Button(getBaseContext());
-            questionSet.setText(qs.getName());
-            questionSet.setOnClickListener(new View.OnClickListener() {
+            Button questionSetButton = new Button(getBaseContext());
+            questionSetButton.setText(qs.getName());
+            questionSetButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.out.println("POOOOOOP: " + qs.getName());
-                    Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
+                    Intent intent = new Intent(getBaseContext(),EditQuestionSet.class);
                     intent.putExtra("questionSetName", qs.getName());
                     intent.putExtra("isNewQuestionSet", false);
                     startActivity(intent);
                 }
             });
 
-            Button delete = new Button(getBaseContext());
-            delete.setText("Delete");
-            delete.setOnClickListener(new View.OnClickListener() {
+            Button deleteButton = new Button(getBaseContext());
+            deleteButton.setText("Delete");
+            deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     questionSetTable.removeView(row);
@@ -132,8 +111,8 @@ public class QuestionSetList extends Activity {
                 }
             });
 
-            row.addView(questionSet);
-            row.addView(delete);
+            row.addView(questionSetButton);
+            row.addView(deleteButton);
 
             questionSetTable.addView(row);
         }

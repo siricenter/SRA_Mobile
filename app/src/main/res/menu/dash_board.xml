@@ -1,12 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.chad.sraMobile.DashBoard" >
-    <item android:id="@+id/action_settings"
-        android:title="Question Sets"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:onClick="goToQuestionGen"
-        />
+    <!--<item android:id="@+id/action_settings"-->
+        <!--android:title="Question Sets"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:showAsAction="never"-->
+        <!--android:onClick="goToQuestionGen"-->
+        <!--/>-->
     <item android:id="@+id/add_area"
         android:title="Add Area"
         android:orderInCategory="100"

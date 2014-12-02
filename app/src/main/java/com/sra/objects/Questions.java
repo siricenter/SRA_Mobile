@@ -11,8 +11,26 @@ import java.util.ArrayList;
  */
 public class Questions implements Serializable {
 
+    private String name;
     private String referenceUrl;
     private ArrayList <Datapoint> dataPoints;
+    private Boolean isMultiUse;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setMultiUse(Boolean use) {
+        isMultiUse = use;
+    }
+
+    public Boolean getMultiUse() {
+        return isMultiUse;
+    }
 
     public void addDataPoint(Datapoint datapoint){
         for (Datapoint dp : dataPoints) {
@@ -58,9 +76,11 @@ public class Questions implements Serializable {
         this.referenceUrl = referenceUrl;
     }
 
-    public Questions(String url){
-        this.dataPoints = new ArrayList<Datapoint>();
+    public Questions(String url) {
+        this.name = "";
         this.referenceUrl = url;
+        this.dataPoints = new ArrayList<Datapoint>();
+        this.isMultiUse = false;
     }
 
     public Questions(JSONObject q) {

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,10 +28,12 @@ import com.sra.objects.Questions;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CreateOrEditQuestion extends Activity {
+public class EditQuestion extends Activity {
 
     private TableLayout dataPointTable;
     private Dialog alert;
+    private EditText questionNameField;
+    private CheckBox multiUseCheckBox;
 
     private QuestionSet questionSet;
     private Questions question;
@@ -36,16 +41,53 @@ public class CreateOrEditQuestion extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_or_edit_question);
-
-        Intent intent = getIntent();
-        String questionID = (String) intent.getStringExtra("questionName");
-        System.out.println("Question: " + questionID);
-
+        setContentView(R.layout.activity_edit_question);
         dataPointTable = (TableLayout) findViewById(R.id.data_point_table);
         dataPointTable.setStretchAllColumns(true);
+        questionNameField = (EditText) findViewById(R.id.question_name_field);
+        multiUseCheckBox = (CheckBox) findViewById(R.id.question_multi_use_checkbox);
 
-        question = new Questions("");
+        Intent intent = getIntent();
+        String questionSetName = (String) intent.getStringExtra("questionSetName");
+        String questionName = (String) intent.getStringExtra("questionName");
+        Boolean isNewQuestion = intent.getBooleanExtra("isNewQuestion", false);
+        if (isNewQuestion) {
+            questionSet = QuestionSet.getQuestionSet(questionSetName);
+            questionName = "";
+            question = new Questions("");
+            question.setName(questionName);
+            questionSet.addQuestion(question);
+        }
+        else {
+            questionSet = QuestionSet.getQuestionSet(questionSetName);
+            question = questionSet.getQuestion(questionName);
+            questionNameField.setText(questionName);
+            if (question.getMultiUse()) {
+                multiUseCheckBox.setChecked(true);
+            }
+            else {
+                multiUseCheckBox.setChecked(false);
+            }
+            ArrayList<Datapoint> dps = question.getDataPoints();
+            for (Datapoint dp : dps) {
+                updateDataPointRow(dp, new TableRow(this));
+            }
+        }
+        save();
+
+        questionNameField.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                question.setName(questionNameField.getText().toString());
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        save();
     }
 
     @Override
@@ -65,6 +107,12 @@ public class CreateOrEditQuestion extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void save() {
+        question.setName(questionNameField.getText().toString());
+        question.setMultiUse(multiUseCheckBox.isChecked());
+        QuestionSet.saveQuestionSets();
     }
 
     public void addDataPoint(View view) {
@@ -180,7 +228,7 @@ public class CreateOrEditQuestion extends Activity {
 
     public void updateDataPointRow(final Datapoint dp, final TableRow row) {
         // If row has already been initialized with label, edit button, and delete button
-        if (row.getChildCount() == 3) {
+        if (row.getChildCount() == 2) {
             TextView labelView = (TextView) row.getChildAt(0);
             labelView.setText(dp.getLabel());
         }
@@ -191,11 +239,8 @@ public class CreateOrEditQuestion extends Activity {
                     TableRow.LayoutParams.MATCH_PARENT);
             row.setLayoutParams(params);
 
-            TextView labelView = new TextView(this);
-            labelView.setText(dp.getLabel());
-
             Button edit = new Button(this);
-            edit.setText("Edit");
+            edit.setText(dp.getLabel());
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -213,14 +258,10 @@ public class CreateOrEditQuestion extends Activity {
                 }
             });
 
-            row.addView(labelView);
             row.addView(edit);
             row.addView(delete);
 
             dataPointTable.addView(row);
-
-            labelView.setMaxWidth(labelView.getWidth());
-            labelView.setHorizontallyScrolling(false);
         }
     }
 

@@ -2,8 +2,7 @@
 <ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="false"
-    android:id="@+id/questionset">
+    android:background="@color/DefaultBackgroundColor">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -15,36 +14,29 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/question_set_name_field"
+            android:id="@+id/question_name_field"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textSize="24dip"
-            android:hint="Question set name" />
+            android:hint="Question name" />
+
+        <CheckBox
+            android:id="@+id/question_multi_use_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Multi-use" />
 
         <TableLayout
-            android:id="@+id/question_table"
+            android:id="@+id/data_point_table"
             android:layout_width="match_parent"
             android:layout_height="fill_parent">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/question_header_row"
-                android:background="#fff">
-                <Button
-                    android:id="@+id/save_question_set_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:text="Save" />
-
-                <Button
-                    android:id="@+id/add_question_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:text="Add question" />
-            </TableRow>
-
         </TableLayout>
 
+        <Button
+            android:id="@+id/add_data_point_button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="Add data point"
+            android:onClick="addDataPoint" />
     </LinearLayout>
 </ScrollView>

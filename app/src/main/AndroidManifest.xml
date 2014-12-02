@@ -37,12 +37,12 @@
             android:label="@string/title_activity_interview" >
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.CreateQuestionSet"
-            android:label="@string/title_activity_create_question_set" >
+            android:name=".EditQuestionSet"
+            android:label="@string/title_activity_edit_question_set" >
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.CreateOrEditQuestion"
-            android:label="@string/title_activity_create_or_edit_question" >
+            android:name="com.example.chad.sraMobile.EditQuestion"
+            android:label="@string/title_activity_edit_question" >
         </activity>
         <activity
             android:name="com.example.chad.sraMobile.QuestionSetList"

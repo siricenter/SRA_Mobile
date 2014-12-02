@@ -56,8 +56,8 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addInterview">Add Interview</string>
-    <string name="title_activity_create_question_set">CreateQuestionSet</string>
-    <string name="title_activity_create_or_edit_question">CreateOrEditQuestion</string>
+    <string name="title_activity_edit_question_set">EditQuestionSet</string>
+    <string name="title_activity_edit_question">EditQuestion</string>
 
     <!-- strings for Creating Question Sets and Questions -->
     <string-array name="data_point_types_array">

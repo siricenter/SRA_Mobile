@@ -5,4 +5,6 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <color name="DefaultBackgroundColor">#efe</color>
+
 </resources>
