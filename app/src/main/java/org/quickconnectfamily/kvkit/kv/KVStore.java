@@ -17,6 +17,8 @@ import java.util.concurrent.Semaphore;
 import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
+import javax.crypto.NullCipher;
+
 import org.quickconnectfamily.json.JSONUtilities;
 
 
@@ -34,6 +36,7 @@ public class KVStore {
 	private static Executor runnableExecutor;
 	private static WeakReference<Application> theActivityRef;
 	static{
+
 		valuesByKey = new ConcurrentHashMap<String, Serializable>();
 		valuesByTimeStamp = new ConcurrentLinkedQueue<Serializable>();
 		fileSemaphores = new ConcurrentHashMap<String,Semaphore>();
@@ -170,11 +173,13 @@ public class KVStore {
 		try {
 			Application theActivity = theActivityRef.get();
 			if(theActivity == null){
+                System.out.println("The Activity is NULL");
 				return null;
 			}
 			FileInputStream persistanceFileInputStream = theActivity.openFileInput(encryptedKey);
 			long size = persistanceFileInputStream.getChannel().size();
 			if(size == 0){
+                System.out.println("Size is Zero");
 				return null;
 			}
 			byte[] fileBytes = new byte[(int) size];
@@ -182,6 +187,7 @@ public class KVStore {
 			persistanceFileInputStream.close();
 			if(aCipher != null){
 				fileBytes = aCipher.doFinal(fileBytes);
+
 			}
 			String textString = new String(fileBytes);
 			aFoundEntity = (Serializable)JSONUtilities.parse(textString);

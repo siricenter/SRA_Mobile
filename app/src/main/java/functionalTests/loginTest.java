@@ -7,9 +7,9 @@ import android.test.suitebuilder.annotation.MediumTest;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.chad.sra_mobile.DashBoard;
-import com.example.chad.sra_mobile.R;
-import com.example.chad.sra_mobile.login;
+import com.example.chad.sraMobile.DashBoard;
+import com.example.chad.sraMobile.R;
+import com.example.chad.sraMobile.login;
 
 /**
  * Created by jakobhartman on 11/13/14.
