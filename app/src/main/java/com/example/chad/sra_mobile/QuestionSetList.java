@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class QuestionSetList extends Activity {
 
-    QuestionSet currentSet;
-
     private TableLayout questionSetTable;
 
     @Override
@@ -32,10 +30,8 @@ public class QuestionSetList extends Activity {
 
         questionSetTable = (TableLayout) findViewById(R.id.question_set_table);
 
-        currentSet = new QuestionSet("aaa", "bbb");
         loadQuestionSets();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,14 +52,21 @@ public class QuestionSetList extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadQuestionSets();
+    }
+
     public void addQuestionSet(View v) {
         Intent intent = new Intent(this, CreateQuestionSet.class);
-        intent.putExtra("questionSet", "I am the question set");
+        intent.putExtra("questionSetName", "");
+        intent.putExtra("isNewQuestionSet", true);
         startActivity(intent);
     }
 
     public void loadQuestionSets() {
-        //set the application for KVKit
+        questionSetTable.removeAllViews();
         KVStore.setActivity(getApplication());
         KVStore.setInMemoryStorageCount(10);
 
@@ -88,7 +91,7 @@ public class QuestionSetList extends Activity {
 
             @Override
             public boolean shouldDelete(String key) {
-                return false;
+                return true;
             }
 
             @Override
@@ -102,56 +105,37 @@ public class QuestionSetList extends Activity {
         //set the listener
         KVStore.setStoreEventListener(listener);
 
-//        ArrayList<QuestionSet> sets = new ArrayList<QuestionSet>();
-//
-//        QuestionSet s = new QuestionSet("ccc", "ddd");
-//        Questions q = new Questions("question1");
-//        Datapoint dp = new Datapoint();
-//        dp.setLabel("juice");
-//        dp.setDataType("Text");
-//        q.addDataPoint(dp);
-//        s.addQuestion(q);
-//        sets.add(s);
-
-//        try {
-//            KVStore.storeValue("QuestionSetBank", sets);
-//        }
-//        catch (Exception e) {
-//            System.out.println("Exception trying to store item in KVStore");
-//        }
-
-//        ArrayList<QuestionSet> qs = (ArrayList<QuestionSet>) KVStore.getValue("QuestionSetBank");
-//        System.out.println("Question Sets: " + qs);
-
-//        JSONObject set = QuestionSet.loadQuestionSet("ccc");
-//        System.out.println("JSON STRING: " + set.toString());
-
-        QuestionSet set = QuestionSet.getQuestionSet("ccc");
-        System.out.println("SET: " + set);
-
         ArrayList<QuestionSet> questionSets = QuestionSet.getQuestionSets();
-        for (QuestionSet qs : questionSets) {
-            TableRow row = new TableRow(getBaseContext());
+        for (final QuestionSet qs : questionSets) {
+            final TableRow row = new TableRow(getBaseContext());
 
-            Button question = new Button(getBaseContext());
-            question.setText(qs.getName());
-            question.setOnClickListener(new View.OnClickListener() {
+            Button questionSet = new Button(getBaseContext());
+            questionSet.setText(qs.getName());
+            questionSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    System.out.println("POOOOOOP: " + qs.getName());
                     Intent intent = new Intent(getBaseContext(),CreateQuestionSet.class);
-                    intent.putExtra("questionSet", "I am the question set");
+                    intent.putExtra("questionSetName", qs.getName());
+                    intent.putExtra("isNewQuestionSet", false);
                     startActivity(intent);
                 }
             });
 
             Button delete = new Button(getBaseContext());
             delete.setText("Delete");
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    questionSetTable.removeView(row);
+                    QuestionSet.deleteQuestionSet(qs);
+                }
+            });
 
-            row.addView(question);
+            row.addView(questionSet);
             row.addView(delete);
 
-            int index = questionSetTable.getChildCount() - 1;
-            questionSetTable.addView(row, index);
+            questionSetTable.addView(row);
         }
     }
 

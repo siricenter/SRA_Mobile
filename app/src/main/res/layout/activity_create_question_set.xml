@@ -15,6 +15,7 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/question_set_name_field"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textSize="24dip"
@@ -25,38 +26,23 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent">
 
-            <!--<TableRow-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="fill_parent"-->
-                <!--android:id="@+id/question_header_row"-->
-                <!--android:background="#fff">-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:text="Question"-->
-                    <!--android:textSize="16dip"-->
-                    <!--android:id="@+id/question_column_header" />-->
-
-                <!--&lt;!&ndash;Hidden fields&ndash;&gt;-->
-                <!--<Button-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:text="Edit"-->
-                    <!--android:visibility="invisible" />-->
-
-                <!--<Button-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:text="Delete"-->
-                    <!--android:visibility="invisible" />-->
-            <!--</TableRow>-->
-
-            <Button
-                android:id="@+id/add_question_button"
+            <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:text="Add question" />
+                android:id="@+id/question_header_row"
+                android:background="#fff">
+                <Button
+                    android:id="@+id/save_question_set_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Save" />
+
+                <Button
+                    android:id="@+id/add_question_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Add question" />
+            </TableRow>
 
         </TableLayout>
 

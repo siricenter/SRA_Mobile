@@ -24,15 +24,14 @@
             android:id="@+id/question_set_table"
             android:layout_width="match_parent"
             android:layout_height="fill_parent">
-
-            <Button
-                android:id="@+id/add_question_set_button"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:onClick="addQuestionSet"
-                android:text="Add question set" />
-
         </TableLayout>
+
+        <Button
+            android:id="@+id/add_question_set_button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:onClick="addQuestionSet"
+            android:text="Add question set" />
 
     </LinearLayout>
 </ScrollView>

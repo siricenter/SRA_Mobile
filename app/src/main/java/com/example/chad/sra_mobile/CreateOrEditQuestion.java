@@ -39,19 +39,13 @@ public class CreateOrEditQuestion extends Activity {
         setContentView(R.layout.activity_create_or_edit_question);
 
         Intent intent = getIntent();
-        String questionID = (String) intent.getStringExtra("question");
+        String questionID = (String) intent.getStringExtra("questionName");
         System.out.println("Question: " + questionID);
 
         dataPointTable = (TableLayout) findViewById(R.id.data_point_table);
         dataPointTable.setStretchAllColumns(true);
 
         question = new Questions("");
-
-//        for(Questions question : qs.getQuestions()){
-//            for(Datapoint data :question.getDataPoints()){
-//                addDataPointRow(data.getLabel(),data.getDataType());
-//            }
-//        }
     }
 
     @Override

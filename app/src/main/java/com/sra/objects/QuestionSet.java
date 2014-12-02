@@ -66,6 +66,7 @@ public class QuestionSet implements Serializable {
 
 
     public QuestionSet(JSONObject set) {
+        HashMap<String, Object> poop;
         try {
             if (set.has("name")) {
                 name = set.getString("name");
@@ -89,6 +90,7 @@ public class QuestionSet implements Serializable {
 
     private static ArrayList<QuestionSet> questionSets = null;
     public static ArrayList<QuestionSet> getQuestionSets() {
+        if (questionSets == null) { loadQuestionSets(); }
         return questionSets;
     }
     private static void loadQuestionSets() {
@@ -115,14 +117,24 @@ public class QuestionSet implements Serializable {
     }
 
     public static QuestionSet getQuestionSet(String name) {
-        if (questionSets == null) {
-            loadQuestionSets();
-        }
+        if (questionSets == null) { loadQuestionSets(); }
         for (QuestionSet set : questionSets) {
             if (set.getName().equals(name)) {
                 return set;
             }
         }
         return null;
+    }
+
+    public static void deleteQuestionSet(QuestionSet qs) {
+        if (questionSets == null) { loadQuestionSets(); }
+        questionSets.remove(qs);
+        saveQuestionSets();
+    }
+
+    public static void addQuestionSet(QuestionSet qs) {
+        if (questionSets == null) { loadQuestionSets(); }
+        questionSets.add(qs);
+        saveQuestionSets();
     }
 }
