@@ -161,7 +161,7 @@ public class login extends Activity {
                     public void onAuthenticated(final AuthData authData) {
                         status = true;
                         textview.setText("Authenticating....");
-                        //Get referance to User Tree
+                        //Get reference to User Tree
                         Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users");
                         //Start download from firebase, once
                          users.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -287,23 +287,31 @@ public class login extends Activity {
 
                                      //store the region name
                                      usersRegion.setRegionName(data.child("Name").getValue().toString());
+
+                                     //Show progress
                                      textview.setText("Finished Downloading " + data.child("Name").getValue().toString());
                                       System.out.println(data.getValue().toString());
+
                                      for(DataSnapshot areas : data.child("Areas").getChildren()) {
 
                                          String name = areas.child("Name").getValue().toString();
                                          System.out.println(name);
                                          textview.setText("Loading " + name);
+
+                                         //Getting Users list of areas
                                          ArrayList<String> ars = info.getAreaNames();
                                          System.out.println(ars);
-                                         for (String items : ars) {
 
+                                         //looping through areas in firebase
+                                         for (String items : ars) {
+                                            //if area is assigned to user
                                              if (items.equals(name)) {
 
-                                                 Areas area = new Areas();
+                                                 final Areas area = new Areas();
                                                  area.setRef(areas.getRef().toString());
                                                  area.setAreaName(name);
                                                  long h = 1;
+                                                 //Get resources
                                                  for (DataSnapshot houses : areas.child("Resources").getChildren()) {
                                                      String hName = houses.child("Name").getValue().toString();
                                                      Households household = new Households();
@@ -333,6 +341,8 @@ public class login extends Activity {
                                                          household.addInterview(newInterview);
                                                      }
                                                      h++;
+                                                     System.out.print(household);
+                                                     area.addHousehold(household);
                                                  }
                                                  System.out.println("Food " + area);
                                                  usersRegion.addArea(area);

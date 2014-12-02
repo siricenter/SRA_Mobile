@@ -13,6 +13,10 @@ public class Areas implements Serializable {
     private String ref;
     private ArrayList <Households> households;
 
+    public Areas(){
+        households = new ArrayList<Households>();
+    }
+
     public String getRef() {
         return ref;
     }
@@ -31,6 +35,10 @@ public class Areas implements Serializable {
 
     public ArrayList<Households> getHouseholds() {
         return households;
+    }
+
+    public void addHousehold(Households household){
+        households.add(household);
     }
 
     public void setHouseholds(ArrayList<Households> households) {
