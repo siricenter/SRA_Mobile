@@ -134,6 +134,7 @@ public class PersistanceRunnable implements Runnable {
 		}
 		try {
 			Application activity = activityRef.get();
+            System.out.println( "Activity is " + activity);
 			if(activity == null){
 				return;
 			}
