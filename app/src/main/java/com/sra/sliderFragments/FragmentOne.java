@@ -13,6 +13,7 @@ import com.example.chad.sraMobile.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sra.objects.Areas;
+import com.sra.objects.Households;
 import com.sra.objects.Region;
 
 
@@ -29,6 +30,7 @@ public class FragmentOne extends Fragment {
     private ArrayAdapter list;
     private ListView listView;
     private ArrayList<String> areasList;
+    private ArrayList<String> householdsList;
     public Region regions;
     public FragmentOne() {
 
@@ -39,6 +41,7 @@ public class FragmentOne extends Fragment {
                              Bundle savedInstanceState) {
 
         areasList = new ArrayList<String>();
+        householdsList = new ArrayList<String>();
 
         KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
@@ -121,7 +124,21 @@ public class FragmentOne extends Fragment {
     }
 
     public void loadhouseholdsIntoView(View v, int position){
-        
+        ArrayList<Areas> areas = regions.getAreas();
+        ArrayList<Households> houses = areas.get(position).getHouseholds();
+
+        for (Households household : houses){
+            householdsList.add(household.getHouseholdName());
+        }
+
+        list = new ArrayAdapter(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,householdsList);
+        listView.setAdapter(list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
     }
 
 }

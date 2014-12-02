@@ -65,6 +65,7 @@ public class DashBoard extends Activity {
 
         mDrawerList.setAdapter(adapter);
 
+        dataList.add(new DrawerItem("Dash", R.drawable.dashboard));
         dataList.add(new DrawerItem("Areas",R.drawable.map));
         dataList.add(new DrawerItem("Stats",R.drawable.stats));
         dataList.add(new DrawerItem("Q Sets",R.drawable.questionmark));
@@ -144,14 +145,14 @@ public class DashBoard extends Activity {
         Bundle args = new Bundle();
         switch (position) {
             case 0:
-                fragment = new FragmentOne();
-                break;
-            case 1:
-                fragment = new FragmentTwo();
                 args.putString(FragmentTwo.ITEM_NAME, dataList.get(position)
                         .getItemName());
                 args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                fragment = new FragmentTwo();
+                break;
+            case 1:
+                fragment = new FragmentOne();
                 break;
             case 2:
                 fragment = new FragmentThree();
