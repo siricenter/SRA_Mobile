@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/back"
+        android:tag="back"
+        style="@style/MyListBackContent"
+        android:layout_height="73dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swipe_button2"
+            android:background="@android:drawable/ic_menu_edit"
+            style="@style/MyListButtonAction"
+            android:layout_alignTop="@+id/swipe_button3"
+            android:layout_toLeftOf="@+id/swipe_button3"
+            android:layout_toStartOf="@+id/swipe_button3"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/ic_menu_delete"
+            android:id="@+id/swipe_button3"
+            style="@style/MyListButtonAction"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="77dp"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:orientation="vertical"
+        android:id="@+id/front"
+        android:tag="front"
+        style="@style/MyListFrontContent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            style="@style/MyListImage"
+            android:id="@+id/example_image"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/MyListTitle"
+            android:id="@+id/example_itemname"
+            android:text="Name"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/example_image"
+            android:gravity="center_vertical"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/example_image" />
+
+    </RelativeLayout>
+
+</FrameLayout>

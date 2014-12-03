@@ -252,6 +252,7 @@ public class DashBoard extends Activity {
         }
     }
 
+
     public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
