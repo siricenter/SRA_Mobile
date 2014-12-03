@@ -125,7 +125,7 @@ public class FragmentOne extends Fragment {
 
     public void loadhouseholdsIntoView(View v, int position){
         ArrayList<Areas> areas = regions.getAreas();
-        ArrayList<Households> houses = areas.get(position).getHouseholds();
+        final ArrayList<Households> houses = areas.get(position).getHouseholds();
 
         for (Households household : houses){
             householdsList.add(household.getHouseholdName());
@@ -136,10 +136,21 @@ public class FragmentOne extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                loadMembersIntoView(view,i,houses);
             }
         });
     }
+
+    public void loadMembersIntoView(View v, int position,ArrayList<Households> houses){
+       ArrayList<String> members = houses.get(position).getMembers();
+       list = new ArrayAdapter(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,members);
+       listView.setAdapter(list);
+    }
+
+    public void addArea(View v){
+
+    }
+
 
 }
 
