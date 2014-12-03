@@ -36,7 +36,7 @@
                 android:paddingRight="0dip" >
 
                 <RadioGroup
-                    android:id="@+id/is_multi_use_question"
+                    android:id="@+id/option_list_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">

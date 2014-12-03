@@ -6,7 +6,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    android:background="#efe"
+    android:background="@color/DefaultBackgroundColor"
     tools:context="com.example.chad.sraMobile.DashBoard">
 
 

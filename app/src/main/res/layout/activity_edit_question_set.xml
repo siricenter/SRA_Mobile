@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="false"
+    android:background="@color/DefaultBackgroundColor"
+    android:id="@+id/questionset">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -13,41 +16,30 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/question_set_name_field"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textSize="24dip"
-            android:hint="Question label" />
-
-        <RadioGroup
-            android:id="@+id/is_multi_use_question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/is_not_multi_use"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Single use"
-                android:checked="true" />
-
-            <RadioButton
-                android:id="@+id/is_multi_use"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Multi-use" />
-        </RadioGroup>
+            android:hint="Question set name" />
 
         <TableLayout
-            android:id="@+id/data_point_table"
+            android:id="@+id/question_table"
             android:layout_width="match_parent"
             android:layout_height="fill_parent">
         </TableLayout>
 
         <Button
-            android:id="@+id/add_data_point_button"
+            android:id="@+id/add_question_button"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:text="Add data point"
-            android:onClick="addDataPoint" />
+            android:text="Add question" />
+
+        <!--<Button-->
+            <!--android:id="@+id/save_question_set_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:onClick="save"-->
+            <!--android:text="Save" />-->
+
     </LinearLayout>
 </ScrollView>

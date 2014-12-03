@@ -1,6 +1,7 @@
 package com.sra.objects;
 
-import com.sra.objects.Datapoint;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,11 +11,53 @@ import java.util.ArrayList;
  */
 public class Questions implements Serializable {
 
+    private String name;
     private String referenceUrl;
     private ArrayList <Datapoint> dataPoints;
+    private Boolean isMultiUse;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setMultiUse(Boolean use) {
+        isMultiUse = use;
+    }
+
+    public Boolean getMultiUse() {
+        return isMultiUse;
+    }
 
     public void addDataPoint(Datapoint datapoint){
+        for (Datapoint dp : dataPoints) {
+            if (dp == datapoint) {
+                return;
+            }
+        }
         dataPoints.add(datapoint);
+    }
+
+    public Datapoint getDataPoint(String label) {
+        for (Datapoint dp : dataPoints) {
+            if (dp.getLabel().equals(label)) {
+                return dp;
+            }
+        }
+        return null;
+    }
+
+    public void deleteDataPoint(Datapoint dp) { dataPoints.remove(dp); }
+    public void deleteDataPoint(String label) {
+        for (Datapoint dp : dataPoints) {
+            if (dp.getLabel().equals(label)) {
+                dataPoints.remove(dp);
+                return;
+            }
+        }
     }
 
     public ArrayList<Datapoint> getDataPoints() {
@@ -33,10 +76,27 @@ public class Questions implements Serializable {
         this.referenceUrl = referenceUrl;
     }
 
-    public Questions(String url){
-        this.dataPoints = new ArrayList<Datapoint>();
+    public Questions(String url) {
+        this.name = "";
         this.referenceUrl = url;
+        this.dataPoints = new ArrayList<Datapoint>();
+        this.isMultiUse = false;
     }
 
+    public Questions(JSONObject q) {
+        try {
+            if (q.has("referenceUrl")) {
+                referenceUrl = q.getString("referenceUrl");
+            }
+            if (q.has("dataPoints")) {
+                JSONArray dps = q.getJSONArray("dataPoints");
+                for (int i = 0; i < dps.length(); i++) {
+                    addDataPoint(new Datapoint(dps.getJSONObject(i)));
+                }
+            }
+        }
+        catch (org.json.JSONException e) {
 
+        }
+    }
 }
