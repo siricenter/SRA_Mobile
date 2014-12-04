@@ -67,6 +67,12 @@
         <item>Date</item>
         <item>Option List</item>
     </string-array>
+    <string-array name="question_set_categories_array">
+        <item>Region</item>
+        <item>Area</item>
+        <item>Household</item>
+        <item>Individual</item>
+    </string-array>
 
     <string name="title_activity_question_set_list">QuestionSetList</string>
 

@@ -22,10 +22,18 @@
             android:textSize="24dip"
             android:hint="Question set name" />
 
+        <Spinner
+            android:id="@+id/question_set_type_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></Spinner>
+
         <TableLayout
             android:id="@+id/question_table"
             android:layout_width="match_parent"
             android:layout_height="fill_parent">
+            <TextView
+                android:text="Questions"
+                />
         </TableLayout>
 
         <Button

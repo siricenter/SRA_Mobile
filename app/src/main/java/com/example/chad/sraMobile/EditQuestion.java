@@ -22,8 +22,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.sra.objects.Datapoint;
+import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.Questions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class EditQuestion extends Activity {
     private CheckBox multiUseCheckBox;
 
     private QuestionSet questionSet;
-    private Questions question;
+    private Question question;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class EditQuestion extends Activity {
         if (isNewQuestion) {
             questionSet = QuestionSet.getQuestionSet(questionSetName);
             questionName = "";
-            question = new Questions("");
+            question = new Question("");
             question.setName(questionName);
             questionSet.addQuestion(question);
         }

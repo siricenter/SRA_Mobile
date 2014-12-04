@@ -1,17 +1,13 @@
 package com.sra.objects;
 
-import android.app.Fragment;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.quickconnectfamily.kvkit.kv.KVStore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by jakobhartman on 11/10/14.
@@ -19,82 +15,40 @@ import java.util.HashMap;
 
 public class QuestionSet implements Serializable {
 
-    private ArrayList<Questions> questions;
     private String name;
     private String refUrl;
+    private String type;
+    private ArrayList<Question> questions;
 
-    public void addQuestion(Questions qs){
-          questions.add(qs);
-    }
-    public void deleteQuestion(Questions qs) {
-        questions.remove(qs);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setQuestions(ArrayList<Questions> questions) {
-        this.questions = questions;
-    }
-
-    public void setRefUrl(String refUrl) {
-        this.refUrl = refUrl;
-    }
-
-    public ArrayList<Questions> getQuestions() {
-        return questions;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getRefUrl() {
-        return refUrl;
-    }
-
-    public QuestionSet(String name,String url){
-        this.questions = new ArrayList<Questions>();
+    /*
+     * Constructor
+     */
+    public QuestionSet(String name, String url) {
         this.name = name;
         this.refUrl = url;
+        this.type = "Region";
+        this.questions = new ArrayList<Question>();
     }
 
-    public Fragment generateFragment(){
-        Fragment f = new Fragment();
+    /*
+     * Modifiers
+     */
+    public void setName(String name) { this.name = name; }
+    public void setRefUrl(String refUrl) { this.refUrl = refUrl; }
+    public void setType(String type) { this.type = type; }
+    public void addQuestion(Question qs) { questions.add(qs); }
+    public void setQuestions(ArrayList<Question> questions) { this.questions = questions; }
 
-
-        return f;
-    }
-
-    public void createQuestion(){
-
-    }
-
-
-    public QuestionSet(JSONObject set) {
-        HashMap<String, Object> poop;
-        try {
-            if (set.has("name")) {
-                name = set.getString("name");
-            }
-            if (set.has("refUrl")) {
-                refUrl = set.getString("refUrl");
-            }
-            if (set.has("questions")) {
-                JSONArray q = set.getJSONArray("questions");
-                for (int i = 0; i < q.length(); i++) {
-                    addQuestion(new Questions(q.getJSONObject(i)));
-                }
-            }
-        }
-        catch (org.json.JSONException e) {
-
-        }
-    }
-
-    public Questions getQuestion(String questionName) {
-        for (Questions q : questions) {
+    /*
+     * Accessors
+     */
+    public String getName() { return name; }
+    public String getRefUrl() { return refUrl; }
+    public String getType() { return type; }
+    public void deleteQuestion(Question qs) { questions.remove(qs); }
+    public ArrayList<Question> getQuestions() { return questions; }
+    public Question getQuestion(String questionName) {
+        for (Question q : questions) {
             if (q.getName().equals(questionName)) {
                 return q;
             }
@@ -102,6 +56,9 @@ public class QuestionSet implements Serializable {
         return null;
     }
 
+    /*
+     * Static methods
+     */
     private static ArrayList<QuestionSet> questionSets = null;
     public static ArrayList<QuestionSet> getQuestionSets() {
         if (questionSets == null) { loadQuestionSets(); }

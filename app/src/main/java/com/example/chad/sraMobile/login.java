@@ -22,8 +22,8 @@ import com.sra.objects.Areas;
 import com.sra.objects.Datapoint;
 import com.sra.objects.Households;
 import com.sra.objects.Interviews;
+import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.Questions;
 import com.sra.objects.Region;
 import com.sra.objects.loginObject;
 
@@ -326,7 +326,7 @@ public class login extends Activity {
                                                          for (DataSnapshot questionSets : interview.child("QuestionSets").getChildren()) {
                                                              QuestionSet qSet = new QuestionSet(questionSets.child("Name").getValue().toString(), questionSets.getRef().toString());
                                                              for (DataSnapshot questions : questionSets.child("Questions").getChildren()) {
-                                                                 Questions question = new Questions(questions.getRef().toString());
+                                                                 Question question = new Question(questions.getRef().toString());
                                                                  for (DataSnapshot datapoints : questions.child("Data Points").getChildren()) {
                                                                      Datapoint newDatapoint = new Datapoint();
                                                                      newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());

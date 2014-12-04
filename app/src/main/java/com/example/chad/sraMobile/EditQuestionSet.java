@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.Questions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EditQuestionSet extends Activity {
 
@@ -23,6 +27,7 @@ public class EditQuestionSet extends Activity {
     private EditText questionSetNameField;
 
     private QuestionSet questionSet;
+    private Boolean isNewQuestionSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +36,10 @@ public class EditQuestionSet extends Activity {
 
         Intent intent = getIntent();
         String questionSetName = (String) intent.getStringExtra("questionSetName");
-        Boolean isNewQuestionSet = (Boolean) intent.getBooleanExtra("isNewQuestionSet", true);
+        isNewQuestionSet = (Boolean) intent.getBooleanExtra("isNewQuestionSet", true);
         if (isNewQuestionSet) {
             questionSetName = "";
             questionSet = new QuestionSet(questionSetName, "");
-            QuestionSet.addQuestionSet(questionSet);
-            QuestionSet.saveQuestionSets();
         }
         else {
             questionSet = QuestionSet.getQuestionSet(questionSetName);
@@ -61,17 +64,32 @@ public class EditQuestionSet extends Activity {
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                save();
-                goToQuestionEdit("", true);
+                if (questionSetNameField.getText().length() == 0) {
+                    errorDialog();
+                } else {
+                    save();
+                    goToQuestionEdit("", true);
+                }
             }
         });
-        loadQuestions();
-    }
 
-    @Override
-    protected void onDestroy() {
-        save();
-        super.onDestroy();
+        final Spinner type = (Spinner) findViewById(R.id.question_set_type_spinner);
+        String[] typesArray = getResources().getStringArray(R.array.question_set_categories_array);
+        final ArrayList<String> typesArrayList = new ArrayList<String>(Arrays.asList(typesArray));
+        ArrayAdapter<String> freqAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, typesArrayList);
+        type.setAdapter(freqAdapter);
+        type.setSelection(typesArrayList.indexOf(questionSet.getType()));
+        type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                questionSet.setType(typesArrayList.get(position));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        loadQuestions();
     }
 
     @Override
@@ -80,16 +98,28 @@ public class EditQuestionSet extends Activity {
         loadQuestions();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (questionSetNameField.getText().length() > 0) {
+            save();
+        }
+        super.onBackPressed();
+    }
+
     public void save() {
         questionSet.setName(questionSetNameField.getText().toString());
+        if (isNewQuestionSet) {
+            QuestionSet.addQuestionSet(questionSet);
+            isNewQuestionSet = false;
+        }
         QuestionSet.saveQuestionSets();
     }
 
     public void loadQuestions() {
         questionTable.removeAllViews();
 
-        ArrayList<Questions> questions = questionSet.getQuestions();
-        for (final Questions qs : questions) {
+        ArrayList<Question> questions = questionSet.getQuestions();
+        for (final Question qs : questions) {
             final TableRow row = new TableRow(getBaseContext());
 
             Button questionButton = new Button(getBaseContext());
@@ -126,7 +156,7 @@ public class EditQuestionSet extends Activity {
         startActivity(intent);
     }
 
-    public void errorLabel() {
+    public void errorDialog() {
         Dialog alert = new Dialog(this);
         alert.setTitle("Question set name is required");
         alert.show();
