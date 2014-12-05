@@ -54,7 +54,7 @@ public class EditQuestion extends Activity {
         if (isNewQuestion) {
             questionSet = QuestionSet.getQuestionSet(questionSetName);
             questionName = "";
-            question = new Questions("");
+            question = new Questions();
             question.setName(questionName);
             questionSet.addQuestion(question);
         }

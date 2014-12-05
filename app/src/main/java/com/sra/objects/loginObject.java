@@ -61,5 +61,6 @@ public class loginObject implements Serializable {
         this.permissions = new ArrayList<String>();
         this.username = username;
         this.areaNames = new ArrayList<String>();
+        this.regions = new ArrayList<String>();
     }
 }

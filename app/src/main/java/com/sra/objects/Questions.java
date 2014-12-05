@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * Created by jakobhartman on 11/10/14.
  */
 public class Questions implements Serializable {
-
     private String name;
     private String referenceUrl;
     private ArrayList <Datapoint> dataPoints;
@@ -76,9 +75,8 @@ public class Questions implements Serializable {
         this.referenceUrl = referenceUrl;
     }
 
-    public Questions(String url) {
-        this.name = "";
-        this.referenceUrl = url;
+    public Questions() {
+        this.name = new String();
         this.dataPoints = new ArrayList<Datapoint>();
         this.isMultiUse = false;
     }

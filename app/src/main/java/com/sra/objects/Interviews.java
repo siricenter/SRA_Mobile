@@ -14,6 +14,10 @@ public class Interviews implements Serializable {
         questionSets.add(questionSet);
     }
 
+    public Interviews(){
+        this.questionSets = new ArrayList<QuestionSet>();
+    }
+
     public ArrayList<QuestionSet> getQuestionSets() {
         return questionSets;
     }

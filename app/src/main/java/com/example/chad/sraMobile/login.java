@@ -27,6 +27,8 @@ import com.sra.objects.Questions;
 import com.sra.objects.Region;
 import com.sra.objects.loginObject;
 
+import org.quickconnectfamily.json.JSONException;
+import org.quickconnectfamily.json.JSONUtilities;
 import org.quickconnectfamily.kvkit.kv.KVStore;
 import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
 
@@ -43,7 +45,7 @@ public class login extends Activity {
     private boolean status;
     TextView textview;
     ProgressBar progress;
-    String place;
+    int passes = 0;
     private String organization = "SRA";
 
     public boolean getStatus(){
@@ -120,7 +122,6 @@ public class login extends Activity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -163,7 +164,7 @@ public class login extends Activity {
                         status = true;
                         textview.setText("Authenticating....");
                         //Get reference to User Tree
-                        String Node = username.split("@")[0];
+                        final String Node = username.split("@")[0];
                         Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
                         //Start download from firebase, once
                          users.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,6 +173,7 @@ public class login extends Activity {
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
                                  //loop through Users
+                                 System.out.println("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
                                         initialDownload(dataSnapshot);
                              }
                              //Fail
@@ -200,12 +202,11 @@ public class login extends Activity {
             textview.setText("Saving User For Offline Use");
 
             // storing user data
+            System.out.println(data.getValue().toString());
             String username = data.child("Email").getValue().toString();
             DataSnapshot ld = data.child("Organizations").child(organization);
             DataSnapshot role = ld.child("Roles");
             DataSnapshot area = ld.child("Regions");
-
-
 
             //create loginInfo Object
             final loginObject info = new loginObject(username);
@@ -228,8 +229,6 @@ public class login extends Activity {
                 info.addToRoles(Roles);
             }
 
-
-
             //Store User data into the file system
             try{
                 KVStore.storeValue("User",info);
@@ -239,39 +238,79 @@ public class login extends Activity {
             }
 
             //set status to download
-
             textview.setText("Downloading Region");
+            final Region usersRegion = new Region();
 
+            for(String rg : info.getRegions()) {
+                textview.setText("Downloading " + rg);
+                for (String ar : info.getAreaNames()) {
+                    textview.setText("Downloading area " + ar);
+                    //create reference to organization name
+                    String urlref = "https://intense-inferno-7741.firebaseio.com/Organizations/" + organization + "/Regions/" + rg + "/Areas/" + ar;
+                    Firebase areaData = new Firebase(urlref);
 
+                    areaData.addListenerForSingleValueEvent(new ValueEventListener() {
+                        //Success
 
-            //create reference to organization name
-            String urlref = "https://intense-inferno-7741.firebaseio.com/Organizations/" + organization + "/Regions/";
-            Firebase areaData = new Firebase(urlref);
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Areas area = new Areas();
+                                  area.setAreaName(dataSnapshot.getName());
+                            DataSnapshot resources = dataSnapshot.child("Resources");
+                            for(DataSnapshot household : resources.getChildren()){
+                               Households households = new Households();
+                                          households.setHouseholdName(household.getName());
+                               for(DataSnapshot members : household.child("Members").getChildren() ){
+                                   households.addMember(members.getName());
+                               }
+                               for(DataSnapshot interviews : household.child("Interviews").getChildren()){
+                                   Interviews interview = new Interviews();
+                                              interview.setCreatedDate(interviews.child("Date Created").getValue().toString());
+                                   for(DataSnapshot qs : interviews.child("Question Sets").getChildren()){
+                                       QuestionSet questionSet = new QuestionSet();
 
+                                                   questionSet.setName(qs.child("Name").getValue().toString());
+                                                   questionSet.setRefUrl(qs.getRef().toString());
+                                                   questionSet.setQuestions();
+                                       for(DataSnapshot q: qs.child("Questions").getChildren()){
+                                           Questions questions = new Questions();
+                                                     questions.setReferenceUrl(q.getRef().toString());
+                                                     questions.setName(q.child("Name").getValue().toString());
+                                                     questions.setMultiUse(true);
+                                           for (DataSnapshot datapoints : q.child("Data Points").getChildren()) {
+                                               Datapoint newDatapoint = new Datapoint();
+                                               newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
+                                               newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
+                                               newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
+                                               questions.addDataPoint(newDatapoint);
+                                           }
+                                           questionSet.addQuestion(questions);
+                                       }
+                                       interview.addQuestionSets(questionSet);
+                                   }
+                                   households.addInterview(interview);
+                               }
+                               area.addHousehold(households);
+                            }
+                            usersRegion.addArea(area);
+                            passes++;
+                            if(passes == info.getRegions().size()){
+                                try {
+                                    KVStore.storeValue("Field", usersRegion);
+                                    Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
 
-            areaData.addListenerForSingleValueEvent(new ValueEventListener() {
-                //Success
-                 @Override
-                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                     Region usersRegion = new Region();
-                     for(String rg : info.getRegions()){
-                         
-                     }
-
-                     try{
-                         KVStore.storeValue("Field",usersRegion);
-                         Intent intent = new Intent(getApplicationContext(), DashBoard.class);
-                         startActivity(intent);
-                     } catch(Exception e){}
-                 }
-
-                 @Override
-                 public void onCancelled(FirebaseError firebaseError) {
-                    textview.setText(firebaseError.getMessage());
-                 }
-            });
-
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                            textview.setText(firebaseError.getMessage());
+                        }
+                    });
+                }
+            }
         }
     }
 

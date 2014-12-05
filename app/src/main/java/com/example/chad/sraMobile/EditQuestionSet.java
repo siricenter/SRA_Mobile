@@ -34,7 +34,9 @@ public class EditQuestionSet extends Activity {
         Boolean isNewQuestionSet = (Boolean) intent.getBooleanExtra("isNewQuestionSet", true);
         if (isNewQuestionSet) {
             questionSetName = "";
-            questionSet = new QuestionSet(questionSetName, "");
+            questionSet = new QuestionSet();
+            questionSet.setName(questionSetName);
+            questionSet.setRefUrl("");
             QuestionSet.addQuestionSet(questionSet);
             QuestionSet.saveQuestionSets();
         }

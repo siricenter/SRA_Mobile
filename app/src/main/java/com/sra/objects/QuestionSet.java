@@ -18,10 +18,9 @@ import java.util.HashMap;
  */
 
 public class QuestionSet implements Serializable {
-
-    private ArrayList<Questions> questions;
     private String name;
     private String refUrl;
+    private ArrayList<Questions> questions;
 
     public void addQuestion(Questions qs){
           questions.add(qs);
@@ -32,10 +31,6 @@ public class QuestionSet implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setQuestions(ArrayList<Questions> questions) {
-        this.questions = questions;
     }
 
     public void setRefUrl(String refUrl) {
@@ -54,23 +49,13 @@ public class QuestionSet implements Serializable {
         return refUrl;
     }
 
-    public QuestionSet(String name,String url){
+    public void setQuestions(){
         this.questions = new ArrayList<Questions>();
-        this.name = name;
-        this.refUrl = url;
     }
 
-    public Fragment generateFragment(){
-        Fragment f = new Fragment();
-
-
-        return f;
-    }
-
-    public void createQuestion(){
+    public QuestionSet(){
 
     }
-
 
     public QuestionSet(JSONObject set) {
         HashMap<String, Object> poop;
@@ -102,7 +87,7 @@ public class QuestionSet implements Serializable {
         return null;
     }
 
-    private static ArrayList<QuestionSet> questionSets = null;
+    private static ArrayList<QuestionSet> questionSets = new ArrayList<QuestionSet>();
     public static ArrayList<QuestionSet> getQuestionSets() {
         if (questionSets == null) { loadQuestionSets(); }
         return questionSets;

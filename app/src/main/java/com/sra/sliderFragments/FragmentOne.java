@@ -220,6 +220,7 @@ public class FragmentOne extends Fragment {
     public void buildRegion(){
         try {
             String json = JSONUtilities.stringify(KVStore.getValue("Field"));
+
             Gson gson = new GsonBuilder().create();
             regions = gson.fromJson(json,Region.class);
             ArrayList<Areas> areas = regions.getAreas();
