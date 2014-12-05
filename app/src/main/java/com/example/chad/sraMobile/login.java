@@ -44,6 +44,7 @@ public class login extends Activity {
     TextView textview;
     ProgressBar progress;
     String place;
+    private String organization = "SRA";
 
     public boolean getStatus(){
         return status;
@@ -153,7 +154,7 @@ public class login extends Activity {
             textview.setText("Logging In....");
 
         //Start a reference to the base firebase
-        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com");
+        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com/Organization");
                 //authenticate user using firebase.
                 ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
                     //Success
@@ -162,7 +163,8 @@ public class login extends Activity {
                         status = true;
                         textview.setText("Authenticating....");
                         //Get reference to User Tree
-                        Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users");
+                        String Node = username.split("@")[0];
+                        Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
                         //Start download from firebase, once
                          users.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -170,21 +172,8 @@ public class login extends Activity {
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
                                  //loop through Users
-                                for(DataSnapshot data: dataSnapshot.getChildren()){
-                                    String currentLogged = data.child("Email").getValue().toString();
-                                           currentLogged = currentLogged.toLowerCase();
-
-                                    Map map = authData.getProviderData();
-                                    String sanUsername = map.get("email").toString();
-                                           sanUsername = sanUsername.toLowerCase();
-                                    if(currentLogged.equals(sanUsername)){
-                                        textview.setText("Authentication Complete, Starting Initial Sync");
-                                        initialDownload(data);
-                                    }
-                                }
-
+                                        initialDownload(dataSnapshot);
                              }
-
                              //Fail
                              @Override
                              public void onCancelled(FirebaseError firebaseError) {
@@ -212,17 +201,20 @@ public class login extends Activity {
 
             // storing user data
             String username = data.child("Email").getValue().toString();
-            DataSnapshot ld = data.child("Organizations").child("Organization");
+            DataSnapshot ld = data.child("Organizations").child(organization);
             DataSnapshot role = ld.child("Roles");
-            DataSnapshot area = ld.child("Region");
+            DataSnapshot area = ld.child("Regions");
 
 
 
             //create loginInfo Object
             final loginObject info = new loginObject(username);
             info.setLoggedIn(true);
+
             textview.setText("Loading User Areas");
+
             for(DataSnapshot rs : area.getChildren()){
+                info.addRegion(rs.getName());
                 for(DataSnapshot as : rs.child("Areas").getChildren()){
                     String areaName = as.child("Name").getValue().toString();
                     System.out.println(areaName);
@@ -250,16 +242,10 @@ public class login extends Activity {
 
             textview.setText("Downloading Region");
 
-            //get the name of Organizations
-            for(DataSnapshot rf : ld.child("Region").getChildren()){
-                place = rf.child("Name").getValue().toString();
-            }
 
-            //get the organization name
-            final String orgName = ld.child("Name").getValue().toString();
 
             //create reference to organization name
-            String urlref = "https://intense-inferno-7741.firebaseio.com/Organizations/";
+            String urlref = "https://intense-inferno-7741.firebaseio.com/Organizations/" + organization + "/Regions/";
             Firebase areaData = new Firebase(urlref);
 
 
@@ -267,92 +253,12 @@ public class login extends Activity {
                 //Success
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
-                     //Start loop from the Top getting the correct organization
+
                      Region usersRegion = new Region();
-                     for(DataSnapshot org :dataSnapshot.getChildren()){
-                         String orgsName = org.child("Name").getValue().toString();
-
-                         //When find a match
-                         if(orgsName.equals(orgName)){
-
-                             //loops through the regions
-                             for(DataSnapshot data :org.child("Regions").getChildren()){
-
-                                 String regionName = data.child("Name").getValue().toString();
-
-                                 //When find a region match
-                                 if(regionName.equals(place)){
-
-                                     //creates a region object
-
-                                     //store the region name
-                                     usersRegion.setRegionName(data.child("Name").getValue().toString());
-
-                                     //Show progress
-                                     textview.setText("Finished Downloading " + data.child("Name").getValue().toString());
-                                      System.out.println(data.getValue().toString());
-
-                                     for(DataSnapshot areas : data.child("Areas").getChildren()) {
-
-                                         String name = areas.child("Name").getValue().toString();
-                                         System.out.println(name);
-                                         textview.setText("Loading " + name);
-
-                                         //Getting Users list of areas
-                                         ArrayList<String> ars = info.getAreaNames();
-                                         System.out.println(ars);
-
-                                         //looping through areas in firebase
-                                         for (String items : ars) {
-                                            //if area is assigned to user
-                                             if (items.equals(name)) {
-
-                                                 final Areas area = new Areas();
-                                                 area.setRef(areas.getRef().toString());
-                                                 area.setAreaName(name);
-                                                 long h = 1;
-                                                 //Get resources
-                                                 for (DataSnapshot houses : areas.child("Resources").getChildren()) {
-                                                     String hName = houses.child("Name").getValue().toString();
-                                                     Households household = new Households();
-                                                     household.setHouseholdName(hName);
-                                                     household.setId(h);
-                                                     for (DataSnapshot members : houses.child("Members").getChildren()) {
-                                                         household.addMember(members.child("Name").getValue().toString());
-                                                     }
-                                                     for (DataSnapshot interview : houses.child("Interviews").getChildren()) {
-                                                         Interviews newInterview = new Interviews();
-                                                         newInterview.setCreatedDate(interview.child("Date Created").getValue().toString());
-                                                         for (DataSnapshot questionSets : interview.child("QuestionSets").getChildren()) {
-                                                             QuestionSet qSet = new QuestionSet(questionSets.child("Name").getValue().toString(), questionSets.getRef().toString());
-                                                             for (DataSnapshot questions : questionSets.child("Questions").getChildren()) {
-                                                                 Questions question = new Questions(questions.getRef().toString());
-                                                                 for (DataSnapshot datapoints : questions.child("Data Points").getChildren()) {
-                                                                     Datapoint newDatapoint = new Datapoint();
-                                                                     newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
-                                                                     newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
-                                                                     newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
-                                                                     question.addDataPoint(newDatapoint);
-                                                                 }
-                                                                 qSet.addQuestion(question);
-                                                             }
-                                                             newInterview.addQuestionSets(qSet);
-                                                         }
-                                                         household.addInterview(newInterview);
-                                                     }
-                                                     h++;
-                                                     System.out.print(household);
-                                                     area.addHousehold(household);
-                                                 }
-                                                 System.out.println("Food " + area);
-                                                 usersRegion.addArea(area);
-                                             }
-                                         }
-                                     }
-                                 }
-                             }
-                         }
+                     for(String rg : info.getRegions()){
+                         
                      }
+
                      try{
                          KVStore.storeValue("Field",usersRegion);
                          Intent intent = new Intent(getApplicationContext(), DashBoard.class);

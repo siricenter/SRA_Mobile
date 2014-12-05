@@ -12,7 +12,21 @@ public class loginObject implements Serializable {
     private String username;
     private ArrayList<String> permissions;
     private ArrayList<String> areaNames;
+    private  ArrayList<String> regions;
     private boolean loggedIn;
+
+    public ArrayList<String> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(ArrayList<String> regions) {
+        this.regions = regions;
+    }
+
+    public void addRegion(String regionName){
+        regions.add(regionName);
+    }
+
 
     public String getUsername() {
         return username;
