@@ -49,6 +49,7 @@ public class FragmentOne extends Fragment {
     public ItemAdapter adapter;
     List<ItemRow> itemData;
     View view;
+    public String navigationPosition;
     public FragmentOne() {
 
     }
@@ -66,7 +67,7 @@ public class FragmentOne extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
+        navigationPosition = "areas";
         areasList = new ArrayList<String>();
         householdsList = new ArrayList<String>();
 
@@ -188,7 +189,7 @@ public class FragmentOne extends Fragment {
                 Log.d("swipe", String.format("onClickFrontView %d", position));
 
                 //swipelistview.openAnimate(position); //when you touch front view it will open
-
+                navigationPosition = "households";
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<Households> households = areas.get(position).getHouseholds();
 
@@ -277,7 +278,7 @@ public class FragmentOne extends Fragment {
                 Log.d("swipe", String.format("onClickFrontView %d", position));
 
                 //swipelistview.openAnimate(position); //when you touch front view it will open
-
+                navigationPosition = "members";
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<String> members = areas.get(i).getHouseholds().get(position).getMembers();
 
