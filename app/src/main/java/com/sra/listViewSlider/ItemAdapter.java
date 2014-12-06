@@ -14,25 +14,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chad.sraMobile.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sra.objects.Region;
+import com.sra.sliderFragments.FragmentOne;
+
+import org.quickconnectfamily.json.JSONException;
+import org.quickconnectfamily.json.JSONUtilities;
+import org.quickconnectfamily.kvkit.kv.KVStore;
 
 public class ItemAdapter extends ArrayAdapter {
 
     List   data;
     Context context;
     int layoutResID;
+    FragmentOne fragmentOne;
 
-    public ItemAdapter(Context context, int layoutResourceId,List data) {
+    public ItemAdapter(Context context, int layoutResourceId,List data,FragmentOne fragmentOne) {
         super(context, layoutResourceId, data);
 
         this.data=data;
         this.context=context;
         this.layoutResID=layoutResourceId;
+        this.fragmentOne = fragmentOne;
 
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         NewsHolder holder = null;
         View row = convertView;
@@ -66,7 +76,7 @@ public class ItemAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "Button 2 Clicked",Toast.LENGTH_SHORT).show();
+                fragmentOne.editRow(position);
             }
         });
 
@@ -75,7 +85,7 @@ public class ItemAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "Button 3 Clicked",Toast.LENGTH_SHORT);
+                fragmentOne.deleteRow(position);
             }
         });
 
@@ -87,7 +97,6 @@ public class ItemAdapter extends ArrayAdapter {
 
         TextView itemName;
         ImageView icon;
-        Button button1;
         Button button2;
         Button button3;
     }

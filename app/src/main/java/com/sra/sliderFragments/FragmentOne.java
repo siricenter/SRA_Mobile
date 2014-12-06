@@ -42,16 +42,22 @@ import java.util.List;
 
 public class FragmentOne extends Fragment {
 
-    private ArrayAdapter list;
-    private ListView listView;
     private ArrayList<String> areasList;
     private ArrayList<String> householdsList;
     public Region regions;
     public SwipeListView swipelistview;
     public ItemAdapter adapter;
     List<ItemRow> itemData;
-
+    View view;
     public FragmentOne() {
+
+    }
+
+    public void deleteRow(int p){
+
+    }
+
+    public void editRow(int p){
 
     }
 
@@ -108,12 +114,12 @@ public class FragmentOne extends Fragment {
         //set the listener
         KVStore.setStoreEventListener(listener);
 
-        View view = inflater.inflate(R.layout.button1slide, container,false);
+        view = inflater.inflate(R.layout.button1slide, container,false);
         // listView = (ListView) view.findViewById(R.id.ListView01);
         swipelistview = (SwipeListView)view.findViewById(R.id.example_swipe_lv_list);
         itemData = new ArrayList<ItemRow>();
 
-        adapter=new ItemAdapter(getActivity(),R.layout.custom_row,itemData);
+        adapter=new ItemAdapter(getActivity(),R.layout.custom_row,itemData,FragmentOne.this);
 
         Button button = (Button)view.findViewById(R.id.button3);
                button.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +166,7 @@ public class FragmentOne extends Fragment {
 
             @Override
             public void onListChanged() {
+                swipelistview.closeOpenedItems();
             }
 
             @Override
@@ -177,10 +184,32 @@ public class FragmentOne extends Fragment {
             }
 
             @Override
-            public void onClickFrontView(int position) {
+            public void onClickFrontView(final int position) {
                 Log.d("swipe", String.format("onClickFrontView %d", position));
 
                 //swipelistview.openAnimate(position); //when you touch front view it will open
+
+                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Households> households = areas.get(position).getHouseholds();
+
+                for(Households houses : households){
+                    itemData.clear();
+                    itemData.add(new ItemRow(houses.getHouseholdName()));
+                }
+
+                Button button = (Button)view.findViewById(R.id.button3);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        addHousehold();
+                    }
+                });
+                button.setText("Add Household");
+
+                adapter.getItem(position);
+
+                adapter.notifyDataSetChanged();
+                changeListener(position);
 
             }
 
@@ -209,6 +238,80 @@ public class FragmentOne extends Fragment {
 
         adapter.notifyDataSetChanged();
 
+    }
+
+
+
+
+    public void changeListener(final int i){
+        swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("swipe", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(int position) {
+                Log.d("swipe", String.format("onClickFrontView %d", position));
+
+                //swipelistview.openAnimate(position); //when you touch front view it will open
+
+                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<String> members = areas.get(i).getHouseholds().get(position).getMembers();
+
+
+                for(String member : members){
+                    itemData.clear();
+                    itemData.add(new ItemRow(member));
+                }
+
+                Button button = (Button)view.findViewById(R.id.button3);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        addMember();
+                    }
+                });
+                       button.setText("Add Member");
+
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("swipe", String.format("onClickBackView %d", position));
+
+                swipelistview.closeAnimate(position);//when you touch back view it will close
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+
+            }
+        });
     }
 
     public int convertDpToPixel(float dp) {
@@ -265,58 +368,28 @@ public class FragmentOne extends Fragment {
         builder.show();
     }
 
+    public void addHousehold(){
+
+    }
+
+    public void addMember(){
+
+    }
+
     public void reloadAreasIntoView(){
         ArrayList<Areas> areas = regions.getAreas();
         areasList.clear();
+        itemData.clear();
         for(Areas area : areas){
-            areasList.add(area.getAreaName());
+            itemData.add( new ItemRow(area.getAreaName()));
         }
-        //list.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         try{
             KVStore.storeValue("Field",regions);
         }
         catch (KVStorageException e){
 
         }
-
     }
-
-    public void loadAreasIntoView(){
-       // list = new ArrayAdapter <String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,areasList);
-        //listView.setAdapter(list);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                loadhouseholdsIntoView(view,i);
-//            }
-//        });
-    }
-
-    public void loadhouseholdsIntoView(View v, int position){
-        ArrayList<Areas> areas = regions.getAreas();
-        final ArrayList<Households> houses = areas.get(position).getHouseholds();
-
-        for (Households household : houses){
-            householdsList.add(household.getHouseholdName());
-        }
-
-//        list = new ArrayAdapter(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,householdsList);
-//        listView.setAdapter(list);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                loadMembersIntoView(view,i,houses);
-//            }
-//        });
-    }
-
-    public void loadMembersIntoView(View v, int position,ArrayList<Households> houses){
-       ArrayList<String> members = houses.get(position).getMembers();
-//       list = new ArrayAdapter(getActivity().getBaseContext(),android.R.layout.simple_list_item_1,members);
-//       listView.setAdapter(list);
-    }
-
-
-
 }
 
