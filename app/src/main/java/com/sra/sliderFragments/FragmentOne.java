@@ -55,11 +55,11 @@ public class FragmentOne extends Fragment {
     }
 
     public void deleteRow(int p){
-
+        System.out.println(p);
     }
 
     public void editRow(int p){
-
+        System.out.println(p);
     }
 
     @Override
