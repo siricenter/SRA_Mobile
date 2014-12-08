@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DeleteRecord implements Serializable {
     private ArrayList <Areas> deletedAreas;
     private ArrayList <Households> deletedHouseholds;
-    private ArrayList <String> deletedMembers;
+    private ArrayList <Member> deletedMembers;
     private ArrayList <QuestionSet> removedQuestionSets;
     private ArrayList <Questions> removedQuestions;
     private ArrayList <Datapoint> removedDatapoints;
@@ -35,7 +35,7 @@ public class DeleteRecord implements Serializable {
         return removedQuestionSets;
     }
 
-    public ArrayList<String> getDeletedMembers() {
+    public ArrayList<Member> getDeletedMembers() {
         return deletedMembers;
     }
 
@@ -47,7 +47,7 @@ public class DeleteRecord implements Serializable {
         deletedHouseholds.add(household);
     }
 
-    public void addMember(String member){
+    public void addMember(Member member){
         deletedMembers.add(member);
     }
 
@@ -61,5 +61,14 @@ public class DeleteRecord implements Serializable {
 
     public void addDatapoint(Datapoint datapoint){
         removedDatapoints.add(datapoint);
+    }
+
+    public DeleteRecord(){
+        this.deletedMembers = new ArrayList<Member>();
+        this.deletedAreas = new ArrayList<Areas>();
+        this.deletedHouseholds = new ArrayList<Households>();
+        this.removedDatapoints = new ArrayList<Datapoint>();
+        this.removedQuestions = new ArrayList<Questions>();
+        this.removedQuestionSets = new ArrayList<QuestionSet>();
     }
 }

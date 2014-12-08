@@ -26,7 +26,9 @@ import com.google.gson.GsonBuilder;
 import com.sra.listViewSlider.ItemAdapter;
 import com.sra.listViewSlider.ItemRow;
 import com.sra.objects.Areas;
+import com.sra.objects.DeleteRecord;
 import com.sra.objects.Households;
+import com.sra.objects.Member;
 import com.sra.objects.Region;
 
 
@@ -50,6 +52,7 @@ public class FragmentOne extends Fragment {
     int currentArea;
     int currentHousehold;
     View view;
+    DeleteRecord markedForDeletion;
     public String navigationPosition;
     public FragmentOne() {
 
@@ -59,28 +62,35 @@ public class FragmentOne extends Fragment {
 
 
         if(navigationPosition.equals("areas")){
+            markedForDeletion.addArea(regions.getAreas().get(p));
+            regions.getAreas().remove(p);
             ArrayList<Areas> areas = regions.getAreas();
-            areas.remove(p);
             itemData.clear();
             for(Areas area : areas){
                 itemData.add(new ItemRow(area.getAreaName()));
             }
         } else if(navigationPosition.equals("households")){
+            markedForDeletion.addhousehold(regions.getAreas().get(currentArea).getHouseholds().get(p));
+            regions.getAreas().get(currentArea).getHouseholds().remove(p);
             ArrayList<Areas> areas = regions.getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
-            households.remove(p);
             itemData.clear();
             for(Households household : households){
                 itemData.add(new ItemRow(household.getHouseholdName()));
             }
         } else if(navigationPosition.equals("members")){
+            Member member = new Member();
+            member.setMemberName(regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().get(p));
+            member.setCurrentArea(regions.getAreas().get(p).getAreaName());
+            member.setCurrentHousehold(regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getHouseholdName());
+            markedForDeletion.addMember(member);
+            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().remove(p);
             ArrayList<Areas> areas = regions.getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
             ArrayList<String> members = households.get(currentHousehold).getMembers();
-            members.remove(p);
             itemData.clear();
-            for(String member : members){
-                itemData.add(new ItemRow(member));
+            for(String mb : members){
+                itemData.add(new ItemRow(mb));
             }
         }
         try{
