@@ -43,11 +43,12 @@ import java.util.List;
 public class FragmentOne extends Fragment {
 
     private ArrayList<String> areasList;
-    private ArrayList<String> householdsList;
     public Region regions;
     public SwipeListView swipelistview;
     public ItemAdapter adapter;
     List<ItemRow> itemData;
+    int currentArea;
+    int currentHousehold;
     View view;
     public String navigationPosition;
     public FragmentOne() {
@@ -55,7 +56,40 @@ public class FragmentOne extends Fragment {
     }
 
     public void deleteRow(int p){
-        System.out.println(p);
+
+
+        if(navigationPosition.equals("areas")){
+            ArrayList<Areas> areas = regions.getAreas();
+            areas.remove(p);
+            itemData.clear();
+            for(Areas area : areas){
+                itemData.add(new ItemRow(area.getAreaName()));
+            }
+        } else if(navigationPosition.equals("households")){
+            ArrayList<Areas> areas = regions.getAreas();
+            ArrayList<Households> households = areas.get(currentArea).getHouseholds();
+            households.remove(p);
+            itemData.clear();
+            for(Households household : households){
+                itemData.add(new ItemRow(household.getHouseholdName()));
+            }
+        } else if(navigationPosition.equals("members")){
+            ArrayList<Areas> areas = regions.getAreas();
+            ArrayList<Households> households = areas.get(currentArea).getHouseholds();
+            ArrayList<String> members = households.get(currentHousehold).getMembers();
+            members.remove(p);
+            itemData.clear();
+            for(String member : members){
+                itemData.add(new ItemRow(member));
+            }
+        }
+        try{
+            KVStore.removeValue("Field");
+            KVStore.storeValue("Field",regions);
+        }catch (KVStorageException e){
+
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void editRow(int p){
@@ -69,7 +103,6 @@ public class FragmentOne extends Fragment {
 
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
-        householdsList = new ArrayList<String>();
 
         KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
@@ -95,17 +128,17 @@ public class FragmentOne extends Fragment {
 
             @Override
             public boolean shouldDelete(String key) {
-                return false;
+                return true;
             }
 
             @Override
             public void willDelete(String key) {
-
+                System.out.println(key + " deleting");
             }
 
             @Override
             public void didDelete(String key) {
-
+                System.out.println(key + " was deleted");
             }
 
 
@@ -190,6 +223,7 @@ public class FragmentOne extends Fragment {
 
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "households";
+                currentArea = position;
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<Households> households = areas.get(position).getHouseholds();
 
@@ -279,6 +313,7 @@ public class FragmentOne extends Fragment {
 
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "members";
+                currentHousehold = position;
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<String> members = areas.get(i).getHouseholds().get(position).getMembers();
 
@@ -324,7 +359,8 @@ public class FragmentOne extends Fragment {
     public void buildRegion(){
         try {
             String json = JSONUtilities.stringify(KVStore.getValue("Field"));
-
+            System.out.println("Loading Areas");
+            System.out.println(json);
             Gson gson = new GsonBuilder().create();
             regions = gson.fromJson(json,Region.class);
             ArrayList<Areas> areas = regions.getAreas();
@@ -386,6 +422,7 @@ public class FragmentOne extends Fragment {
         }
         adapter.notifyDataSetChanged();
         try{
+            KVStore.removeValue("Field");
             KVStore.storeValue("Field",regions);
         }
         catch (KVStorageException e){
