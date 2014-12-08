@@ -29,6 +29,7 @@ public class ItemAdapter extends ArrayAdapter {
     Context context;
     int layoutResID;
     FragmentOne fragmentOne;
+    public int buttonWidth;
 
     public ItemAdapter(Context context, int layoutResourceId,List data,FragmentOne fragmentOne) {
         super(context, layoutResourceId, data);
@@ -38,6 +39,7 @@ public class ItemAdapter extends ArrayAdapter {
         this.layoutResID=layoutResourceId;
         this.fragmentOne = fragmentOne;
 
+
         // TODO Auto-generated constructor stub
     }
 
@@ -46,7 +48,7 @@ public class ItemAdapter extends ArrayAdapter {
 
         NewsHolder holder = null;
         View row = convertView;
-        holder = null;
+
 
         if(row == null)
         {
@@ -59,6 +61,7 @@ public class ItemAdapter extends ArrayAdapter {
             holder.icon=(ImageView)row.findViewById(R.id.example_image);
             holder.button2=(Button)row.findViewById(R.id.swipe_button2);
             holder.button3=(Button)row.findViewById(R.id.swipe_button3);
+
             row.setTag(holder);
         }
         else
@@ -66,11 +69,13 @@ public class ItemAdapter extends ArrayAdapter {
             holder = (NewsHolder)row.getTag();
         }
 
+
+
         ItemRow itemdata = (ItemRow)data.get(position);
         holder.itemName.setText(itemdata.getItemName());
         holder.icon.setImageDrawable(itemdata.getIcon());
 
-
+        buttonWidth = holder.button2.getWidth();
         holder.button2.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -92,6 +97,8 @@ public class ItemAdapter extends ArrayAdapter {
         return row;
 
     }
+
+
 
     static class NewsHolder{
 

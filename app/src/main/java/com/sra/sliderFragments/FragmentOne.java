@@ -2,16 +2,20 @@ package com.sra.sliderFragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,8 +58,17 @@ public class FragmentOne extends Fragment {
     View view;
     DeleteRecord markedForDeletion;
     public String navigationPosition;
+    private float buttonWidth;
     public FragmentOne() {
 
+    }
+
+    public void setButtonWidth(float buttonWidth) {
+        this.buttonWidth = buttonWidth;
+    }
+
+    public float getButtonWidth() {
+        return buttonWidth;
     }
 
     public void deleteRow(int p){
@@ -110,7 +123,7 @@ public class FragmentOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        buttonWidth = 0;
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
 
@@ -188,12 +201,24 @@ public class FragmentOne extends Fragment {
 
 
     public void setListener(){
+
+        WindowManager wm = (WindowManager) getActivity().getBaseContext().getSystemService(Context.WINDOW_SERVICE);
+
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        int width = size.x;
+
+
+
+
         //These are the swipe listview settings. you can change these
         //setting as your requrement
         swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
         swipelistview.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
         swipelistview.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
-        swipelistview.setOffsetLeft(convertDpToPixel(210f)); // left side offset
+
         swipelistview.setOffsetRight(convertDpToPixel(0f)); // right side offset
         swipelistview.setAnimationTime(60); // animarion time
         swipelistview.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
@@ -236,9 +261,8 @@ public class FragmentOne extends Fragment {
                 currentArea = position;
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<Households> households = areas.get(position).getHouseholds();
-
+                itemData.clear();
                 for(Households houses : households){
-                    itemData.clear();
                     itemData.add(new ItemRow(houses.getHouseholdName()));
                 }
 
@@ -250,8 +274,6 @@ public class FragmentOne extends Fragment {
                     }
                 });
                 button.setText("Add Household");
-
-                adapter.getItem(position);
 
                 adapter.notifyDataSetChanged();
                 changeListener(position);
@@ -282,6 +304,15 @@ public class FragmentOne extends Fragment {
         }
 
         adapter.notifyDataSetChanged();
+
+        ItemAdapter itemAdapter = (ItemAdapter) swipelistview.getAdapter();
+        System.out.println(itemAdapter);
+        View child = itemAdapter.getView(0,null,swipelistview);
+        child.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        buttonWidth = child.getMeasuredWidth();
+        System.out.println(buttonWidth);
+        float space = (float) ((width - convertDpToPixel(buttonWidth)));
+        swipelistview.setOffsetLeft(space); // left side offset
 
     }
 
