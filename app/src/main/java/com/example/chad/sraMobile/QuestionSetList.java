@@ -11,6 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.sra.objects.QuestionSet;
+import com.sra.objects.QuestionSetBank;
 
 import org.quickconnectfamily.kvkit.kv.KVStore;
 import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
@@ -85,7 +86,7 @@ public class QuestionSetList extends Activity {
     public void loadQuestionSets() {
         questionSetTable.removeAllViews();
 
-        ArrayList<QuestionSet> questionSets = QuestionSet.getQuestionSets();
+        ArrayList<QuestionSet> questionSets = QuestionSetBank.getQuestionSets();
         for (final QuestionSet qs : questionSets) {
             final TableRow row = new TableRow(getBaseContext());
 
@@ -107,7 +108,7 @@ public class QuestionSetList extends Activity {
                 @Override
                 public void onClick(View view) {
                     questionSetTable.removeView(row);
-                    QuestionSet.deleteQuestionSet(qs);
+                    QuestionSetBank.deleteQuestionSet(qs);
                 }
             });
 

@@ -16,6 +16,7 @@ import com.example.chad.sraMobile.DataGather;
 import com.example.chad.sraMobile.EditQuestionSet;
 import com.example.chad.sraMobile.R;
 import com.sra.objects.QuestionSet;
+import com.sra.objects.QuestionSetBank;
 
 import org.quickconnectfamily.kvkit.kv.KVStore;
 import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
@@ -108,7 +109,7 @@ public class FragmentFour extends Fragment {
     public void loadQuestionSets() {
         questionSetTable.removeAllViews();
 
-        ArrayList<QuestionSet> questionSets = QuestionSet.getQuestionSets();
+        ArrayList<QuestionSet> questionSets = QuestionSetBank.getQuestionSets();
         for (final QuestionSet qs : questionSets) {
             final TableRow row = new TableRow(getActivity());
 
@@ -130,7 +131,7 @@ public class FragmentFour extends Fragment {
                 @Override
                 public void onClick(View view) {
                     questionSetTable.removeView(row);
-                    QuestionSet.deleteQuestionSet(qs);
+                    QuestionSetBank.deleteQuestionSet(qs);
                 }
             });
 

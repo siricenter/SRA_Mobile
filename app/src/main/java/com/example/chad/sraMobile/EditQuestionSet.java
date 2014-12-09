@@ -17,6 +17,7 @@ import android.widget.TableRow;
 
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
+import com.sra.objects.QuestionSetBank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class EditQuestionSet extends Activity {
             questionSet = new QuestionSet(questionSetName, "");
         }
         else {
-            questionSet = QuestionSet.getQuestionSet(questionSetName);
+            questionSet = QuestionSetBank.getQuestionSet(questionSetName);
         }
         questionSetNameField = (EditText) findViewById(R.id.question_set_name_field);
         questionSetNameField.setText(questionSet.getName());
@@ -109,10 +110,10 @@ public class EditQuestionSet extends Activity {
     public void save() {
         questionSet.setName(questionSetNameField.getText().toString());
         if (isNewQuestionSet) {
-            QuestionSet.addQuestionSet(questionSet);
+            QuestionSetBank.addQuestionSet(questionSet);
             isNewQuestionSet = false;
         }
-        QuestionSet.saveQuestionSets();
+        QuestionSetBank.saveQuestionSets();
     }
 
     public void loadQuestions() {

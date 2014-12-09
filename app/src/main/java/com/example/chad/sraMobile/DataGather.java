@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
+import com.sra.objects.QuestionSetBank;
 
 public class DataGather extends FragmentActivity {
 
@@ -33,7 +34,7 @@ public class DataGather extends FragmentActivity {
         //String json = "";
         //Gson gson = new GsonBuilder().create();
         //questionSet = gson.fromJson(json, QuestionSet.class);
-        questionSet = QuestionSet.getQuestionSets().get(0);
+        questionSet = QuestionSetBank.getQuestionSets().get(0);
         numQuestions = questionSet.getQuestions().size();
 
         progressView = (TextView) findViewById(R.id.question_progress_view);
