@@ -67,8 +67,11 @@ public class DashBoard extends Activity {
 
         dataList.add(new DrawerItem("Dash", R.drawable.dashboard));
         dataList.add(new DrawerItem("Areas",R.drawable.map));
-        dataList.add(new DrawerItem("Stats",R.drawable.stats));
         dataList.add(new DrawerItem("Q Sets",R.drawable.questionmark));
+        dataList.add(new DrawerItem("Notes",android.R.drawable.ic_menu_edit));
+        dataList.add(new DrawerItem("Stats",R.drawable.stats));
+
+
 
 
 
@@ -106,34 +109,6 @@ public class DashBoard extends Activity {
 
 
     }
-
-    public void areaWasSelected() {
-
-    }
-
-    public void createArea(MenuItem item){
-    }
-
-    public void goToInterview(){
-    }
-
-    public void addButton(){
-    }
-
-    public void clearHouseholdsFromView() {
-    }
-
-    public void loadHouseholdsIntoView(){
-    }
-    public void loadMembersIntoView(){
-    }
-
-    public void goBack(MenuItem item){
-
-    }
-    public void createMember(MenuItem item){
-    }
-
 
 
     public void syncDatabase(MenuItem item){
@@ -229,11 +204,6 @@ public class DashBoard extends Activity {
     }
 
     public void logOut(MenuItem menuItem){
-
-    }
-
-
-    public void addHousehold(MenuItem item){
 
     }
 

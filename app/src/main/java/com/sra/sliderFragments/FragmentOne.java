@@ -63,13 +63,6 @@ public class FragmentOne extends Fragment {
 
     }
 
-    public void setButtonWidth(float buttonWidth) {
-        this.buttonWidth = buttonWidth;
-    }
-
-    public float getButtonWidth() {
-        return buttonWidth;
-    }
 
     public void deleteRow(int p){
 
@@ -116,7 +109,75 @@ public class FragmentOne extends Fragment {
     }
 
     public void editRow(int p){
-        System.out.println(p);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final EditText input = new EditText(getActivity());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        final int pos = p;
+        input.setHint("Name");
+        builder.setView(input);
+        if(navigationPosition.equals("areas")){
+            builder.setTitle("Edit The Area Name");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    regions.getAreas().get(pos).setAreaName(input.getText().toString());
+                    ArrayList<Areas> areas = regions.getAreas();
+                    itemData.clear();
+                    for(Areas area : areas){
+                        itemData.add(new ItemRow(area.getAreaName()));
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+        } else if(navigationPosition.equals("households")){
+            builder.setTitle("Edit The Household Name");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                regions.getAreas().get(currentArea).getHouseholds().get(pos).setHouseholdName(input.getText().toString());
+                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Households> households = areas.get(currentArea).getHouseholds();
+                itemData.clear();
+                for(Households household : households){
+                    itemData.add(new ItemRow(household.getHouseholdName()));
+                }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+        } else if(navigationPosition.equals("members")){
+            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().set(pos,input.getText().toString());
+            ArrayList<Areas> areas = regions.getAreas();
+            ArrayList<Households> households = areas.get(currentArea).getHouseholds();
+            ArrayList<String> members = households.get(currentHousehold).getMembers();
+            itemData.clear();
+            for(String mb : members){
+                itemData.add(new ItemRow(mb));
+            }
+        }
+        try{
+            KVStore.removeValue("Field");
+            KVStore.storeValue("Field",regions);
+        }catch (KVStorageException e){
+
+        }
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -192,9 +253,6 @@ public class FragmentOne extends Fragment {
         KVStore.setActivity(getActivity().getApplication());
         buildRegion();
         setListener();
-        //loadAreasIntoView();
-
-
 
         return view;
     }
