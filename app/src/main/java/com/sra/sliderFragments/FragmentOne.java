@@ -161,7 +161,7 @@ public class FragmentOne extends Fragment {
             builder.show();
 
         } else if(navigationPosition.equals("members")){
-            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().set(pos,input.getText().toString());
+            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().set(pos, input.getText().toString());
             ArrayList<Areas> areas = regions.getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
             ArrayList<String> members = households.get(currentHousehold).getMembers();
@@ -505,11 +505,103 @@ public class FragmentOne extends Fragment {
     }
 
     public void addHousehold(){
+        final Households household = new Households();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Enter The Household Name");
+
+        // Set up the input
+        final EditText input = new EditText(getActivity());
+        final EditText inputMember = new EditText(getActivity());
+        input.setHint("Name");
+        inputMember.setHint("Name of Head of household");
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        inputMember.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setView(inputMember);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                household.setHouseholdName(input.getText().toString());
+                household.addMember(inputMember.getText().toString());
+                regions.getAreas().get(currentArea).addHousehold(household);
+                reloadHouseholdsIntoView();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     public void addMember(){
 
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Enter The Member's Name");
+
+        // Set up the input
+        final EditText input = new EditText(getActivity());
+        input.setHint("Name");
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).addMember(input.getText().toString());
+                reloadMembersIntoView();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void reloadMembersIntoView(){
+        ArrayList<String> members = regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers();
+        itemData.clear();
+        for(String member : members){
+            itemData.add(new ItemRow(member));
+        }
+        adapter.notifyDataSetChanged();
+        try{
+            KVStore.removeValue("Field");
+            KVStore.storeValue("Field",regions);
+        }
+        catch (KVStorageException e){
+
+        }
+    }
+
+    public void reloadHouseholdsIntoView(){
+        ArrayList<Households> households = regions.getAreas().get(currentArea).getHouseholds();
+        itemData.clear();
+        for(Households houses : households){
+            itemData.add(new ItemRow(houses.getHouseholdName()));
+        }
+        adapter.notifyDataSetChanged();
+        try{
+            KVStore.removeValue("Field");
+            KVStore.storeValue("Field",regions);
+        }
+        catch (KVStorageException e){
+
+        }
     }
 
     public void reloadAreasIntoView(){
