@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.chad.sraMobile.MyActivity"
+            android:name=".MyActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.login"
+            android:name=".login"
             android:label="@string/title_activity_login" >
         </activity>
 
@@ -28,12 +28,11 @@
             android:value="sra.db" />
 
         <activity
-            android:name="com.example.chad.sraMobile.DashBoard"
-            android:label="@string/title_activity_dash_board">
-
+            android:name=".DashBoard"
+            android:label="@string/title_activity_dash_board" >
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.InterviewActivity"
+            android:name=".InterviewActivity"
             android:label="@string/title_activity_interview" >
         </activity>
         <activity
@@ -41,12 +40,16 @@
             android:label="@string/title_activity_edit_question_set" >
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.EditQuestion"
+            android:name=".EditQuestion"
             android:label="@string/title_activity_edit_question" >
         </activity>
         <activity
-            android:name="com.example.chad.sraMobile.QuestionSetList"
+            android:name=".QuestionSetList"
             android:label="@string/title_activity_question_set_list" >
+        </activity>
+        <activity
+            android:name=".DataGather"
+            android:label="@string/title_activity_data_gather" >
         </activity>
     </application>
 

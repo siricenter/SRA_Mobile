@@ -75,5 +75,6 @@
     </string-array>
 
     <string name="title_activity_question_set_list">QuestionSetList</string>
+    <string name="title_activity_data_gather">DataGather</string>
 
 </resources>

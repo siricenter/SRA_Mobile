@@ -12,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.chad.sraMobile.DataGather;
 import com.example.chad.sraMobile.EditQuestionSet;
 import com.example.chad.sraMobile.R;
 import com.sra.objects.QuestionSet;
@@ -58,6 +59,15 @@ public class FragmentFour extends Fragment {
             @Override
             public void onClick(View view) {
                 addQuestionSet();
+            }
+        });
+
+        Button tempButton = (Button) view.findViewById(R.id.go_to_data_gather_button);
+        tempButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), DataGather.class);
+                startActivity(intent);
             }
         });
 
