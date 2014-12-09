@@ -1,17 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffd2e8e6"
+    android:background="#fff"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp"
     tools:context="com.example.chad.sraMobile.DataGatherQuestionFragment">
 
-    <TextView
+    <TableLayout
+        android:id="@+id/question_fragment_data_point_table"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Question" />
+        android:layout_height="fill_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/question_fragment_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Base.SearchResult.Title"
+            android:text="Question" />
 
-</FrameLayout>
+    </TableLayout>
+
+</ScrollView>

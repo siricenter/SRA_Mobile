@@ -329,7 +329,7 @@ public class login extends Activity {
                                                                  Question question = new Question(questions.getRef().toString());
                                                                  for (DataSnapshot datapoints : questions.child("Data Points").getChildren()) {
                                                                      Datapoint newDatapoint = new Datapoint();
-                                                                     newDatapoint.setAnswer(datapoints.child("Answer").getValue().toString());
+                                                                     newDatapoint.setSingleAnswer(datapoints.child("Answer").getValue().toString());
                                                                      newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
                                                                      newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
                                                                      question.addDataPoint(newDatapoint);

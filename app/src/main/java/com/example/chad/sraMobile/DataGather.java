@@ -1,5 +1,6 @@
 package com.example.chad.sraMobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,9 +12,13 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.TextView;
 
+import com.sra.objects.Question;
+import com.sra.objects.QuestionSet;
+
 public class DataGather extends FragmentActivity {
 
     private int numQuestions;
+    private QuestionSet questionSet;
 
     private TextView progressView;
     private ViewPager mPager;
@@ -24,14 +29,16 @@ public class DataGather extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_gather);
 
-        numQuestions = 5;
-//        questionFragments = new ArrayList<DataGatherQuestionFragment>();
-//        for (int i = 0; i < numQuestions; i++) {
-//            DataGatherQuestionFragment frag = new DataGatherQuestionFragment();
-//            questionFragments.add(frag);
-//        }
+        Intent intent = getIntent();
+        //String json = "";
+        //Gson gson = new GsonBuilder().create();
+        //questionSet = gson.fromJson(json, QuestionSet.class);
+        questionSet = QuestionSet.getQuestionSets().get(0);
+        numQuestions = questionSet.getQuestions().size();
 
         progressView = (TextView) findViewById(R.id.question_progress_view);
+        TextView pageTitle = (TextView) findViewById(R.id.question_header_view);
+        pageTitle.setText(questionSet.getName());
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.question_view_pager);
@@ -63,6 +70,10 @@ public class DataGather extends FragmentActivity {
         progressView.setText(newLabel);
     }
 
+    public Question getQuestion(int index) {
+        return questionSet.getQuestions().get(index);
+    }
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -74,7 +85,11 @@ public class DataGather extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new DataGatherQuestionFragment();
+            Bundle arguments = new Bundle();
+            arguments.putInt("questionIndex", position);
+            DataGatherQuestionFragment fragment = new DataGatherQuestionFragment();
+            fragment.setArguments(arguments);
+            return fragment;
         }
 
         @Override
