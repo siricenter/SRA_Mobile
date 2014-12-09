@@ -40,7 +40,8 @@ public class DashBoard extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
-
+    FragmentManager frgManager;
+    String name;
     List<DrawerItem> dataList;
 
 
@@ -115,7 +116,7 @@ public class DashBoard extends Activity {
     }
 
     public void SelectItem(int position) {
-
+        name = new String();
         Fragment fragment = null;
         Bundle args = new Bundle();
         switch (position) {
@@ -125,9 +126,11 @@ public class DashBoard extends Activity {
                 args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 fragment = new FragmentTwo();
+                name = "Dashboard";
                 break;
             case 1:
                 fragment = new FragmentOne();
+                name = "Areas";
                 break;
             case 2:
                 fragment = new FragmentThree();
@@ -135,6 +138,7 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Questions";
                 break;
             case 3:
                 fragment = new FragmentFour();
@@ -142,6 +146,7 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentFour.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Notes";
                 break;
             case 4:
                 fragment = new FragmentFive();
@@ -149,12 +154,13 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentFive.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Stats";
                 break;
         }
 
         fragment.setArguments(args);
-        FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+        frgManager = getFragmentManager();
+        frgManager.beginTransaction().replace(R.id.content_frame, fragment,name)
                 .commit();
 
         mDrawerList.setItemChecked(position, true);
@@ -207,6 +213,10 @@ public class DashBoard extends Activity {
 
     }
 
+    public void goBack(MenuItem menuItem){
+
+    }
+
     public void goToQuestionGen(MenuItem item){
         Intent intent = new Intent(this,QuestionSetList.class);
         startActivity(intent);
@@ -230,6 +240,33 @@ public class DashBoard extends Activity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Fragment fragment = getFragmentManager().findFragmentByTag(name);
+        if(fragment.isVisible()){
+            if(name.equals("Dashboard")){
+
+            }else if(name.equals("Areas")){
+            FragmentOne fragmentOne = (FragmentOne)fragment;
+                if(fragmentOne.navigationPosition.equals("areas")){
+                    super.onBackPressed();
+                }else if(fragmentOne.navigationPosition.equals("households")){
+                    fragmentOne.setAreaListeners();
+                    fragmentOne.loadAreasIntoView();
+
+                }else if(fragmentOne.navigationPosition.equals("members")){
+                    fragmentOne.loadHouseholdsIntoView();
+                }
+            }else if(name.equals("Questions")){
+
+            }else if(name.equals("Notes")){
+
+            }else if(name.equals("Stats")){
+
+            }
+        }
     }
 
 }

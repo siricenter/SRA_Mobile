@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.chad.sraMobile.R;
@@ -68,6 +69,7 @@ public class FragmentOne extends Fragment {
 
 
         if(navigationPosition.equals("areas")){
+            System.out.println(markedForDeletion);
             markedForDeletion.addArea(regions.getAreas().get(p));
             regions.getAreas().remove(p);
             ArrayList<Areas> areas = regions.getAreas();
@@ -187,7 +189,7 @@ public class FragmentOne extends Fragment {
         buttonWidth = 0;
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
-
+        markedForDeletion = new DeleteRecord();
         KVStoreEventListener listener = new KVStoreEventListener() {
             @Override
             public void errorHappened(String key, Serializable value, Exception e) {
@@ -253,6 +255,7 @@ public class FragmentOne extends Fragment {
         KVStore.setActivity(getActivity().getApplication());
         buildRegion();
         setListener();
+
 
         return view;
     }
@@ -509,17 +512,22 @@ public class FragmentOne extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Enter The Household Name");
+        LinearLayout layout = new LinearLayout(getActivity());
+
 
         // Set up the input
         final EditText input = new EditText(getActivity());
         final EditText inputMember = new EditText(getActivity());
+
         input.setHint("Name");
         inputMember.setHint("Name of Head of household");
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         inputMember.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-        builder.setView(inputMember);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(input);
+        layout.addView(inputMember);
+        builder.setView(layout);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -588,6 +596,27 @@ public class FragmentOne extends Fragment {
         }
     }
 
+    public void loadHouseholdsIntoView(){
+        ArrayList<Households> households = regions.getAreas().get(currentArea).getHouseholds();
+        itemData.clear();
+        for(Households houses : households){
+            itemData.add(new ItemRow(houses.getHouseholdName()));
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void loadAreasIntoView(){
+        ArrayList<Areas> areas = regions.getAreas();
+        areasList.clear();
+        itemData.clear();
+        for(Areas area : areas){
+            itemData.add( new ItemRow(area.getAreaName()));
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
+
     public void reloadHouseholdsIntoView(){
         ArrayList<Households> households = regions.getAreas().get(currentArea).getHouseholds();
         itemData.clear();
@@ -620,5 +649,91 @@ public class FragmentOne extends Fragment {
 
         }
     }
+
+    public void setAreaListeners(){
+        Button button = (Button)view.findViewById(R.id.button3);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addArea();
+            }
+        });
+        button.setText("Add Area");
+
+        swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+                swipelistview.closeOpenedItems();
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("swipe", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(final int position) {
+                Log.d("swipe", String.format("onClickFrontView %d", position));
+
+                //swipelistview.openAnimate(position); //when you touch front view it will open
+                navigationPosition = "households";
+                currentArea = position;
+                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Households> households = areas.get(position).getHouseholds();
+                itemData.clear();
+                for(Households houses : households){
+                    itemData.add(new ItemRow(houses.getHouseholdName()));
+                }
+
+                Button button = (Button)view.findViewById(R.id.button3);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        addHousehold();
+                    }
+                });
+                button.setText("Add Household");
+
+                adapter.notifyDataSetChanged();
+                changeListener(position);
+
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("swipe", String.format("onClickBackView %d", position));
+
+                swipelistview.closeAnimate(position);//when you touch back view it will close
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+
+            }
+
+
+
+        });
+    }
+
+
+
 }
 
