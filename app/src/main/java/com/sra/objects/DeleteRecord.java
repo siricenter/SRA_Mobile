@@ -11,7 +11,7 @@ public class DeleteRecord implements Serializable {
     private ArrayList <Households> deletedHouseholds;
     private ArrayList <Member> deletedMembers;
     private ArrayList <QuestionSet> removedQuestionSets;
-    private ArrayList <Questions> removedQuestions;
+    private ArrayList <Question> removedQuestions;
     private ArrayList <Datapoint> removedDatapoints;
 
 
@@ -27,7 +27,7 @@ public class DeleteRecord implements Serializable {
         return deletedHouseholds;
     }
 
-    public ArrayList<Questions> getRemovedQuestions() {
+    public ArrayList<Question> getRemovedQuestions() {
         return removedQuestions;
     }
 
@@ -55,7 +55,7 @@ public class DeleteRecord implements Serializable {
         removedQuestionSets.add(questionSet);
     }
 
-    public void addQuestion(Questions questions){
+    public void addQuestion(Question questions){
         removedQuestions.add(questions);
     }
 
@@ -68,7 +68,7 @@ public class DeleteRecord implements Serializable {
         this.deletedAreas = new ArrayList<Areas>();
         this.deletedHouseholds = new ArrayList<Households>();
         this.removedDatapoints = new ArrayList<Datapoint>();
-        this.removedQuestions = new ArrayList<Questions>();
+        this.removedQuestions = new ArrayList<Question>();
         this.removedQuestionSets = new ArrayList<QuestionSet>();
     }
 }
