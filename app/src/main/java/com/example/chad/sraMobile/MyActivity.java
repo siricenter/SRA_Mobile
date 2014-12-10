@@ -3,12 +3,9 @@ package com.example.chad.sraMobile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.sra.objects.loginObject;
 
 import org.quickconnectfamily.kvkit.kv.KVStore;
 
@@ -24,15 +21,12 @@ public class MyActivity extends Activity {
         KVStore.setActivity(getApplication());
         try{
             HashMap hashMap = (HashMap)KVStore.getValue("User");
-            System.out.println(hashMap);
             if(hashMap != null){
                 goToDashboard();
             }
-        }catch (Exception e){
+        }catch (NullPointerException e){
 
         }
-
-
     }
 
 

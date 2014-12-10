@@ -55,7 +55,11 @@ public class EditQuestion extends Activity {
         if (isNewQuestion) {
             questionSet = QuestionSetBank.getQuestionSet(questionSetName);
             questionName = "";
+<<<<<<< HEAD
             question = new Question("");
+=======
+            question = new Questions();
+>>>>>>> dashboard
             question.setName(questionName);
             questionSet.addQuestion(question);
         }

@@ -25,6 +25,8 @@ import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
+import org.quickconnectfamily.kvkit.kv.KVStore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class DashBoard extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
-
+    FragmentManager frgManager;
+    String name;
     List<DrawerItem> dataList;
 
 
@@ -67,8 +70,11 @@ public class DashBoard extends Activity {
 
         dataList.add(new DrawerItem("Dash", R.drawable.dashboard));
         dataList.add(new DrawerItem("Areas",R.drawable.map));
-        dataList.add(new DrawerItem("Stats",R.drawable.stats));
         dataList.add(new DrawerItem("Q Sets",R.drawable.questionmark));
+        dataList.add(new DrawerItem("Notes",android.R.drawable.ic_menu_edit));
+        dataList.add(new DrawerItem("Stats",R.drawable.stats));
+
+
 
 
 
@@ -107,40 +113,12 @@ public class DashBoard extends Activity {
 
     }
 
-    public void areaWasSelected() {
-
-    }
-
-    public void createArea(MenuItem item){
-    }
-
-    public void goToInterview(){
-    }
-
-    public void addButton(){
-    }
-
-    public void clearHouseholdsFromView() {
-    }
-
-    public void loadHouseholdsIntoView(){
-    }
-    public void loadMembersIntoView(){
-    }
-
-    public void goBack(MenuItem item){
-
-    }
-    public void createMember(MenuItem item){
-    }
-
-
 
     public void syncDatabase(MenuItem item){
     }
 
     public void SelectItem(int position) {
-
+        name = new String();
         Fragment fragment = null;
         Bundle args = new Bundle();
         switch (position) {
@@ -150,9 +128,11 @@ public class DashBoard extends Activity {
                 args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
                 fragment = new FragmentTwo();
+                name = "Dashboard";
                 break;
             case 1:
                 fragment = new FragmentOne();
+                name = "Areas";
                 break;
             case 2:
                 fragment = new FragmentThree();
@@ -160,6 +140,7 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentThree.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Questions";
                 break;
             case 3:
                 fragment = new FragmentFour();
@@ -167,6 +148,7 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentFour.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Notes";
                 break;
             case 4:
                 fragment = new FragmentFive();
@@ -174,12 +156,13 @@ public class DashBoard extends Activity {
                         .getItemName());
                 args.putInt(FragmentFive.IMAGE_RESOURCE_ID, dataList.get(position)
                         .getImgResID());
+                name = "Stats";
                 break;
         }
 
         fragment.setArguments(args);
-        FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+        frgManager = getFragmentManager();
+        frgManager.beginTransaction().replace(R.id.content_frame, fragment,name)
                 .commit();
 
         mDrawerList.setItemChecked(position, true);
@@ -229,11 +212,17 @@ public class DashBoard extends Activity {
     }
 
     public void logOut(MenuItem menuItem){
+        try{
+            KVStore.setActivity(getApplication());
+            KVStore.removeValue("User");
+        }catch (NullPointerException e){
 
+        }
+        Intent intent = new Intent(this,MyActivity.class);
+        startActivity(intent);
     }
 
-
-    public void addHousehold(MenuItem item){
+    public void goBack(MenuItem menuItem){
 
     }
 
@@ -252,6 +241,7 @@ public class DashBoard extends Activity {
         }
     }
 
+
     public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -259,6 +249,34 @@ public class DashBoard extends Activity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Fragment fragment = getFragmentManager().findFragmentByTag(name);
+        if(fragment.isVisible()){
+            if(name.equals("Dashboard")){
+
+            }else if(name.equals("Areas")){
+            FragmentOne fragmentOne = (FragmentOne)fragment;
+                if(fragmentOne.navigationPosition.equals("areas")){
+                    super.onBackPressed();
+                }else if(fragmentOne.navigationPosition.equals("households")){
+                    fragmentOne.setAreaListeners();
+                    fragmentOne.loadAreasIntoView();
+
+                }else if(fragmentOne.navigationPosition.equals("members")){
+                    fragmentOne.setHouseholdListeners();
+                    fragmentOne.loadHouseholdsIntoView();
+                }
+            }else if(name.equals("Questions")){
+
+            }else if(name.equals("Notes")){
+
+            }else if(name.equals("Stats")){
+
+            }
+        }
     }
 
 }
