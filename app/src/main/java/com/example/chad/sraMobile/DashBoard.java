@@ -25,7 +25,6 @@ import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
-import org.quickconnectfamily.kvkit.kv.KVStorageException;
 import org.quickconnectfamily.kvkit.kv.KVStore;
 
 import java.util.ArrayList;
