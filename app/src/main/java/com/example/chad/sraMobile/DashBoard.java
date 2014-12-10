@@ -25,6 +25,9 @@ import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
+import org.quickconnectfamily.kvkit.kv.KVStorageException;
+import org.quickconnectfamily.kvkit.kv.KVStore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,7 +213,14 @@ public class DashBoard extends Activity {
     }
 
     public void logOut(MenuItem menuItem){
+        try{
+            KVStore.setActivity(getApplication());
+            KVStore.removeValue("User");
+        }catch (NullPointerException e){
 
+        }
+        Intent intent = new Intent(this,MyActivity.class);
+        startActivity(intent);
     }
 
     public void goBack(MenuItem menuItem){
@@ -257,6 +267,7 @@ public class DashBoard extends Activity {
                     fragmentOne.loadAreasIntoView();
 
                 }else if(fragmentOne.navigationPosition.equals("members")){
+                    fragmentOne.setHouseholdListeners();
                     fragmentOne.loadHouseholdsIntoView();
                 }
             }else if(name.equals("Questions")){

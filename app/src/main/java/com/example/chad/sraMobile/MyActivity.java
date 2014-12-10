@@ -24,15 +24,12 @@ public class MyActivity extends Activity {
         KVStore.setActivity(getApplication());
         try{
             HashMap hashMap = (HashMap)KVStore.getValue("User");
-            System.out.println(hashMap);
             if(hashMap != null){
                 goToDashboard();
             }
-        }catch (Exception e){
+        }catch (NullPointerException e){
 
         }
-
-
     }
 
 
