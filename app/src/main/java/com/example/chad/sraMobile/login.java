@@ -268,7 +268,7 @@ public class login extends Activity {
                                        for(DataSnapshot q: qs.child("Questions").getChildren()){
                                            Question questions = new Question(q.getRef().toString());
                                                      questions.setName(q.child("Name").getValue().toString());
-                                                     questions.setMultiUse(true);
+                                                      questions.setMultiUse(true);
                                            for (DataSnapshot datapoints : q.child("Data Points").getChildren()) {
                                                Datapoint newDatapoint = new Datapoint();
                                                newDatapoint.addAnswer(datapoints.child("Answer").getValue().toString());
