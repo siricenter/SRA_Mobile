@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.sra.helperClasses.SyncCompare;
 import com.sra.helperClasses.SyncDownlaod;
+import com.sra.helperClasses.SyncUpload;
 import com.sra.sliderFragments.CustomDrawerAdapter;
 import com.sra.sliderFragments.DrawerItem;
 import com.sra.sliderFragments.FragmentFive;
@@ -119,9 +120,9 @@ public class DashBoard extends Activity {
     public void syncDatabase(MenuItem item){
         SyncDownlaod downlaod = new SyncDownlaod(this);
                      downlaod.beginSync();
-        SyncCompare compare = new SyncCompare(downlaod.getRegion());
-                    compare.startCompare();
-
+        FragmentOne one = (FragmentOne)getFragmentManager().findFragmentByTag("Areas");
+        SyncUpload upload = new SyncUpload(downlaod.getRegion(),one.markedForDeletion);
+                   upload.startUpload();
     }
 
     public void SelectItem(int position) {

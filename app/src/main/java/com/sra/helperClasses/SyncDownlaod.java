@@ -37,6 +37,7 @@ public class SyncDownlaod  {
     Toast toast;
     int passes;
     private  Region region;
+    loginObject user;
     static String organization = "SRA";
 
     public SyncDownlaod(Activity activity){
@@ -44,7 +45,6 @@ public class SyncDownlaod  {
     }
 
     public void beginSync() {
-        loginObject user = new loginObject("");
         context = activity.getBaseContext();
         CharSequence text = "Beginning Download";
         int duration = Toast.LENGTH_SHORT;
@@ -53,8 +53,8 @@ public class SyncDownlaod  {
         toast.show();
 
         //Start a reference to the base firebase
-
-        Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com/Organization");
+        Firebase.setAndroidContext(activity);
+        final Firebase ref = new Firebase("https://intense-inferno-7741.firebaseio.com/Organization");
         //authenticate user using firebase.
         try{
             String json = JSONUtilities.stringify(KVStore.getValue("User"));
@@ -65,7 +65,7 @@ public class SyncDownlaod  {
         }
 
 
-        final String password = new String();
+        final
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Enter Password for " + user.getUsername());
@@ -74,14 +74,61 @@ public class SyncDownlaod  {
         final EditText input = new EditText(activity);
         input.setHint("Password");
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setInputType(InputType.TYPE_MASK_VARIATION);
         builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                password.concat(input.getText().toString());
+                String password = input.getText().toString();
+
+                System.out.println(password);
+
+                final String username = user.getUsername().toLowerCase();
+                toast.setText(password);
+                toast.show();
+
+                ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
+                    //Success
+                    @Override
+                    public void onAuthenticated(final AuthData authData) {
+
+                        toast.setText("Authenticating....");
+                        toast.show();
+
+                        //Get reference to User Tree
+                        final String Node = username.split("@")[0];
+                        Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
+                        //Start download from firebase, once
+                        users.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            //Success
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                //loop through Users
+                                System.out.println("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
+                                initialDownload(dataSnapshot);
+                            }
+
+                            //Fail
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                toast.setText(firebaseError.getMessage());
+                                toast.show();
+                            }
+                        });
+                    }
+
+                    //Fail
+                    @Override
+                    public void onAuthenticationError(FirebaseError firebaseError) {
+                        //Hide progress wheel
+                        //display Error
+                        toast.setText(firebaseError.getMessage());
+                        toast.show();
+                    }
+                });
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -94,47 +141,7 @@ public class SyncDownlaod  {
         builder.show();
 
 
-        final String username = user.getUsername();
-        ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
-            //Success
-            @Override
-            public void onAuthenticated(final AuthData authData) {
 
-                toast.setText("Authenticating....");
-                toast.show();
-
-                //Get reference to User Tree
-                final String Node = username.split("@")[0];
-                Firebase users = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
-                //Start download from firebase, once
-                users.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                    //Success
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //loop through Users
-                        System.out.println("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
-                        initialDownload(dataSnapshot);
-                    }
-
-                    //Fail
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        toast.setText(firebaseError.getMessage());
-                        toast.show();
-                    }
-                });
-            }
-
-            //Fail
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-                //Hide progress wheel
-                //display Error
-                toast.setText(firebaseError.getMessage());
-                toast.show();
-            }
-        });
     }
 
 

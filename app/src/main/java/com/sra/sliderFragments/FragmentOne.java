@@ -52,7 +52,7 @@ public class FragmentOne extends Fragment {
     public int currentArea;
     public int currentHousehold;
     View view;
-    DeleteRecord markedForDeletion;
+    public DeleteRecord markedForDeletion;
     public String navigationPosition;
     private float buttonWidth;
 
