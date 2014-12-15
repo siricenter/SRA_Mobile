@@ -20,6 +20,7 @@ import android.widget.ListView;
 import com.sra.helperClasses.SyncCompare;
 import com.sra.helperClasses.SyncDownlaod;
 import com.sra.helperClasses.SyncUpload;
+import com.sra.objects.Region;
 import com.sra.sliderFragments.CustomDrawerAdapter;
 import com.sra.sliderFragments.DrawerItem;
 import com.sra.sliderFragments.FragmentFive;
@@ -47,6 +48,7 @@ public class DashBoard extends Activity {
     CustomDrawerAdapter adapter;
     FragmentManager frgManager;
     String name;
+    String org;
     List<DrawerItem> dataList;
 
 
@@ -55,7 +57,7 @@ public class DashBoard extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-
+        org = "SRA";
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,10 +121,12 @@ public class DashBoard extends Activity {
 
     public void syncDatabase(MenuItem item){
         SyncDownlaod downlaod = new SyncDownlaod(this);
-                     downlaod.beginSync();
+        SyncCompare compare = new SyncCompare(new Region());
+
         FragmentOne one = (FragmentOne)getFragmentManager().findFragmentByTag("Areas");
-        SyncUpload upload = new SyncUpload(downlaod.getRegion(),one.markedForDeletion);
-                   upload.startUpload();
+        SyncUpload upload = new SyncUpload(compare.getCurrentRegion(),one.markedForDeletion,org);
+        System.out.println(upload.getRegion());
+                upload.startUpload();
     }
 
     public void SelectItem(int position) {
@@ -228,10 +232,6 @@ public class DashBoard extends Activity {
         }
         Intent intent = new Intent(this,MyActivity.class);
         startActivity(intent);
-    }
-
-    public void goBack(MenuItem menuItem){
-
     }
 
     public void goToQuestionGen(MenuItem item){

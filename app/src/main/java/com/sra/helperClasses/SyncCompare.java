@@ -44,6 +44,10 @@ public class SyncCompare {
         }
     }
 
+    public Region getCurrentRegion() {
+        return currentRegion;
+    }
+
     public static Collection Subtract(Collection coll1, Collection coll2)
     {
         Collection result = new ArrayList(coll2);

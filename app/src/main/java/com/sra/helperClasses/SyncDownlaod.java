@@ -192,7 +192,7 @@ public class SyncDownlaod  {
         toast.show();
         final Region usersRegion = new Region();
 
-        for(String rg : info.getRegions()) {
+        for(final String rg : info.getRegions()) {
             toast.setText("Downloading " + rg);
             toast.show();
             for (String ar : info.getAreaNames()) {
@@ -209,6 +209,9 @@ public class SyncDownlaod  {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Areas area = new Areas();
                         area.setAreaName(dataSnapshot.getName());
+                        area.setRegion(rg);
+                        area.setRef(dataSnapshot.getRef().toString());
+
                         DataSnapshot resources = dataSnapshot.child("Resources");
                         for(DataSnapshot household : resources.getChildren()){
                             Households households = new Households();

@@ -351,23 +351,35 @@ public class FragmentOne extends Fragment {
 
     public void addArea(){
         final Areas area = new Areas();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Enter The Area Name");
+        LinearLayout layout = new LinearLayout(getActivity());
+
 
         // Set up the input
         final EditText input = new EditText(getActivity());
+        final EditText inputRegion = new EditText(getActivity());
+
         input.setHint("Name");
+        inputRegion.setHint("Region Name");
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+        inputRegion.setInputType(InputType.TYPE_CLASS_TEXT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(input);
+        layout.addView(inputRegion);
+        builder.setView(layout);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-             area.setAreaName(input.getText().toString());
-             regions.addArea(area);
-             reloadAreasIntoView();
+                area.setAreaName(input.getText().toString());
+
+                area.setRef("https://intense-inferno-7741.firebaseio.com/Organizations/SRA/Regions/" + inputRegion.getText().toString() + "/Areas/" + area.getAreaName() + "/");
+                regions.addArea(area);
+                reloadAreasIntoView();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

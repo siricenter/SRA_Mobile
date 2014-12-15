@@ -8,6 +8,7 @@ import com.sra.objects.Region;
 import org.json.JSONObject;
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
+import org.quickconnectfamily.kvkit.kv.SearchRunnable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,21 +19,28 @@ import java.util.Iterator;
 public class SyncUpload {
     Region region;
     DeleteRecord deleteRecord;
+    String organization;
 
-    public SyncUpload(Region region,DeleteRecord deleted){
+    public SyncUpload(Region region,DeleteRecord deleted,String org){
                 this.region = region;
                 this.deleteRecord = deleted;
+                this.organization = org;
     }
 
     public void startUpload(){
         Firebase base;
         for(Areas area : region.getAreas()){
+            System.out.println(area);
             base = new Firebase(area.getRef());
             try{
                HashMap map = jsonToMap(JSONUtilities.stringify(area));
-                System.out.println(map);
+                base.setValue(map);
             } catch (JSONException e){}
         }
+    }
+
+    public Region getRegion() {
+        return region;
     }
 
     public static HashMap jsonToMap(String t) throws JSONException {

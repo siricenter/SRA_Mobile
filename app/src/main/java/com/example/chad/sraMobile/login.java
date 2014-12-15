@@ -238,7 +238,7 @@ public class login extends Activity {
             textview.setText("Downloading Region");
             final Region usersRegion = new Region();
 
-            for(String rg : info.getRegions()) {
+            for(final String rg : info.getRegions()) {
                 textview.setText("Downloading " + rg);
                 for (String ar : info.getAreaNames()) {
                     textview.setText("Downloading area " + ar);
@@ -253,6 +253,8 @@ public class login extends Activity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Areas area = new Areas();
                                   area.setAreaName(dataSnapshot.getName());
+                                  area.setRegion(rg);
+                                  area.setRef(dataSnapshot.getRef().toString());
                             DataSnapshot resources = dataSnapshot.child("Resources");
                             for(DataSnapshot household : resources.getChildren()){
                                Households households = new Households();
@@ -288,6 +290,7 @@ public class login extends Activity {
                             passes++;
                             if(passes == info.getRegions().size()){
                                 try {
+                                    KVStore.removeValue("Field");
                                     KVStore.storeValue("Field", usersRegion);
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                                     startActivity(intent);
