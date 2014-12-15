@@ -18,12 +18,9 @@ import java.util.Collection;
 public class SyncCompare {
     private Region newRegion;
     private Region currentRegion;
-    private DataTransfer transfer;
-
-
 
     public SyncCompare(Region region){
-        this.transfer = new DataTransfer();
+
         this.newRegion = region;
         try{
             String json = JSONUtilities.stringify(KVStore.getValue("Field"));
@@ -35,15 +32,7 @@ public class SyncCompare {
         catch (NullPointerException e){}
     }
 
-    public void startCompare(){
-        if(newRegion != null && currentRegion != null){
-            transfer.setAreasToLocal((ArrayList)Subtract(currentRegion.getAreas(),newRegion.getAreas()));
-            transfer.setAreasToFirebase((ArrayList)Subtract(newRegion.getAreas(),currentRegion.getAreas()));
-        }
-        else{
-            throw new NullPointerException();
-        }
-    }
+
 
     public Region getCurrentRegion() {
         return currentRegion;
