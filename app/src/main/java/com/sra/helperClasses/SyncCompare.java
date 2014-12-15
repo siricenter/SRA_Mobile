@@ -32,6 +32,7 @@ public class SyncCompare {
             Gson gson = new GsonBuilder().create();
             this.currentRegion = gson.fromJson(json,Region.class);
         }catch (JSONException e){}
+        catch (NullPointerException e){}
     }
 
     public void startCompare(){
@@ -42,6 +43,10 @@ public class SyncCompare {
         else{
             throw new NullPointerException();
         }
+    }
+
+    public Region getCurrentRegion() {
+        return currentRegion;
     }
 
     public static Collection Subtract(Collection coll1, Collection coll2)

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Households implements Serializable {
     private String householdName;
     private long id;
+    private String ref;
     private ArrayList<Interviews> interviews;
     private ArrayList<String> members;
 
@@ -59,6 +60,14 @@ public class Households implements Serializable {
 
     public String getHouseholdName() {
         return householdName;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+    public String getRef() {
+        return ref;
     }
 }
 

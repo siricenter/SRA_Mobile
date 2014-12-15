@@ -238,7 +238,7 @@ public class login extends Activity {
             textview.setText("Downloading Region");
             final Region usersRegion = new Region();
 
-            for(String rg : info.getRegions()) {
+            for(final String rg : info.getRegions()) {
                 textview.setText("Downloading " + rg);
                 for (String ar : info.getAreaNames()) {
                     textview.setText("Downloading area " + ar);
@@ -253,10 +253,13 @@ public class login extends Activity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Areas area = new Areas();
                                   area.setAreaName(dataSnapshot.getName());
+                                  area.setRegion(rg);
+                                  area.setRef(dataSnapshot.getRef().toString());
                             DataSnapshot resources = dataSnapshot.child("Resources");
                             for(DataSnapshot household : resources.getChildren()){
                                Households households = new Households();
                                           households.setHouseholdName(household.getName());
+                                          households.setRef(household.getRef().toString());
                                for(DataSnapshot members : household.child("Members").getChildren() ){
                                    households.addMember(members.getName());
                                }
@@ -271,7 +274,9 @@ public class login extends Activity {
                                                       questions.setMultiUse(true);
                                            for (DataSnapshot datapoints : q.child("Data Points").getChildren()) {
                                                Datapoint newDatapoint = new Datapoint();
-                                               newDatapoint.addAnswer(datapoints.child("Answer").getValue().toString());
+                                               for(DataSnapshot answer : datapoints.child("Answers").getChildren()){
+                                                   newDatapoint.addAnswer(answer.getValue().toString());
+                                               }
                                                newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
                                                newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
                                                questions.addDataPoint(newDatapoint);
@@ -288,6 +293,7 @@ public class login extends Activity {
                             passes++;
                             if(passes == info.getRegions().size()){
                                 try {
+                                    KVStore.removeValue("Field");
                                     KVStore.storeValue("Field", usersRegion);
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                                     startActivity(intent);

@@ -17,8 +17,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sra.helperClasses.SyncCompare;
 import com.sra.helperClasses.SyncDownlaod;
+import com.sra.helperClasses.SyncUpload;
+import com.sra.objects.DeleteRecord;
+import com.sra.objects.Region;
 import com.sra.sliderFragments.CustomDrawerAdapter;
 import com.sra.sliderFragments.DrawerItem;
 import com.sra.sliderFragments.FragmentFive;
@@ -27,7 +32,11 @@ import com.sra.sliderFragments.FragmentOne;
 import com.sra.sliderFragments.FragmentThree;
 import com.sra.sliderFragments.FragmentTwo;
 
+import org.quickconnectfamily.json.JSONException;
+import org.quickconnectfamily.json.JSONUtilities;
+import org.quickconnectfamily.kvkit.kv.KVStorageException;
 import org.quickconnectfamily.kvkit.kv.KVStore;
+import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +53,10 @@ public class DashBoard extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
+    public DeleteRecord deleteRecord;
     FragmentManager frgManager;
     String name;
+    String org;
     List<DrawerItem> dataList;
 
 
@@ -53,8 +64,23 @@ public class DashBoard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+        KVStore.setActivity(getApplication());
 
+    try{
+        String json = JSONUtilities.stringify(KVStore.getValue("Delete"));
+        Gson gson = new GsonBuilder().create();
+        deleteRecord = gson.fromJson(json,DeleteRecord.class);
+    } catch (JSONException e){}catch (NullPointerException e){
+        deleteRecord = new DeleteRecord();
+        try {
+            KVStore.storeValue("Delete", deleteRecord);
+        }catch (KVStorageException w){
 
+        }catch (NullPointerException w){
+
+        }
+    }
+        org = "SRA";
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,10 +144,18 @@ public class DashBoard extends Activity {
 
     public void syncDatabase(MenuItem item){
         SyncDownlaod downlaod = new SyncDownlaod(this);
-                     downlaod.beginSync();
-        SyncCompare compare = new SyncCompare(downlaod.getRegion());
-                    compare.startCompare();
+        SyncCompare compare = new SyncCompare(new Region());
+        SyncUpload upload = new SyncUpload(compare.getCurrentRegion(),deleteRecord,org,this);
+        System.out.println(upload.getRegion());
+                upload.startUpload();
+                upload.addNewAreaToUser();
+                downlaod.beginSync();
 
+        try {
+            KVStore.setActivity(getApplication());
+            KVStore.removeValue("Field");
+            KVStore.storeValue("Field", downlaod.getRegion());
+        }catch (KVStorageException e){}
     }
 
     public void SelectItem(int position) {
@@ -227,10 +261,6 @@ public class DashBoard extends Activity {
         }
         Intent intent = new Intent(this,MyActivity.class);
         startActivity(intent);
-    }
-
-    public void goBack(MenuItem menuItem){
-
     }
 
     public void goToQuestionGen(MenuItem item){
