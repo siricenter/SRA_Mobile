@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.chad.sraMobile.DashBoard;
 import com.example.chad.sraMobile.R;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
@@ -292,9 +293,9 @@ public class FragmentOne extends Fragment {
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<String> members = areas.get(i).getHouseholds().get(position).getMembers();
 
-
+                itemData.clear();
                 for(String member : members){
-                    itemData.clear();
+
                     itemData.add(new ItemRow(member));
                 }
 
@@ -378,6 +379,9 @@ public class FragmentOne extends Fragment {
                 area.setAreaName(input.getText().toString());
 
                 area.setRef("https://intense-inferno-7741.firebaseio.com/Organizations/SRA/Regions/" + inputRegion.getText().toString() + "/Areas/" + area.getAreaName() + "/");
+                try{
+                    
+                }
                 regions.addArea(area);
                 reloadAreasIntoView();
             }
@@ -666,9 +670,8 @@ public class FragmentOne extends Fragment {
                 ArrayList<Areas> areas = regions.getAreas();
                 ArrayList<String> members = areas.get(currentArea).getHouseholds().get(position).getMembers();
 
-
+                itemData.clear();
                 for(String member : members){
-                    itemData.clear();
                     itemData.add(new ItemRow(member));
                 }
 
@@ -723,8 +726,9 @@ public class FragmentOne extends Fragment {
         } else if(navigationPosition.equals("members")){
             Member member = new Member();
             member.setMemberName(regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().get(p));
-            member.setCurrentArea(regions.getAreas().get(p).getAreaName());
-            member.setCurrentHousehold(regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getHouseholdName());
+            String url = regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getRef();
+                   url = url + "/Members/" + member.getMemberName();
+            member.setRef(url);
             markedForDeletion.addMember(member);
             regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().remove(p);
             ArrayList<Areas> areas = regions.getAreas();
@@ -736,11 +740,15 @@ public class FragmentOne extends Fragment {
             }
         }
         try{
+            KVStore.removeValue("Delete");
+            KVStore.storeValue("Delete",markedForDeletion);
             KVStore.removeValue("Field");
             KVStore.storeValue("Field",regions);
         }catch (KVStorageException e){
 
         }
+        DashBoard dashBoard = (DashBoard)getActivity();
+                  dashBoard.deleteRecord = markedForDeletion;
         adapter.notifyDataSetChanged();
     }
 

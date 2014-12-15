@@ -259,6 +259,7 @@ public class login extends Activity {
                             for(DataSnapshot household : resources.getChildren()){
                                Households households = new Households();
                                           households.setHouseholdName(household.getName());
+                                          households.setRef(household.getRef().toString());
                                for(DataSnapshot members : household.child("Members").getChildren() ){
                                    households.addMember(members.getName());
                                }
@@ -273,7 +274,9 @@ public class login extends Activity {
                                                       questions.setMultiUse(true);
                                            for (DataSnapshot datapoints : q.child("Data Points").getChildren()) {
                                                Datapoint newDatapoint = new Datapoint();
-                                               newDatapoint.addAnswer(datapoints.child("Answer").getValue().toString());
+                                               for(DataSnapshot answer : datapoints.child("Answers").getChildren()){
+                                                   newDatapoint.addAnswer(answer.getValue().toString());
+                                               }
                                                newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
                                                newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
                                                questions.addDataPoint(newDatapoint);
