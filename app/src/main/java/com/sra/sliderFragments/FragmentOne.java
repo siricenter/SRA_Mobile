@@ -31,6 +31,7 @@ import com.sra.objects.DeleteRecord;
 import com.sra.objects.Households;
 import com.sra.objects.Member;
 import com.sra.objects.Region;
+import com.sra.objects.loginObject;
 
 
 import org.quickconnectfamily.json.JSONException;
@@ -380,7 +381,19 @@ public class FragmentOne extends Fragment {
 
                 area.setRef("https://intense-inferno-7741.firebaseio.com/Organizations/SRA/Regions/" + inputRegion.getText().toString() + "/Areas/" + area.getAreaName() + "/");
                 try{
-                    
+                    String json = JSONUtilities.stringify(KVStore.getValue("User"));
+                    Gson gson = new GsonBuilder().create();
+                    loginObject login = gson.fromJson(json,loginObject.class);
+                                login.addToAreas(input.getText().toString());
+                    try{
+                        KVStore.setActivity(getActivity().getApplication());
+                        KVStore.removeValue("User");
+                        KVStore.storeValue("User",login);
+                    }catch (KVStorageException e){
+
+                    }
+                }catch (JSONException e){
+
                 }
                 regions.addArea(area);
                 reloadAreasIntoView();

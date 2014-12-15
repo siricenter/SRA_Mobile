@@ -3,6 +3,8 @@ package com.sra.helperClasses;
 import android.app.Activity;
 
 import com.firebase.client.Firebase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sra.objects.Areas;
 import com.sra.objects.Datapoint;
 import com.sra.objects.DeleteRecord;
@@ -12,6 +14,7 @@ import com.sra.objects.Member;
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
 import com.sra.objects.Region;
+import com.sra.objects.loginObject;
 
 import org.json.JSONObject;
 import org.quickconnectfamily.json.JSONException;
@@ -151,7 +154,16 @@ public class SyncUpload {
     }
 
     public void addNewAreaToUser(){
+        try{
+            String json = JSONUtilities.stringify(KVStore.getValue("User"));
+            Gson gson = new GsonBuilder().create();
+            loginObject login = gson.fromJson(json,loginObject.class);
+            Firebase.setAndroidContext(activity);
+            Firebase base = new Firebase("https://intense-inferno-7741.firebaseio.com/Users");
+            for(String areas : login.getAreaNames()){
 
+            }
+        }catch (JSONException e){}
     }
 
     public void removeDeleted(){
