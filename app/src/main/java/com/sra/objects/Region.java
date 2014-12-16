@@ -34,4 +34,12 @@ public class Region implements Serializable {
     public void addArea(Areas area){
         areas.add(area);
     }
+
+    public Areas getArea(String areaName) {
+        for (Areas a : areas) {
+            if (a.getAreaName().equals(areaName))
+                return a;
+        }
+        return null;
+    }
 }

@@ -31,10 +31,11 @@ public class DataGather extends FragmentActivity {
         setContentView(R.layout.activity_data_gather);
 
         Intent intent = getIntent();
-        //String json = "";
-        //Gson gson = new GsonBuilder().create();
-        //questionSet = gson.fromJson(json, QuestionSet.class);
-        questionSet = QuestionSetBank.getQuestionSets().get(0);
+        String questionSetName = intent.getStringExtra("questionSetName");
+        questionSet = QuestionSetBank.getQuestionSet(questionSetName);
+        if (questionSet == null) {
+            questionSet = new QuestionSet("", "");
+        }
         numQuestions = questionSet.getQuestions().size();
 
         progressView = (TextView) findViewById(R.id.question_progress_view);
