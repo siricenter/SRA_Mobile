@@ -158,8 +158,9 @@ public class SyncUpload {
             String json = JSONUtilities.stringify(KVStore.getValue("User"));
             Gson gson = new GsonBuilder().create();
             loginObject login = gson.fromJson(json,loginObject.class);
+            final String Node = login.getUsername().split("@")[0];
             Firebase.setAndroidContext(activity);
-            Firebase base = new Firebase("https://intense-inferno-7741.firebaseio.com/Users");
+            Firebase base = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node + "/Organizations/" + organization + "/Regions/");
             for(String areas : login.getAreaNames()){
 
             }
