@@ -162,7 +162,7 @@ public class SyncUpload {
             Firebase.setAndroidContext(activity);
             Firebase base = new Firebase("https://intense-inferno-7741.firebaseio.com/Users/" + Node + "/Organizations/" + organization + "/Regions/");
             for(String areas : login.getAreaNames()){
-
+                base.child("South Africa").child("Areas").child(areas).child("Name").setValue(areas);
             }
         }catch (JSONException e){}
     }
