@@ -83,10 +83,8 @@ public class SyncDownlaod  {
             public void onClick(DialogInterface dialog, int which) {
                 String password = input.getText().toString();
 
-                System.out.println(password);
 
                 final String username = user.getUsername().toLowerCase();
-                toast.setText(password);
                 toast.show();
 
                 ref.authWithPassword(username, password, new Firebase.AuthResultHandler() {
@@ -107,7 +105,6 @@ public class SyncDownlaod  {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 //loop through Users
-                                System.out.println("https://intense-inferno-7741.firebaseio.com/Users/" + Node);
                                 initialDownload(dataSnapshot);
                             }
 
@@ -139,9 +136,6 @@ public class SyncDownlaod  {
         });
 
         builder.show();
-
-
-
     }
 
 
@@ -230,7 +224,10 @@ public class SyncDownlaod  {
                                         questions.setMultiUse(true);
                                         for (DataSnapshot datapoints : q.child("Data Points").getChildren()) {
                                             Datapoint newDatapoint = new Datapoint();
-                                            newDatapoint.addAnswer(datapoints.child("Answer").getValue().toString());
+                                            for(DataSnapshot answer :datapoints.child("Answers").getChildren())
+                                            {
+                                                newDatapoint.addAnswer(answer.child("Value").getValue().toString());
+                                            }
                                             newDatapoint.setDataType(datapoints.child("Type").getValue().toString());
                                             newDatapoint.setLabel(datapoints.child("Label").getValue().toString());
                                             questions.addDataPoint(newDatapoint);

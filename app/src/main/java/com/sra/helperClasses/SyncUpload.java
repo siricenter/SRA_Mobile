@@ -61,6 +61,7 @@ public class SyncUpload {
                     Firebase houses = base.child("Resources").child(household.getName());
                     houses.child("Name").setValue(household.getName());
                     if (household.Interviews.size() > 0) {
+
                         for (FirebaseInterview interview : household.Interviews) {
                             Firebase inter = houses.child("Interviews").push();
                             inter.child("Date Created").setValue(interview.getDateCreated());
@@ -189,9 +190,11 @@ public class SyncUpload {
             base.removeValue();
         }
         deleteRecord = new DeleteRecord();
-        KVStore.removeValue("Delete");
-    }
+        try {
+            KVStore.removeValue("Delete");
+        } catch (NullPointerException e){}
 
+    }
 
     public void buildFirebase(){
         for(Areas area : region.getAreas()){

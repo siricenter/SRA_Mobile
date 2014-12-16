@@ -150,9 +150,10 @@ public class DashBoard extends Activity {
 
         try {
             KVStore.setActivity(getApplication());
+
             KVStore.removeValue("Field");
             KVStore.storeValue("Field", downlaod.getRegion());
-        }catch (KVStorageException e){}
+        }catch (KVStorageException e){}catch (NullPointerException e){}
     }
 
     public void SelectItem(int position) {
@@ -293,7 +294,7 @@ public class DashBoard extends Activity {
         Fragment fragment = getFragmentManager().findFragmentByTag(name);
         if(fragment.isVisible()){
             if(name.equals("Dashboard")){
-
+                super.onBackPressed();
             }else if(name.equals("Areas")){
             FragmentOne fragmentOne = (FragmentOne)fragment;
                 if(fragmentOne.navigationPosition.equals("areas")){
@@ -307,11 +308,11 @@ public class DashBoard extends Activity {
                     fragmentOne.loadHouseholdsIntoView();
                 }
             }else if(name.equals("Questions")){
-
+                super.onBackPressed();
             }else if(name.equals("Notes")){
-
+                super.onBackPressed();
             }else if(name.equals("Stats")){
-
+                super.onBackPressed();
             }
         }
     }
