@@ -46,6 +46,25 @@ public class Households implements Serializable {
         return interviews;
     }
 
+    public void addQuestionSet(QuestionSet qs) {
+        if (interviews.isEmpty()) {
+            interviews.add(new Interviews());
+        }
+        Interviews i = interviews.get(0);
+        i.addQuestionSets(qs);
+    }
+
+    public QuestionSet getQuestionSet(String name) {
+        if (interviews.isEmpty()) return null;
+        Interviews i = interviews.get(0);
+        ArrayList<QuestionSet> sets = i.getQuestionSets();
+        for (QuestionSet qs : sets) {
+            if (qs.getName().equals(name))
+                return qs;
+        }
+        return null;
+    }
+
     public void setHouseholdName(String householdName) {
         this.householdName = householdName;
     }

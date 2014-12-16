@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -36,7 +34,6 @@ import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
 import org.quickconnectfamily.kvkit.kv.KVStorageException;
 import org.quickconnectfamily.kvkit.kv.KVStore;
-import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,12 +260,15 @@ public class DashBoard extends Activity {
         startActivity(intent);
     }
 
-    public void goToQuestionGen(MenuItem item){
-        Intent intent = new Intent(this,QuestionSetList.class);
-        startActivity(intent);
+    public void goToInterview(MenuItem menuItem) {
+        if(name.equals("Areas")) {
+            Fragment fragment = getFragmentManager().findFragmentByTag(name);
+            FragmentOne fragmentOne = (FragmentOne) fragment;
+            fragmentOne.goToInterview();
+        }
     }
 
-    public class DrawerItemClickListener implements
+        public class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,

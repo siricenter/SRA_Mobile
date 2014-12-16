@@ -38,6 +38,14 @@ public class Areas implements Serializable {
         return households;
     }
 
+    public Households getHousehold(String householdName) {
+        for (Households h : households) {
+            if (h.getHouseholdName().equals(householdName))
+                return h;
+        }
+        return null;
+    }
+
     public void addHousehold(Households household){
         households.add(household);
     }

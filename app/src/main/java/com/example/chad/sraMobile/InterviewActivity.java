@@ -22,6 +22,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sra.objects.Areas;
+import com.sra.objects.Households;
+import com.sra.objects.Interviews;
 import com.sra.objects.QuestionSet;
 import com.sra.objects.QuestionSetBank;
 import com.sra.objects.Region;
@@ -39,6 +42,9 @@ public class InterviewActivity extends Activity {
     private QuestionSetListItemAdapter questionSetsAdapter;
 
     private Region region;
+    private Households household;
+    int area;
+    int house;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,12 @@ public class InterviewActivity extends Activity {
         setContentView(R.layout.activity_interview);
 
         Intent intent = getIntent();
+        area = intent.getIntExtra("area", 0);
+        house = intent.getIntExtra("household", 0);
+        String type = intent.getStringExtra("interviewType");
+        if (area < 0) area = 0;
+        if (house < 0) house = 0;
+        getRegion(area, house);
 
         listView = (ListView) findViewById(R.id.question_set_list_view);
 
@@ -55,11 +67,9 @@ public class InterviewActivity extends Activity {
         listView.addHeaderView(textView);
 
         questionSetNames = new ArrayList<String>();
-//        region = getRegion();
-
-
         questionSetsAdapter = new QuestionSetListItemAdapter(this, questionSetNames);
         listView.setAdapter(questionSetsAdapter);
+        refreshQuestionSets();
     }
 
     @Override
@@ -69,20 +79,56 @@ public class InterviewActivity extends Activity {
         return true;
     }
 
-    public Region getRegion() {
-        Region r = null;
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void refreshQuestionSets() {
+        ArrayList<Interviews> interviews = household.getInterviews();
+        for (Interviews i : interviews) {
+            ArrayList<QuestionSet> sets = i.getQuestionSets();
+            for (QuestionSet qs : sets) {
+                questionSetNames.add(qs.getName());
+                System.out.println("adding qs: " + qs.getName());
+            }
+        }
+        questionSetsAdapter.notifyDataSetChanged();
+    }
+
+    public void goToDataGather(int area, int house, String qsName) {
+        Intent intent = new Intent(this, DataGather.class);
+        intent.putExtra("area", area);
+        intent.putExtra("household", house);
+        intent.putExtra("questionSetName", qsName);
+        startActivity(intent);
+    }
+
+    public void getRegion(int area, int house) {
+        region = null;
         try {
             String json = JSONUtilities.stringify(KVStore.getValue("Field"));
             System.out.println("Loading Areas");
             System.out.println(json);
             Gson gson = new GsonBuilder().create();
-            r = gson.fromJson(json,Region.class);
+            region = gson.fromJson(json,Region.class);
+
+            household = null;
+            ArrayList<Areas> areas = region.getAreas();
+            if (areas.size() > 0) {
+                ArrayList<Households> households = areas.get(area).getHouseholds();
+                if (households.size() > house) {
+                    household = households.get(house);
+                }
+            }
+            if (household == null) {
+                household = new Households();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
             System.out.println("Nothing Here");
         }
-        return region;
     }
 
     public void addQuestionSet(MenuItem menuItem) {
@@ -107,6 +153,14 @@ public class InterviewActivity extends Activity {
                 questionSetNames.add(item);
                 questionSetsAdapter.notifyDataSetChanged();
                 alert.dismiss();
+                household.addQuestionSet(QuestionSetBank.getQuestionSet(item));
+                try {
+                    KVStore.storeValue("Field", region);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Could not save region");
+                }
             }
         });
 
@@ -116,12 +170,6 @@ public class InterviewActivity extends Activity {
     public void removeQuestionSet(String text) {
         questionSetNames.remove(text);
         questionSetsAdapter.notifyDataSetChanged();
-    }
-
-    public void goToDataGather(String questionSetName) {
-        Intent intent = new Intent(this, DataGather.class);
-        intent.putExtra("questionSetName", questionSetName);
-        startActivity(intent);
     }
 
     public class QuestionSetListItemAdapter extends ArrayAdapter<String> {
@@ -161,7 +209,7 @@ public class InterviewActivity extends Activity {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToDataGather(value);
+                    goToDataGather(area, house, value);
                 }
             });
 

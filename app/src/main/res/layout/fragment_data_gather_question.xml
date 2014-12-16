@@ -8,18 +8,23 @@
     android:paddingTop="20dp"
     tools:context="com.example.chad.sraMobile.DataGatherQuestionFragment">
 
-    <TableLayout
-        android:id="@+id/question_fragment_data_point_table"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/question_fragment_title"
+        <TableLayout
+            android:id="@+id/question_fragment_data_point_table"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Base.SearchResult.Title"
-            android:text="Question" />
+            android:layout_height="fill_parent">
 
-    </TableLayout>
+            <TextView
+                android:id="@+id/question_fragment_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Base.SearchResult.Title"
+                android:text="Question" />
+        </TableLayout>
 
+    </LinearLayout>
 </ScrollView>

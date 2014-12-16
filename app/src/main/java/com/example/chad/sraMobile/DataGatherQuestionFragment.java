@@ -47,7 +47,7 @@ public class DataGatherQuestionFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_data_gather_question,container, false);
 
-        DataGather activity = (DataGather) getActivity();
+        final DataGather activity = (DataGather) getActivity();
         Bundle args = getArguments();
         questionIndex = args.getInt("questionIndex");
         question = activity.getQuestion(questionIndex);

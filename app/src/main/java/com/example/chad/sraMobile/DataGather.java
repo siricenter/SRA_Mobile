@@ -9,12 +9,26 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sra.objects.Areas;
+import com.sra.objects.Households;
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
 import com.sra.objects.QuestionSetBank;
+import com.sra.objects.Region;
+
+import org.quickconnectfamily.json.JSONException;
+import org.quickconnectfamily.json.JSONUtilities;
+import org.quickconnectfamily.kvkit.kv.KVStore;
+
+import java.util.ArrayList;
 
 public class DataGather extends FragmentActivity {
 
@@ -25,13 +39,28 @@ public class DataGather extends FragmentActivity {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
 
+    private Region region;
+    private Households household;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_gather);
 
         Intent intent = getIntent();
+        int area = intent.getIntExtra("area", 0);
+        int house = intent.getIntExtra("household", 0);
+        if (area < 0) area = 0;
+        if (house < 0) house = 0;
+        getRegion(area, house);
         String questionSetName = intent.getStringExtra("questionSetName");
+        if (household != null) {
+            questionSet = household.getQuestionSet(questionSetName);
+        }
+        else {
+            questionSet = new QuestionSet("", "");
+        }
+
         questionSet = QuestionSetBank.getQuestionSet(questionSetName);
         if (questionSet == null) {
             questionSet = new QuestionSet("", "");
@@ -59,11 +88,34 @@ public class DataGather extends FragmentActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.data_gather, menu);
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
+            save();
             super.onBackPressed();
         } else {
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    public void done(MenuItem mi) {
+        save();
+        finish();
+    }
+
+    public void save() {
+        try {
+            KVStore.storeValue("Field", region);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Could not save region");
         }
     }
 
@@ -75,6 +127,34 @@ public class DataGather extends FragmentActivity {
     public Question getQuestion(int index) {
         return questionSet.getQuestions().get(index);
     }
+
+    public void getRegion(int area, int house) {
+        region = null;
+        try {
+            String json = JSONUtilities.stringify(KVStore.getValue("Field"));
+            System.out.println("Loading Areas");
+            System.out.println(json);
+            Gson gson = new GsonBuilder().create();
+            region = gson.fromJson(json,Region.class);
+
+            household = null;
+            ArrayList<Areas> areas = region.getAreas();
+            if (areas.size() > 0) {
+                ArrayList<Households> households = areas.get(area).getHouseholds();
+                if (households.size() > house) {
+                    household = households.get(house);
+                }
+            }
+            if (household == null) {
+                household = new Households();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            System.out.println("Nothing Here");
+        }
+    }
+
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

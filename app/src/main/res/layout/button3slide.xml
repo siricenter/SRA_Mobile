@@ -48,11 +48,5 @@
             android:layout_height="fill_parent"
             android:text="Add question set" />
 
-        <Button
-            android:id="@+id/go_to_data_gather_button"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:text="temporary go to data gather activity" />
-
     </LinearLayout>
 </ScrollView>

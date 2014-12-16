@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.chad.sraMobile.DashBoard;
+import com.example.chad.sraMobile.InterviewActivity;
 import com.example.chad.sraMobile.R;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
@@ -32,7 +34,6 @@ import com.sra.objects.Households;
 import com.sra.objects.Member;
 import com.sra.objects.Region;
 import com.sra.objects.loginObject;
-
 
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
@@ -837,6 +838,12 @@ public class FragmentOne extends Fragment {
 
     }
 
-
+    public void goToInterview() {
+        Intent intent = new Intent(getActivity(), InterviewActivity.class);
+        intent.putExtra("area", currentArea);
+        intent.putExtra("household", currentHousehold);
+        intent.putExtra("interviewType", navigationPosition);
+        startActivity(intent);
+    }
 }
 

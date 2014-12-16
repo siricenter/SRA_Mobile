@@ -3,6 +3,7 @@ package com.example.chad.sraMobile;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -124,6 +125,7 @@ public class EditQuestionSet extends Activity {
             final TableRow row = new TableRow(getBaseContext());
 
             Button questionButton = new Button(getBaseContext());
+            questionButton.setTextColor(Color.BLACK);
             questionButton.setText(qs.getName());
             questionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -133,6 +135,7 @@ public class EditQuestionSet extends Activity {
             });
 
             Button deleteButton = new Button(getBaseContext());
+            deleteButton.setTextColor(Color.BLACK);
             deleteButton.setText("Delete");
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
