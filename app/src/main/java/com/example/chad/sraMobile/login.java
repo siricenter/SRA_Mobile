@@ -27,18 +27,13 @@ import com.sra.objects.QuestionSet;
 import com.sra.objects.Region;
 import com.sra.objects.loginObject;
 
-import org.quickconnectfamily.kvkit.kv.KVStore;
-import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
-
-import java.io.Serializable;
-
-
+import org.quickconnectfamily.json.JSONException;
+import org.quickconnectfamily.json.JSONUtilities;
 
 public class login extends Activity {
 
     EditText usernameET;
     EditText passwordET;
-    SharedPreferences.Editor editor;
     private boolean status;
     TextView textview;
     ProgressBar progress;
@@ -64,58 +59,13 @@ public class login extends Activity {
         passwordET = (EditText) findViewById(R.id.passwordET);
         Button loginButton = (Button) findViewById(R.id.loginButton);
 
-        //set onlcick for button
+        //set onclick for button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login();
             }
         });
-
-        //set the application for KVKit
-        KVStore.setActivity(getApplication());
-        KVStore.setInMemoryStorageCount(10);
-
-        //Listenter for KVKit
-        KVStoreEventListener listener = new KVStoreEventListener() {
-            @Override
-            public void errorHappened(String key, Serializable value, Exception e) {
-                System.out.println(key + " " + value + " " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public boolean shouldStore(String key, Serializable value) {
-                return true;
-            }
-
-            @Override
-            public void willStore(String key, Serializable value) {
-                System.out.println(key + " " + value + "Trying to Save");
-            }
-
-            @Override
-            public void didStore(String key, Serializable value) {
-                System.out.println(key + " " + value + "Saved");
-            }
-
-            @Override
-            public boolean shouldDelete(String key) {
-                return false;
-            }
-
-            @Override
-            public void willDelete(String key) {
-
-            }
-
-            @Override
-            public void didDelete(String key) {
-
-            }
-        };
-
-        //set the listener
-        KVStore.setStoreEventListener(listener);
 
     }
 
@@ -225,14 +175,13 @@ public class login extends Activity {
                 String Roles = roles.getValue().toString();
                 info.addToRoles(Roles);
             }
+            String userString;
+            SharedPreferences.Editor user = getSharedPreferences("AppPrefs",MODE_PRIVATE).edit();
+            try {
+               userString = JSONUtilities.stringify(info);
+               user.putString("User", userString);
+            }catch (JSONException e){}
 
-            //Store User data into the file system
-            try{
-                KVStore.storeValue("User",info);
-            }
-            catch (Exception e){
-
-            }
 
             //set status to download
             textview.setText("Downloading Region");
@@ -255,6 +204,7 @@ public class login extends Activity {
                                   area.setAreaName(dataSnapshot.getName());
                                   area.setRegion(rg);
                                   area.setRef(dataSnapshot.getRef().toString());
+                                  area.setRegion(dataSnapshot.child("Region").getValue().toString());
                             DataSnapshot resources = dataSnapshot.child("Resources");
                             for(DataSnapshot household : resources.getChildren()){
                                Households households = new Households();
@@ -292,16 +242,16 @@ public class login extends Activity {
                             usersRegion.addArea(area);
                             passes++;
                             if(passes == info.getRegions().size()){
-                                try {
-                                    KVStore.removeValue("Field");
-                                    KVStore.storeValue("Field", usersRegion);
+                                    SharedPreferences.Editor saveRegion = getSharedPreferences("AppPrefs",MODE_PRIVATE).edit();
+                                    try{
+                                        String regionString = JSONUtilities.stringify(usersRegion);
+                                               saveRegion.putString("Region",regionString);
+                                    }catch (JSONException e){}
+
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
                                     startActivity(intent);
-                                } catch (Exception e) {
-                                }
                             }
                         }
-
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
                             textview.setText(firebaseError.getMessage());

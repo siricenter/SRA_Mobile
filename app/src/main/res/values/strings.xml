@@ -23,6 +23,7 @@
     <string name="House">Add Household</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
+    <string name="appPrefs">Application Preferences</string>
 
     <!-- Interview strings -->
     <string name="nutrition_tab_title">Nutrition</string>

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.text.InputType;
@@ -37,11 +38,7 @@ import com.sra.objects.loginObject;
 
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
-import org.quickconnectfamily.kvkit.kv.KVStorageException;
-import org.quickconnectfamily.kvkit.kv.KVStore;
-import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +51,8 @@ public class FragmentOne extends Fragment {
     List<ItemRow> itemData;
     public int currentArea;
     public int currentHousehold;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     View view;
     public DeleteRecord markedForDeletion;
     public String navigationPosition;
@@ -66,54 +65,13 @@ public class FragmentOne extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        prefs = getActivity().getApplication().getSharedPreferences("AppPrefs", getActivity().getApplication().MODE_PRIVATE);
+        editor = getActivity().getApplication().getSharedPreferences("AppPrefs",getActivity().getApplication().MODE_PRIVATE).edit();
 
         buttonWidth = 0;
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
         markedForDeletion = new DeleteRecord();
-        KVStoreEventListener listener = new KVStoreEventListener() {
-            @Override
-            public void errorHappened(String key, Serializable value, Exception e) {
-                System.out.println(key + " " + value + " " + e.getLocalizedMessage());
-            }
-
-            @Override
-            public boolean shouldStore(String key, Serializable value) {
-
-                return true;
-            }
-
-            @Override
-            public void willStore(String key, Serializable value) {
-                System.out.println("Trying to Save " + key + " " + value);
-            }
-
-            @Override
-            public void didStore(String key, Serializable value) {
-                System.out.println(key + " " + value + " Saved");
-            }
-
-            @Override
-            public boolean shouldDelete(String key) {
-                return true;
-            }
-
-            @Override
-            public void willDelete(String key) {
-                System.out.println(key + " deleting");
-            }
-
-            @Override
-            public void didDelete(String key) {
-                System.out.println(key + " was deleted");
-            }
-
-
-
-        };
-
-        //set the listener
-        KVStore.setStoreEventListener(listener);
 
         view = inflater.inflate(R.layout.button1slide, container,false);
         // listView = (ListView) view.findViewById(R.id.ListView01);
@@ -130,10 +88,6 @@ public class FragmentOne extends Fragment {
                    }
                });
 
-
-
-
-        KVStore.setActivity(getActivity().getApplication());
         buildRegion();
         setListener();
 
@@ -335,8 +289,8 @@ public class FragmentOne extends Fragment {
     }
 
     public void buildRegion(){
-        try {
-            String json = JSONUtilities.stringify(KVStore.getValue("Field"));
+
+            String json = prefs.getString("Region",null);
             System.out.println("Loading Areas");
             System.out.println(json);
             Gson gson = new GsonBuilder().create();
@@ -345,11 +299,6 @@ public class FragmentOne extends Fragment {
             for(Areas area : areas){
                areasList.add(area.getAreaName());
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            System.out.println("Nothing Here");
-        }
     }
 
     public void addArea(){
@@ -382,17 +331,12 @@ public class FragmentOne extends Fragment {
 
                 area.setRef("https://intense-inferno-7741.firebaseio.com/Organizations/SRA/Regions/" + inputRegion.getText().toString() + "/Areas/" + area.getAreaName() + "/");
                 try{
-                    String json = JSONUtilities.stringify(KVStore.getValue("User"));
+                    String json = prefs.getString("User",null);
                     Gson gson = new GsonBuilder().create();
                     loginObject login = gson.fromJson(json,loginObject.class);
                                 login.addToAreas(input.getText().toString());
-                    try{
-                        KVStore.setActivity(getActivity().getApplication());
-                        KVStore.removeValue("User");
-                        KVStore.storeValue("User",login);
-                    }catch (KVStorageException e){
+                    editor.putString("User", JSONUtilities.stringify(login));
 
-                    }
                 }catch (JSONException e){
 
                 }
@@ -491,10 +435,9 @@ public class FragmentOne extends Fragment {
         }
         adapter.notifyDataSetChanged();
         try{
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field",regions);
+            editor.putString("Region",JSONUtilities.stringify(regions));
         }
-        catch (KVStorageException e){
+        catch (JSONException e){
 
         }
     }
@@ -526,12 +469,8 @@ public class FragmentOne extends Fragment {
         }
         adapter.notifyDataSetChanged();
         try{
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field",regions);
-        }
-        catch (KVStorageException e){
-
-        }
+            editor.putString("Region",JSONUtilities.stringify(regions));
+        }catch (JSONException e){}
     }
 
     public void reloadAreasIntoView(){
@@ -543,12 +482,8 @@ public class FragmentOne extends Fragment {
         }
         adapter.notifyDataSetChanged();
         try{
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field",regions);
-        }
-        catch (KVStorageException e){
-
-        }
+            editor.putString("Region",JSONUtilities.stringify(regions));
+        }catch (JSONException e){}
     }
 
     public void setAreaListeners(){
@@ -754,13 +689,10 @@ public class FragmentOne extends Fragment {
             }
         }
         try{
-            KVStore.removeValue("Delete");
-            KVStore.storeValue("Delete",markedForDeletion);
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field",regions);
-        }catch (KVStorageException e){
+            editor.putString("Delete",JSONUtilities.stringify(markedForDeletion));
+            editor.putString("Region",JSONUtilities.stringify(regions));
+        }catch (JSONException e){}
 
-        }
         DashBoard dashBoard = (DashBoard)getActivity();
                   dashBoard.deleteRecord = markedForDeletion;
         adapter.notifyDataSetChanged();
@@ -829,13 +761,9 @@ public class FragmentOne extends Fragment {
             }
         }
         try{
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field",regions);
-        }catch (KVStorageException e){
-
-        }
+            editor.putString("Region",JSONUtilities.stringify(regions));
+        }catch (JSONException e){}
         adapter.notifyDataSetChanged();
-
     }
 
     public void goToInterview() {

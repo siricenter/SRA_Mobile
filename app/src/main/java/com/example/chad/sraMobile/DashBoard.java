@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -32,8 +33,6 @@ import com.sra.sliderFragments.FragmentTwo;
 
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
-import org.quickconnectfamily.kvkit.kv.KVStorageException;
-import org.quickconnectfamily.kvkit.kv.KVStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,8 @@ public class DashBoard extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
@@ -61,22 +61,17 @@ public class DashBoard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-        KVStore.setActivity(getApplication());
 
-    try{
-        String json = JSONUtilities.stringify(KVStore.getValue("Delete"));
-        Gson gson = new GsonBuilder().create();
-        deleteRecord = gson.fromJson(json,DeleteRecord.class);
-    } catch (JSONException e){}catch (NullPointerException e){
-        deleteRecord = new DeleteRecord();
-        try {
-            KVStore.storeValue("Delete", deleteRecord);
-        }catch (KVStorageException w){
-
-        }catch (NullPointerException w){
-
+        prefs = getSharedPreferences("AppPrefs",MODE_PRIVATE);
+        editor = getSharedPreferences("AppPrefs",MODE_PRIVATE).edit();
+        if(prefs.contains("Delete")) {
+            String json = prefs.getString("Delete", null);
+            Gson gson = new GsonBuilder().create();
+            deleteRecord = gson.fromJson(json, DeleteRecord.class);
+        }else{
+            deleteRecord = new DeleteRecord();
         }
-    }
+
         org = "SRA";
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
@@ -147,13 +142,10 @@ public class DashBoard extends Activity {
                 upload.startUpload();
                 upload.addNewAreaToUser();
                 downlaod.beginSync();
-
-        try {
-            KVStore.setActivity(getApplication());
-
-            KVStore.removeValue("Field");
-            KVStore.storeValue("Field", downlaod.getRegion());
-        }catch (KVStorageException e){}catch (NullPointerException e){}
+        try{
+           String newRegion = JSONUtilities.stringify(downlaod.getRegion());
+           editor.putString("Region",newRegion);
+        }catch (JSONException e){}
     }
 
     public void SelectItem(int position) {
@@ -251,14 +243,11 @@ public class DashBoard extends Activity {
     }
 
     public void logOut(MenuItem menuItem){
-        try{
-            KVStore.setActivity(getApplication());
-            KVStore.removeValue("User");
-        }catch (NullPointerException e){
-
+        if(prefs.contains("User")){
+            editor.remove("User");
+            Intent intent = new Intent(this,MyActivity.class);
+            startActivity(intent);
         }
-        Intent intent = new Intent(this,MyActivity.class);
-        startActivity(intent);
     }
 
     public void goToInterview(MenuItem menuItem) {
