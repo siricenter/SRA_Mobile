@@ -23,12 +23,16 @@ import android.widget.LinearLayout;
 import com.example.chad.sraMobile.DashBoard;
 import com.example.chad.sraMobile.InterviewActivity;
 import com.example.chad.sraMobile.R;
+
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.sra.listViewSlider.ItemAdapter;
 import com.sra.listViewSlider.ItemRow;
+
 import com.sra.objects.Areas;
 import com.sra.objects.DeleteRecord;
 import com.sra.objects.Households;
@@ -74,7 +78,6 @@ public class FragmentOne extends Fragment {
         markedForDeletion = new DeleteRecord();
 
         view = inflater.inflate(R.layout.button1slide, container,false);
-        // listView = (ListView) view.findViewById(R.id.ListView01);
         swipelistview = (SwipeListView)view.findViewById(R.id.example_swipe_lv_list);
         itemData = new ArrayList<ItemRow>();
 
@@ -289,15 +292,16 @@ public class FragmentOne extends Fragment {
     }
 
     public void buildRegion(){
-
-            String json = prefs.getString("Region",null);
-            System.out.println("Loading Areas");
-            System.out.println(json);
-            Gson gson = new GsonBuilder().create();
-            regions = gson.fromJson(json,Region.class);
-            ArrayList<Areas> areas = regions.getAreas();
-            for(Areas area : areas){
-               areasList.add(area.getAreaName());
+            if(prefs.contains("Region")){
+                String json = prefs.getString("Region",null);
+                System.out.println("Loading Areas");
+                System.out.println(json);
+                Gson gson = new GsonBuilder().create();
+                regions = gson.fromJson(json,Region.class);
+                ArrayList<Areas> areas = regions.getAreas();
+                for(Areas area : areas){
+                    areasList.add(area.getAreaName());
+                }
             }
     }
 
@@ -336,10 +340,8 @@ public class FragmentOne extends Fragment {
                     loginObject login = gson.fromJson(json,loginObject.class);
                                 login.addToAreas(input.getText().toString());
                     editor.putString("User", JSONUtilities.stringify(login));
-
-                }catch (JSONException e){
-
-                }
+                    editor.commit();
+                }catch (JSONException e){}
                 regions.addArea(area);
                 reloadAreasIntoView();
             }
@@ -436,6 +438,7 @@ public class FragmentOne extends Fragment {
         adapter.notifyDataSetChanged();
         try{
             editor.putString("Region",JSONUtilities.stringify(regions));
+            editor.commit();
         }
         catch (JSONException e){
 
@@ -470,6 +473,7 @@ public class FragmentOne extends Fragment {
         adapter.notifyDataSetChanged();
         try{
             editor.putString("Region",JSONUtilities.stringify(regions));
+            editor.commit();
         }catch (JSONException e){}
     }
 
@@ -483,6 +487,7 @@ public class FragmentOne extends Fragment {
         adapter.notifyDataSetChanged();
         try{
             editor.putString("Region",JSONUtilities.stringify(regions));
+            editor.commit();
         }catch (JSONException e){}
     }
 
@@ -691,6 +696,7 @@ public class FragmentOne extends Fragment {
         try{
             editor.putString("Delete",JSONUtilities.stringify(markedForDeletion));
             editor.putString("Region",JSONUtilities.stringify(regions));
+            editor.commit();
         }catch (JSONException e){}
 
         DashBoard dashBoard = (DashBoard)getActivity();
@@ -762,6 +768,7 @@ public class FragmentOne extends Fragment {
         }
         try{
             editor.putString("Region",JSONUtilities.stringify(regions));
+            editor.commit();
         }catch (JSONException e){}
         adapter.notifyDataSetChanged();
     }

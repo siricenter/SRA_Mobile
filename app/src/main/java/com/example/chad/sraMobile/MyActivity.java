@@ -2,30 +2,30 @@ package com.example.chad.sraMobile;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.quickconnectfamily.kvkit.kv.KVStore;
-
-import java.util.HashMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sra.objects.loginObject;
 
 public class MyActivity extends Activity {
+
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-
-        KVStore.setActivity(getApplication());
-        try{
-            HashMap hashMap = (HashMap)KVStore.getValue("User");
-            if(hashMap != null){
-                goToDashboard();
-            }
-        }catch (NullPointerException e){
-
+        prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        String user = prefs.getString("User",null);
+        Gson gson = new GsonBuilder().create();
+        loginObject login = gson.fromJson(user,loginObject.class);
+        if(login.isLoggedIn()){
+            goToDashboard();
         }
     }
 

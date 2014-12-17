@@ -180,6 +180,7 @@ public class login extends Activity {
             try {
                userString = JSONUtilities.stringify(info);
                user.putString("User", userString);
+               user.commit();
             }catch (JSONException e){}
 
 
@@ -243,9 +244,11 @@ public class login extends Activity {
                             passes++;
                             if(passes == info.getRegions().size()){
                                     SharedPreferences.Editor saveRegion = getSharedPreferences("AppPrefs",MODE_PRIVATE).edit();
+
                                     try{
                                         String regionString = JSONUtilities.stringify(usersRegion);
-                                               saveRegion.putString("Region",regionString);
+                                        saveRegion.putString("Region",regionString);
+                                        saveRegion.commit();
                                     }catch (JSONException e){}
 
                                     Intent intent = new Intent(getApplicationContext(), DashBoard.class);
