@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sra.helperClasses.SyncCompare;
+
 import com.sra.helperClasses.SyncDownlaod;
 import com.sra.helperClasses.SyncUpload;
 import com.sra.objects.DeleteRecord;
@@ -139,9 +139,11 @@ public class DashBoard extends Activity {
 
     public void syncDatabase(MenuItem item){
         SyncDownlaod downlaod = new SyncDownlaod(this);
-        SyncCompare compare = new SyncCompare(new Region());
-        SyncUpload upload = new SyncUpload(compare.getCurrentRegion(),deleteRecord,org,this);
-        System.out.println(upload.getRegion());
+        String json = prefs.getString("Region", null);
+        Gson gson = new GsonBuilder().create();
+        Region region = gson.fromJson(json, Region.class);
+        SyncUpload upload = new SyncUpload(region,deleteRecord,org,this);
+
                 upload.startUpload();
                 upload.addNewAreaToUser();
                 downlaod.beginSync();

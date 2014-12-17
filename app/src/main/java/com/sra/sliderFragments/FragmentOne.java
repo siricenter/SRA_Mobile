@@ -55,8 +55,8 @@ public class FragmentOne extends Fragment {
     List<ItemRow> itemData;
     public int currentArea;
     public int currentHousehold;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     View view;
     public DeleteRecord markedForDeletion;
     public String navigationPosition;
@@ -67,11 +67,9 @@ public class FragmentOne extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         prefs = getActivity().getApplication().getSharedPreferences("AppPrefs", getActivity().getApplication().MODE_PRIVATE);
         editor = getActivity().getApplication().getSharedPreferences("AppPrefs",getActivity().getApplication().MODE_PRIVATE).edit();
-
         buttonWidth = 0;
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
@@ -97,6 +95,7 @@ public class FragmentOne extends Fragment {
 
         return view;
     }
+
     public void setListener(){
 
         WindowManager wm = (WindowManager) getActivity().getBaseContext().getSystemService(Context.WINDOW_SERVICE);
@@ -341,7 +340,7 @@ public class FragmentOne extends Fragment {
                                 login.addToAreas(input.getText().toString());
                     editor.putString("User", JSONUtilities.stringify(login));
                     editor.commit();
-                }catch (JSONException e){}
+                }catch (JSONException e){return;}
                 regions.addArea(area);
                 reloadAreasIntoView();
             }
@@ -440,9 +439,7 @@ public class FragmentOne extends Fragment {
             editor.putString("Region",JSONUtilities.stringify(regions));
             editor.commit();
         }
-        catch (JSONException e){
-
-        }
+        catch (JSONException e){}
     }
 
     public void loadHouseholdsIntoView(){
