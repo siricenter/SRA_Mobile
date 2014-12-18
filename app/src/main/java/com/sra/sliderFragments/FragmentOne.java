@@ -30,6 +30,7 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.listViewSlider.ItemAdapter;
 import com.sra.listViewSlider.ItemRow;
 
@@ -49,14 +50,11 @@ import java.util.List;
 public class FragmentOne extends Fragment {
 
     private ArrayList<String> areasList;
-    public Region regions;
     public SwipeListView swipelistview;
     public ItemAdapter adapter;
     List<ItemRow> itemData;
     public int currentArea;
     public int currentHousehold;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
     View view;
     public DeleteRecord markedForDeletion;
     public String navigationPosition;
@@ -68,8 +66,7 @@ public class FragmentOne extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        prefs = getActivity().getApplication().getSharedPreferences("AppPrefs", getActivity().getApplication().MODE_PRIVATE);
-        editor = getActivity().getApplication().getSharedPreferences("AppPrefs",getActivity().getApplication().MODE_PRIVATE).edit();
+
         buttonWidth = 0;
         navigationPosition = "areas";
         areasList = new ArrayList<String>();
@@ -155,7 +152,7 @@ public class FragmentOne extends Fragment {
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "households";
                 currentArea = position;
-                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                 ArrayList<Households> households = areas.get(position).getHouseholds();
                 itemData.clear();
                 for(Households houses : households){
@@ -248,12 +245,11 @@ public class FragmentOne extends Fragment {
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "members";
                 currentHousehold = position;
-                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                 ArrayList<String> members = areas.get(i).getHouseholds().get(position).getMembers();
 
                 itemData.clear();
                 for(String member : members){
-
                     itemData.add(new ItemRow(member));
                 }
 
@@ -291,17 +287,10 @@ public class FragmentOne extends Fragment {
     }
 
     public void buildRegion(){
-            if(prefs.contains("Region")){
-                String json = prefs.getString("Region",null);
-                System.out.println("Loading Areas");
-                System.out.println(json);
-                Gson gson = new GsonBuilder().create();
-                regions = gson.fromJson(json,Region.class);
-                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                 for(Areas area : areas){
                     areasList.add(area.getAreaName());
                 }
-            }
     }
 
     public void addArea(){
@@ -333,15 +322,12 @@ public class FragmentOne extends Fragment {
                 area.setAreaName(input.getText().toString());
 
                 area.setRef("https://intense-inferno-7741.firebaseio.com/Organizations/SRA/Regions/" + inputRegion.getText().toString() + "/Areas/" + area.getAreaName() + "/");
-                try{
-                    String json = prefs.getString("User",null);
-                    Gson gson = new GsonBuilder().create();
-                    loginObject login = gson.fromJson(json,loginObject.class);
+
+                    loginObject login = CRUDFlinger.load("User",loginObject.class);
                                 login.addToAreas(input.getText().toString());
-                    editor.putString("User", JSONUtilities.stringify(login));
-                    editor.commit();
-                }catch (JSONException e){return;}
-                regions.addArea(area);
+                    CRUDFlinger.save("User",login);
+
+                CRUDFlinger.getRegion().addArea(area);
                 reloadAreasIntoView();
             }
         });
@@ -383,7 +369,7 @@ public class FragmentOne extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 household.setHouseholdName(input.getText().toString());
                 household.addMember(inputMember.getText().toString());
-                regions.getAreas().get(currentArea).addHousehold(household);
+                CRUDFlinger.getRegion().getAreas().get(currentArea).addHousehold(household);
                 reloadHouseholdsIntoView();
             }
         });
@@ -414,7 +400,7 @@ public class FragmentOne extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).addMember(input.getText().toString());
+                CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).addMember(input.getText().toString());
                 reloadMembersIntoView();
             }
         });
@@ -429,21 +415,17 @@ public class FragmentOne extends Fragment {
     }
 
     public void reloadMembersIntoView(){
-        ArrayList<String> members = regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers();
+        ArrayList<String> members = CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers();
         itemData.clear();
         for(String member : members){
             itemData.add(new ItemRow(member));
         }
         adapter.notifyDataSetChanged();
-        try{
-            editor.putString("Region",JSONUtilities.stringify(regions));
-            editor.commit();
-        }
-        catch (JSONException e){}
+        CRUDFlinger.saveRegion();
     }
 
     public void loadHouseholdsIntoView(){
-        ArrayList<Households> households = regions.getAreas().get(currentArea).getHouseholds();
+        ArrayList<Households> households = CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds();
         itemData.clear();
         for(Households houses : households){
             itemData.add(new ItemRow(houses.getHouseholdName()));
@@ -452,7 +434,7 @@ public class FragmentOne extends Fragment {
     }
 
     public void loadAreasIntoView(){
-        ArrayList<Areas> areas = regions.getAreas();
+        ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
         areasList.clear();
         itemData.clear();
         for(Areas area : areas){
@@ -462,30 +444,24 @@ public class FragmentOne extends Fragment {
     }
 
     public void reloadHouseholdsIntoView(){
-        ArrayList<Households> households = regions.getAreas().get(currentArea).getHouseholds();
+        ArrayList<Households> households = CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds();
         itemData.clear();
         for(Households houses : households){
             itemData.add(new ItemRow(houses.getHouseholdName()));
         }
         adapter.notifyDataSetChanged();
-        try{
-            editor.putString("Region",JSONUtilities.stringify(regions));
-            editor.commit();
-        }catch (JSONException e){}
+        CRUDFlinger.saveRegion();
     }
 
     public void reloadAreasIntoView(){
-        ArrayList<Areas> areas = regions.getAreas();
+        ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
         areasList.clear();
         itemData.clear();
         for(Areas area : areas){
             itemData.add( new ItemRow(area.getAreaName()));
         }
         adapter.notifyDataSetChanged();
-        try{
-            editor.putString("Region",JSONUtilities.stringify(regions));
-            editor.commit();
-        }catch (JSONException e){}
+        CRUDFlinger.saveRegion();
     }
 
     public void setAreaListeners(){
@@ -534,7 +510,7 @@ public class FragmentOne extends Fragment {
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "households";
                 currentArea = position;
-                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                 ArrayList<Households> households = areas.get(position).getHouseholds();
                 itemData.clear();
                 for(Households houses : households){
@@ -618,7 +594,7 @@ public class FragmentOne extends Fragment {
                 //swipelistview.openAnimate(position); //when you touch front view it will open
                 navigationPosition = "members";
                 currentHousehold = position;
-                ArrayList<Areas> areas = regions.getAreas();
+                ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                 ArrayList<String> members = areas.get(currentArea).getHouseholds().get(position).getMembers();
 
                 itemData.clear();
@@ -658,17 +634,17 @@ public class FragmentOne extends Fragment {
 
         if(navigationPosition.equals("areas")){
             System.out.println(markedForDeletion);
-            markedForDeletion.addArea(regions.getAreas().get(p));
-            regions.getAreas().remove(p);
-            ArrayList<Areas> areas = regions.getAreas();
+            markedForDeletion.addArea(CRUDFlinger.getRegion().getAreas().get(p));
+            CRUDFlinger.getRegion().getAreas().remove(p);
+            ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
             itemData.clear();
             for(Areas area : areas){
                 itemData.add(new ItemRow(area.getAreaName()));
             }
         } else if(navigationPosition.equals("households")){
-            markedForDeletion.addhousehold(regions.getAreas().get(currentArea).getHouseholds().get(p));
-            regions.getAreas().get(currentArea).getHouseholds().remove(p);
-            ArrayList<Areas> areas = regions.getAreas();
+            markedForDeletion.addhousehold(CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(p));
+            CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().remove(p);
+            ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
             itemData.clear();
             for(Households household : households){
@@ -676,13 +652,13 @@ public class FragmentOne extends Fragment {
             }
         } else if(navigationPosition.equals("members")){
             Member member = new Member();
-            member.setMemberName(regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().get(p));
-            String url = regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getRef();
+            member.setMemberName(CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().get(p));
+            String url = CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).getRef();
                    url = url + "/Members/" + member.getMemberName();
             member.setRef(url);
             markedForDeletion.addMember(member);
-            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().remove(p);
-            ArrayList<Areas> areas = regions.getAreas();
+            CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().remove(p);
+            ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
             ArrayList<String> members = households.get(currentHousehold).getMembers();
             itemData.clear();
@@ -690,11 +666,9 @@ public class FragmentOne extends Fragment {
                 itemData.add(new ItemRow(mb));
             }
         }
-        try{
-            editor.putString("Delete",JSONUtilities.stringify(markedForDeletion));
-            editor.putString("Region",JSONUtilities.stringify(regions));
-            editor.commit();
-        }catch (JSONException e){}
+
+        CRUDFlinger.save("Delete",markedForDeletion);
+        CRUDFlinger.saveRegion();
 
         DashBoard dashBoard = (DashBoard)getActivity();
                   dashBoard.deleteRecord = markedForDeletion;
@@ -713,8 +687,8 @@ public class FragmentOne extends Fragment {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    regions.getAreas().get(pos).setAreaName(input.getText().toString());
-                    ArrayList<Areas> areas = regions.getAreas();
+                    CRUDFlinger.getRegion().getAreas().get(pos).setAreaName(input.getText().toString());
+                    ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                     itemData.clear();
                     for(Areas area : areas){
                         itemData.add(new ItemRow(area.getAreaName()));
@@ -735,8 +709,8 @@ public class FragmentOne extends Fragment {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    regions.getAreas().get(currentArea).getHouseholds().get(pos).setHouseholdName(input.getText().toString());
-                    ArrayList<Areas> areas = regions.getAreas();
+                    CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(pos).setHouseholdName(input.getText().toString());
+                    ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
                     ArrayList<Households> households = areas.get(currentArea).getHouseholds();
                     itemData.clear();
                     for(Households household : households){
@@ -754,8 +728,8 @@ public class FragmentOne extends Fragment {
             builder.show();
 
         } else if(navigationPosition.equals("members")){
-            regions.getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().set(pos, input.getText().toString());
-            ArrayList<Areas> areas = regions.getAreas();
+            CRUDFlinger.getRegion().getAreas().get(currentArea).getHouseholds().get(currentHousehold).getMembers().set(pos, input.getText().toString());
+            ArrayList<Areas> areas = CRUDFlinger.getRegion().getAreas();
             ArrayList<Households> households = areas.get(currentArea).getHouseholds();
             ArrayList<String> members = households.get(currentHousehold).getMembers();
             itemData.clear();
@@ -763,10 +737,7 @@ public class FragmentOne extends Fragment {
                 itemData.add(new ItemRow(mb));
             }
         }
-        try{
-            editor.putString("Region",JSONUtilities.stringify(regions));
-            editor.commit();
-        }catch (JSONException e){}
+        CRUDFlinger.saveRegion();
         adapter.notifyDataSetChanged();
     }
 
