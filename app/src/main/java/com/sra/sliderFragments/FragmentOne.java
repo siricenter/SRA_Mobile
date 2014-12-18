@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.text.InputType;
@@ -27,9 +26,6 @@ import com.example.chad.sraMobile.R;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import com.sra.helperClasses.CRUDFlinger;
 import com.sra.listViewSlider.ItemAdapter;
 import com.sra.listViewSlider.ItemRow;
@@ -38,11 +34,7 @@ import com.sra.objects.Areas;
 import com.sra.objects.DeleteRecord;
 import com.sra.objects.Households;
 import com.sra.objects.Member;
-import com.sra.objects.Region;
 import com.sra.objects.loginObject;
-
-import org.quickconnectfamily.json.JSONException;
-import org.quickconnectfamily.json.JSONUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
