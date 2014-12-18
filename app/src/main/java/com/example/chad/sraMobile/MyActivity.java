@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.loginObject;
 
 public class MyActivity extends Activity {
@@ -20,10 +21,8 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        String user = prefs.getString("User",null);
-        Gson gson = new GsonBuilder().create();
-        loginObject login = gson.fromJson(user,loginObject.class);
+        CRUDFlinger.setApplication(getApplication());
+        loginObject login = (loginObject)CRUDFlinger.load("User",loginObject.class);
         if(login.isLoggedIn()){
             goToDashboard();
         }

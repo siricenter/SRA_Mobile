@@ -72,9 +72,6 @@ public class DashBoard extends Activity {
             deleteRecord = new DeleteRecord();
         }
 
-        String string = prefs.getString("Region",null);
-        System.out.println(string);
-
         org = "SRA";
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();

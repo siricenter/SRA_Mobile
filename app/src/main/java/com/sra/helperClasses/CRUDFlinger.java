@@ -1,6 +1,6 @@
 package com.sra.helperClasses;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
@@ -18,9 +18,10 @@ import java.io.Serializable;
 public class CRUDFlinger {
 
     private static CRUDFlinger instance = null;
-    static SharedPreferences loader;
-    static SharedPreferences.Editor saver;
-    static Region region = null;
+    private static SharedPreferences loader = null;
+    private static SharedPreferences.Editor saver = null;
+    private static Region region = null;
+    private static Application application = null;
 
     protected CRUDFlinger(){
 
@@ -34,12 +35,23 @@ public class CRUDFlinger {
         return instance;
     }
 
-    public static void setPreferences(Activity activity){
-        loader = activity.getApplication().getSharedPreferences("AppPrefs", activity.getApplication().MODE_PRIVATE);
-        saver = activity.getApplication().getSharedPreferences("AppPrefs", activity.getApplication().MODE_PRIVATE).edit();
+    public static void setApplication(Application applicationPassed){
+        application = applicationPassed;
+    }
+
+    private static void setPreferences(){
+        if(application == null){
+            throw new NullPointerException();
+        }
+        else{
+            loader = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE);
+            saver = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE).edit();
+        }
+
     }
 
     public static void save(String key,Serializable serializable){
+        setPreferences();
         try{
             saver.putString(key,JSONUtilities.stringify(serializable));
             saver.commit();
@@ -47,6 +59,7 @@ public class CRUDFlinger {
     }
 
     public static Object load(String key,Class className){
+        setPreferences();
         String json = loader.getString(key,null);
         Gson gson = new GsonBuilder().create();
         Object object = gson.fromJson(json,className);
@@ -54,14 +67,16 @@ public class CRUDFlinger {
         return object;
     }
 
-    public static Region loadRegion(){
+    private static void loadRegion(){
+        setPreferences();
         String json = loader.getString("Region",null);
         Gson gson = new GsonBuilder().create();
         Region region1 = gson.fromJson(json,Region.class);
-        return region1;
+        region = region1;
     }
 
     public static void saveRegion(){
+        setPreferences();
         if(region == null){
             loadRegion();
             return;
@@ -79,6 +94,4 @@ public class CRUDFlinger {
         }
         return region;
     }
-
-
 }
