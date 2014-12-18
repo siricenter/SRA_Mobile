@@ -22,7 +22,7 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         CRUDFlinger.setApplication(getApplication());
-        loginObject login = (loginObject)CRUDFlinger.load("User",loginObject.class);
+        loginObject login = CRUDFlinger.load("User",loginObject.class);
         if(login.isLoggedIn()){
             goToDashboard();
         }

@@ -19,6 +19,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.helperClasses.SyncDownlaod;
 import com.sra.helperClasses.SyncUpload;
 import com.sra.objects.DeleteRecord;
@@ -45,8 +46,6 @@ public class DashBoard extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
@@ -61,17 +60,11 @@ public class DashBoard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-
-        prefs = getSharedPreferences("AppPrefs",MODE_PRIVATE);
-        editor = getSharedPreferences("AppPrefs",MODE_PRIVATE).edit();
-        if(prefs.contains("Delete")) {
-            String json = prefs.getString("Delete", null);
-            Gson gson = new GsonBuilder().create();
-            deleteRecord = gson.fromJson(json, DeleteRecord.class);
-        }else{
-            deleteRecord = new DeleteRecord();
-        }
-
+           if(CRUDFlinger.checkLocal("Delete")){
+               deleteRecord = CRUDFlinger.load("Delete",DeleteRecord.class);
+           }else{
+               deleteRecord = new DeleteRecord();
+           }
         org = "SRA";
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
@@ -80,8 +73,6 @@ public class DashBoard extends Activity {
 
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
                 GravityCompat.START);
-
-
 
         adapter = new CustomDrawerAdapter(this, R.layout.customdrawer,
                 dataList,getStatusBarHeight());
@@ -93,9 +84,6 @@ public class DashBoard extends Activity {
         dataList.add(new DrawerItem("Q Sets",R.drawable.questionmark));
         dataList.add(new DrawerItem("Notes",android.R.drawable.ic_menu_edit));
         dataList.add(new DrawerItem("Stats",R.drawable.stats));
-
-
-
 
 
         adapter = new CustomDrawerAdapter(this, R.layout.customdrawer,
@@ -136,18 +124,11 @@ public class DashBoard extends Activity {
 
     public void syncDatabase(MenuItem item){
         SyncDownlaod downlaod = new SyncDownlaod(this);
-        String json = prefs.getString("Region", null);
-        Gson gson = new GsonBuilder().create();
-        Region region = gson.fromJson(json, Region.class);
-        SyncUpload upload = new SyncUpload(region,deleteRecord,org,this);
-
-                upload.startUpload();
-                upload.addNewAreaToUser();
-                downlaod.beginSync();
-        try{
-           String newRegion = JSONUtilities.stringify(downlaod.getRegion());
-           editor.putString("Region",newRegion);
-        }catch (JSONException e){}
+        SyncUpload upload = new SyncUpload(CRUDFlinger.getRegion(),deleteRecord,org,this);
+        upload.startUpload();
+        upload.addNewAreaToUser();
+        downlaod.beginSync();
+        CRUDFlinger.saveRegion();
     }
 
     public void SelectItem(int position) {
@@ -245,8 +226,8 @@ public class DashBoard extends Activity {
     }
 
     public void logOut(MenuItem menuItem){
-        if(prefs.contains("User")){
-            editor.remove("User");
+        if(CRUDFlinger.checkLocal("User")){
+            CRUDFlinger.removeLocal("User");
             Intent intent = new Intent(this,MyActivity.class);
             startActivity(intent);
         }

@@ -30,13 +30,13 @@ public class CRUDFlinger {
     public static CRUDFlinger getInstance() {
 
         if(instance == null) {
-            instance = new CRUDFlinger();
+            CRUDFlinger.instance = new CRUDFlinger();
         }
         return instance;
     }
 
     public static void setApplication(Application applicationPassed){
-        application = applicationPassed;
+        CRUDFlinger.application = applicationPassed;
     }
 
     private static void setPreferences(){
@@ -44,8 +44,8 @@ public class CRUDFlinger {
             throw new NullPointerException();
         }
         else{
-            loader = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE);
-            saver = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE).edit();
+            CRUDFlinger.loader = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE);
+            CRUDFlinger.saver = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE).edit();
         }
 
     }
@@ -58,21 +58,21 @@ public class CRUDFlinger {
         }catch (JSONException e){}
     }
 
-    public static Object load(String key,Class className){
+    public static <Any> Any load(String key,Class className){
         setPreferences();
         String json = loader.getString(key,null);
         Gson gson = new GsonBuilder().create();
         Object object = gson.fromJson(json,className);
 
-        return object;
+        return (Any)object;
     }
 
     private static void loadRegion(){
         setPreferences();
         String json = loader.getString("Region",null);
         Gson gson = new GsonBuilder().create();
-        Region region1 = gson.fromJson(json,Region.class);
-        region = region1;
+        Region region = gson.fromJson(json,Region.class);
+        CRUDFlinger.region = region;
     }
 
     public static void saveRegion(){
@@ -88,10 +88,19 @@ public class CRUDFlinger {
         }
    }
 
+    public static boolean checkLocal(String key){
+        return loader.contains(key);
+    }
+
     public static Region getRegion(){
         if(region == null){
             loadRegion();
         }
         return region;
     }
+
+    public static void removeLocal(String key){
+        saver.remove(key);
+    }
+
 }
