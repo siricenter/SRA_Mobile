@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.loginObject;
 
@@ -23,6 +21,9 @@ public class MyActivity extends Activity {
         setContentView(R.layout.activity_my);
         CRUDFlinger.setApplication(getApplication());
         loginObject login = CRUDFlinger.load("User",loginObject.class);
+        if (login == null) {
+            login = new loginObject("");
+        }
         if(login.isLoggedIn()){
             goToDashboard();
         }
