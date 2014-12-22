@@ -16,9 +16,9 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.QuestionSetBank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class EditQuestionSet extends Activity {
             questionSet = new QuestionSet(questionSetName, "");
         }
         else {
-            questionSet = QuestionSetBank.getQuestionSet(questionSetName);
+            questionSet = CRUDFlinger.getQuestionSet(questionSetName);
         }
         questionSetNameField = (EditText) findViewById(R.id.question_set_name_field);
         questionSetNameField.setText(questionSet.getName());
@@ -111,10 +111,10 @@ public class EditQuestionSet extends Activity {
     public void save() {
         questionSet.setName(questionSetNameField.getText().toString());
         if (isNewQuestionSet) {
-            QuestionSetBank.addQuestionSet(questionSet);
+            CRUDFlinger.addQuestionSet(questionSet);
             isNewQuestionSet = false;
         }
-        QuestionSetBank.saveQuestionSets();
+        CRUDFlinger.saveQuestionSets();
     }
 
     public void loadQuestions() {

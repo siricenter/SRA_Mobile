@@ -21,10 +21,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.Datapoint;
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.QuestionSetBank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,14 +53,14 @@ public class EditQuestion extends Activity {
         String questionName = (String) intent.getStringExtra("questionName");
         Boolean isNewQuestion = intent.getBooleanExtra("isNewQuestion", false);
         if (isNewQuestion) {
-            questionSet = QuestionSetBank.getQuestionSet(questionSetName);
+            questionSet = CRUDFlinger.getQuestionSet(questionSetName);
             questionName = "";
             question = new Question("");
             question.setName(questionName);
             questionSet.addQuestion(question);
         }
         else {
-            questionSet = QuestionSetBank.getQuestionSet(questionSetName);
+            questionSet = CRUDFlinger.getQuestionSet(questionSetName);
             question = questionSet.getQuestion(questionName);
             questionNameField.setText(questionName);
             if (question.getMultiUse()) {
@@ -113,7 +113,7 @@ public class EditQuestion extends Activity {
     private void save() {
         question.setName(questionNameField.getText().toString());
         question.setMultiUse(multiUseCheckBox.isChecked());
-        QuestionSetBank.saveQuestionSets();
+        CRUDFlinger.saveQuestionSets();
     }
 
     public void addDataPoint(View view) {

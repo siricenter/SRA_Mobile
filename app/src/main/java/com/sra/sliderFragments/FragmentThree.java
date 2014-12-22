@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.example.chad.sraMobile.EditQuestionSet;
 import com.example.chad.sraMobile.R;
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.QuestionSetBank;
 
 import org.quickconnectfamily.kvkit.kv.KVStore;
 import org.quickconnectfamily.kvkit.kv.KVStoreEventListener;
@@ -98,7 +98,7 @@ public class FragmentThree extends Fragment {
     public void loadQuestionSets() {
         questionSetTable.removeAllViews();
 
-        ArrayList<QuestionSet> questionSets = QuestionSetBank.getQuestionSets();
+        ArrayList<QuestionSet> questionSets = CRUDFlinger.getQuestionSets();
         for (final QuestionSet qs : questionSets) {
             final TableRow row = new TableRow(getActivity());
 
@@ -120,7 +120,7 @@ public class FragmentThree extends Fragment {
                 @Override
                 public void onClick(View view) {
                     questionSetTable.removeView(row);
-                    QuestionSetBank.deleteQuestionSet(qs);
+                    CRUDFlinger.deleteQuestionSet(qs);
                 }
             });
 

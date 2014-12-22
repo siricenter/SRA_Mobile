@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sra.objects.QuestionSet;
 import com.sra.objects.Region;
 
+import org.json.JSONArray;
 import org.quickconnectfamily.json.JSONException;
 import org.quickconnectfamily.json.JSONUtilities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by imac on 12/17/14.
@@ -43,7 +46,7 @@ public class CRUDFlinger {
         if(application == null){
             throw new NullPointerException();
         }
-        else{
+        else if (loader == null || saver == null) {
             CRUDFlinger.loader = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE);
             CRUDFlinger.saver = application.getSharedPreferences("AppPrefs", application.MODE_PRIVATE).edit();
         }
@@ -103,4 +106,92 @@ public class CRUDFlinger {
         saver.remove(key);
     }
 
+
+
+
+    /*
+     * Question set bank stuff.
+     */
+    private static ArrayList<QuestionSet> questionSets = null;
+    public static ArrayList<QuestionSet> getQuestionSets() {
+        if (questionSets == null) { loadQuestionSets(); }
+        return questionSets;
+    }
+    private static void loadQuestionSets() {
+        setPreferences();
+        questionSets = new ArrayList<QuestionSet>();
+        JSONArray sets = null;
+        String loadedJSON = null;
+        try {
+            loadedJSON = loader.getString("QuestionSetBank", null);
+            if (loadedJSON != null) {
+                sets = new JSONArray(loadedJSON);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (sets == null) {
+            saveQuestionSets();
+            return;
+        }
+
+        for (int i = 0; i < sets.length(); i++) {
+            try {
+                try {
+                    String questionSetJSON = sets.getString(i);
+                    Gson gson = new GsonBuilder().create();
+                    QuestionSet set = gson.fromJson(questionSetJSON, QuestionSet.class);
+                    questionSets.add(set);
+                } catch (Exception e) {
+
+                }
+            } catch (NullPointerException e){
+                System.out.println("Nothing Here");
+            }
+        }
+    }
+
+    public static void saveQuestionSets() {
+        setPreferences();
+        if (questionSets == null) {
+            loadQuestionSets();
+            return;
+        }
+        try {
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(questionSets);
+            saver.putString("QuestionSetBank", json);
+            saver.commit();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception: Couldn't store QuestionSet bank using KVStore.");
+        }
+    }
+
+    public static QuestionSet getQuestionSet(String name) {
+        setPreferences();
+        if (questionSets == null) { loadQuestionSets(); }
+        for (QuestionSet set : questionSets) {
+            if (set.getName().equals(name)) {
+                return set;
+            }
+        }
+        return null;
+    }
+
+    public static void deleteQuestionSet(QuestionSet qs) {
+        setPreferences();
+        if (questionSets == null) { loadQuestionSets(); }
+        questionSets.remove(qs);
+        saveQuestionSets();
+    }
+
+    public static void addQuestionSet(QuestionSet qs) {
+        setPreferences();
+        if (questionSets == null) { loadQuestionSets(); }
+        questionSets.add(qs);
+        saveQuestionSets();
+    }
 }

@@ -22,11 +22,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.Areas;
 import com.sra.objects.Households;
 import com.sra.objects.Interviews;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.QuestionSetBank;
 import com.sra.objects.Region;
 
 import org.quickconnectfamily.json.JSONException;
@@ -139,7 +139,7 @@ public class InterviewActivity extends Activity {
 
         final ListView listView = (ListView) alert.findViewById(R.id.question_set_list_view);
         ArrayList<String> list = new ArrayList<String>();
-        ArrayList<QuestionSet> sets = QuestionSetBank.getQuestionSets();
+        ArrayList<QuestionSet> sets = CRUDFlinger.getQuestionSets();
         for (QuestionSet qs : sets) {
             list.add(qs.getName());
         }
@@ -153,7 +153,7 @@ public class InterviewActivity extends Activity {
                 questionSetNames.add(item);
                 questionSetsAdapter.notifyDataSetChanged();
                 alert.dismiss();
-                household.addQuestionSet(QuestionSetBank.getQuestionSet(item));
+                household.addQuestionSet(CRUDFlinger.getQuestionSet(item));
                 try {
                     KVStore.storeValue("Field", region);
                 }

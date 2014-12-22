@@ -17,11 +17,11 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sra.helperClasses.CRUDFlinger;
 import com.sra.objects.Areas;
 import com.sra.objects.Households;
 import com.sra.objects.Question;
 import com.sra.objects.QuestionSet;
-import com.sra.objects.QuestionSetBank;
 import com.sra.objects.Region;
 
 import org.quickconnectfamily.json.JSONException;
@@ -61,7 +61,7 @@ public class DataGather extends FragmentActivity {
             questionSet = new QuestionSet("", "");
         }
 
-        questionSet = QuestionSetBank.getQuestionSet(questionSetName);
+        questionSet = CRUDFlinger.getQuestionSet(questionSetName);
         if (questionSet == null) {
             questionSet = new QuestionSet("", "");
         }
